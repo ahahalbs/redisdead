@@ -396,8 +396,8 @@
                 {p:4, s:8, v:40},
                 {p:4, s:12, v:60}];
 
-
-            const instruments = new MaxiInstruments(".");
+            var origin = "https://ahahalbs.github.io/redisdead/";
+            const instruments = new MaxiInstruments(origin);
             let scene = document.querySelector('a-scene');
             let player= document.getElementById('player');
             let platformsEntity = document.getElementById('platformsEntity');
