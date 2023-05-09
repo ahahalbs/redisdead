@@ -1,7 +1,7 @@
 <html>
     <head>
           <script src="./enable-threads.js"></script>
-  <script crossorigin src = "./maxiInstruments.v.0.7.1.js"></script>
+  <script crossorigin src = "./maxiInstruments.v.0.7.2.js"></script>
         <script src="dist/aframe-master.min.js"></script>
         <!--        JUMP AND FALL (BUT NEVER DEATH, STUCK IN THIS ETERNAL LOOP FOREVER. FOREVAAAAAAAAA)-->
         <script>AFRAME.registerComponent('jump', {
@@ -397,7 +397,7 @@
                 {p:4, s:12, v:60}];
 
 
-            const instruments = new MaxiInstruments();
+            const instruments = new MaxiInstruments(".");
             let scene = document.querySelector('a-scene');
             let player= document.getElementById('player');
             let platformsEntity = document.getElementById('platformsEntity');
