@@ -410,7 +410,7 @@
             let stepCheck = 0;
             let branchID = 0;
             let currentBranch = 0;
-            let platformSize = 3;
+            let platformSize = 2;
             let previousOrientation = '-z';
             let metro = 0;
             let doubleMetro = 0;
@@ -1396,26 +1396,25 @@
                 }
                 for (let i = 0; i < reorderedSamples.length; i++) {
                     if (reorderedSamples[i] === true) {
-                      
-                        
+                     
                         let platform = platforms[i + base];
 
                         switch (selector) {
                             case 0:
-                                updatePlatformAttributes(platform, 9, platformSize, 9);
+                                updatePlatformAttributes(platform, platformSize*3, platformSize, platformSize*3);
                                 break;
                             case 1:
-                                let width = (platform.orientation == 'x' || platform.orientation == '-x') ? 6 : 1.5;
-                                let depth = (platform.orientation == 'x' || platform.orientation == '-x') ? 1.5 : 6;
-                                updatePlatformAttributes(platform, width, 9, depth);
+                                let width = (platform.orientation == 'x' || platform.orientation == '-x') ? platformSize*2 : platformSize/2;
+                                let depth = (platform.orientation == 'x' || platform.orientation == '-x') ? platformSize/2 : platformSize*2;
+                                updatePlatformAttributes(platform, width, platformSize*3, depth);
                                 break;
                             case 2:
-                                let hatWidth = (platform.orientation == 'x' || platform.orientation == '-x') ? 9 : 1.5;
-                                let hatDepth = (platform.orientation == 'x' || platform.orientation == '-x') ? 1.5 : 9;
-                                updatePlatformAttributes(platform, hatWidth, 0.75, hatDepth);
+                                let hatWidth = (platform.orientation == 'x' || platform.orientation == '-x') ? platformSize*3 : platformSize/2;
+                                let hatDepth = (platform.orientation == 'x' || platform.orientation == '-x') ? platformSize/2 : platformSize*3;
+                                updatePlatformAttributes(platform, hatWidth, platformSize/4, hatDepth);
                                 break;
                             case 3:
-                                updatePlatformAttributes(platform, 9, 0.98, 9);
+                                updatePlatformAttributes(platform, platformSize*3, platformSize/4, platformSize*3);
                                 break;
                         }
                     }
