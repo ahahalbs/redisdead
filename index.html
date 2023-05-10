@@ -1575,6 +1575,7 @@
 
                 }
             }
+            const launchSynth = ()=> {    
             instruments.loadModules().then(()=> {
 
                 enemySynth = instruments.addSynth();
@@ -1737,6 +1738,7 @@
                     } 
                 }
             });
+             }
             setInterval(run, 50);
             function run() {
                 if (soundUP) {
