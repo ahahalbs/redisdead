@@ -1454,10 +1454,10 @@
                 }
                 if (bonking  <= 0){
                     hasBonked = false;
-//                     enemySynth.noteoff(62);
-//                     enemySynth.noteoff(64);
-//                     enemySynth.noteoff(65);
-//                     enemySynth.noteoff(69);
+                    enemySynth.noteoff(62);
+                    enemySynth.noteoff(64);
+                    enemySynth.noteoff(65);
+                    enemySynth.noteoff(69);
 
                     bonking = 0;
                     enemySynth.setParams(["delay", bonking], ["delayMix", 0.5 ],["reverbMix",reverb],["roomSize",roomSize],["gain",bonking],);
@@ -1703,7 +1703,7 @@
                 backingMidSynth.setLoop(16,4);
                 bassSynth.setLoop(16,4);
                 sampler.setLoop(16,4);
-                //instruments.setLoop(32,4);
+                instruments.setLoop(16,4);
 
                 instruments.setOnTick((playHeads)=> {
                     //The current playhead of the third instrument added
