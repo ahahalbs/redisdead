@@ -1749,22 +1749,22 @@
                     updatePlatforms();
                     destroyer();
                 }
-                if(hasEnded == true){
-                    end();
-                }
-                if(canStart == true && hasEnded == true){
-                    player.setAttribute('position', {x:0, y: 2, z:8});
-                    scene.setAttribute('background', {color: 'blue'});
-                    killplane.setAttribute('color', 'red');
-                    startup();
-                    sampler.setParams([["gain_0", 1],["gain_1", 1],["gain_2", 1],["gain_3", 1] ]);
-                    bassSynth.setParam('gain', 1);
-                    backingMidSynthSeq.setParam('gain', 1);
-                    sampler.unmute;
-                    backingMidSynth.unmute;
-                    bassSynth.unmute;
-                    instruments.playPause();
-                }
+//                 if(hasEnded == true){
+//                     end();
+//                 }
+//                 if(canStart == true && hasEnded == true){
+//                     player.setAttribute('position', {x:0, y: 2, z:8});
+//                     scene.setAttribute('background', {color: 'blue'});
+//                     killplane.setAttribute('color', 'red');
+//                     startup();
+//                     sampler.setParams([["gain_0", 1],["gain_1", 1],["gain_2", 1],["gain_3", 1] ]);
+//                     bassSynth.setParam('gain', 1);
+//                     backingMidSynthSeq.setParam('gain', 1);
+//                     sampler.unmute;
+//                     backingMidSynth.unmute;
+//                     bassSynth.unmute;
+//                     instruments.playPause();
+//                 }
                 //sequenceTracker(myDrumSequence);
 
             }
