@@ -351,13 +351,16 @@
     <body>
                 <a-scene background="color: #005AFF">
             <!--vr controller-->
-            <a-entity id="leftHand" oculus-touch-controls="hand: left;"></a-entity>
-            <a-entity id="rightHand" oculus-touch-controls="hand: right;"></a-entity>
+            
 
             <!--this is where the magic happens-->
             <a-entity class="ground" id="platformsEntity"></a-entity>
             <!--player/camera-->
+            <a-entity id='rig'>        
             <a-entity id="player" camera position="0 1 8"width="1.0" height="2"depth="1" look-controls wasd-controls="acceleration: 60" jump></a-entity>
+            <a-entity id="leftHand" oculus-touch-controls="hand: left"></a-entity>
+            <a-entity id="rightHand" oculus-touch-controls="hand: right oculus-thumbstick-controls"></a-entity>
+            </a-entity>
             <!--killplane-->
             <a-plane id="killplane" side="double" position="0 -18 0" rotation="-90 0 0" width="500" height="500" color="red"></a-plane>
             <!--start point-->
