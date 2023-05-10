@@ -1,8 +1,7 @@
 <html>
     <head>
           <script src="./enable-threads.js"></script>
-  <script crossorigin src = "maxiInstruments.v.0.7.2.js">
-  </script>
+          <script crossorigin src = "maxiInstruments.v.0.7.2.js"></script>
         <script src="./dist/aframe-master.min.js"></script>
         <!--        JUMP AND FALL (BUT NEVER DEATH, STUCK IN THIS ETERNAL LOOP FOREVER. FOREVAAAAAAAAA)-->
         <script>AFRAME.registerComponent('jump', {
@@ -397,8 +396,10 @@
                 {p:4, s:8, v:40},
                 {p:4, s:12, v:60}];
 
-            var origin = "./libs";
-            const instruments = new MaxiInstruments("https://ahahalbs.github.io/redisdead/");
+             // make clear that the origin is on mimicproject
+             var origin = "https://mimicproject.com/libs";
+             // pass the origin in when loading your instruments
+             const instruments = new MaxiInstruments(origin);
             let scene = document.querySelector('a-scene');
             let player= document.getElementById('player');
             let platformsEntity = document.getElementById('platformsEntity');
@@ -562,7 +563,6 @@
                 }
                 if(event.key == 'q' || event.key == 'Q'){
                     destroyStep = true;
-                    console.log("Q is pressed");
                 }     
                 keyPressed = event.key;
             });
@@ -752,9 +752,7 @@
                 let myZ = Math.floor(0.5+(playerPos.z)/platformSize)*platformSize;
 
                 //update the offset for our step sequencer based on what platform we are over when we generate new ones. 
-                //stepOffset = currentPlayerStep + stepOffset%16;
                 stepOffset = ((stepOffset + stepCheck)%16);
-                //console.log("stepOffset", stepOffset);
                 //increment placementID - this is used so we can keep track of which platforms relate to which placement (useful for deletion)
                 branchID = branchID + 1;
 
