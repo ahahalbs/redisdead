@@ -349,22 +349,21 @@
         <div id = "synths"></div>
     </head>
     <body>
-            <a-scene background="color: #005AFF">
+                <a-scene background="color: #005AFF">
+            <!--vr controller-->
+            <a-entity id="leftHand" oculus-touch-controls="hand: left;"></a-entity>
+            <a-entity id="rightHand" oculus-touch-controls="hand: right;"></a-entity>
+
             <!--this is where the magic happens-->
             <a-entity class="ground" id="platformsEntity"></a-entity>
             <!--player/camera-->
-            <a-entity id="rig">        
-            <a-entity id="player" position="0 0 8" width="1.0" height="2"depth="1" wasd-controls="acceleration: 60" jump></a-entity>
-            <a-camera position="0 1.6 0"></a-camera>
-            <a-entity id="leftHand" oculus-touch-controls="hand: left"></a-entity>
-            <a-entity id="rightHand" oculus-touch-controls="hand: right" oculus-thumbstick-controls></a-entity>
-            </a-entity>
+            <a-entity id="player" camera position="0 1 5"width="1.0" height="2"depth="1" look-controls wasd-controls="acceleration: 60" jump></a-entity>
             <!--killplane-->
             <a-plane id="killplane" side="double" position="0 -18 0" rotation="-90 0 0" width="500" height="500" color="red"></a-plane>
             <!--start point-->
-            <a-box class="ground" id="start" position="0 -0.75 8" width="4" height="1" depth="4" color="white"></a-box>
+            <a-box class="ground" id="start" position="0 -0.75 6" width="6" height="1" depth="6" color="white"></a-box>
             <!--end point-->
-            <a-box class='end' id="lurker" position="0 42 8" width="9" height="1" depth="9" color="black" box-collider lurker="target: #player "></a-box>
+            <a-box class='end' id="lurker" position="0 28 -15" width="6" height="1" depth="6" color="black" box-collider lurker="target: #player "></a-box>
 
             <!-- ui -->
             <!--
@@ -397,7 +396,8 @@
                 {p:4, s:8, v:40},
                 {p:4, s:12, v:60}];
 
-            const instruments = new MaxiInstruments(".");
+
+            const instruments = new MaxiInstruments();
             let scene = document.querySelector('a-scene');
             let player= document.getElementById('player');
             let platformsEntity = document.getElementById('platformsEntity');
@@ -475,8 +475,8 @@
                     platformsEntity.appendChild(platform);
                 }
                 //lets make it look cooler for the 0 platform/also easier! 
-                platforms[0].p.setAttribute('width', 9);
-                platforms[0].p.setAttribute('depth', 9);
+                platforms[0].p.setAttribute('width', platformSize*3);
+                platforms[0].p.setAttribute('depth', platformSize*3);
                 //Create the first playhead for platforms
                 let playhead = document.createElement('a-box');
                 playhead.setAttribute('class', "playheads");
@@ -487,7 +487,7 @@
                 playhead.setAttribute('width', platformSize-0.1);
                 playhead.setAttribute("height", platformSize-0.1);
                 playhead.setAttribute("depth", platformSize-0.1);
-                playhead.setAttribute("box-collider", ''); 
+                //playhead.setAttribute("box-collider", ''); 
                 playheads.push({p: playhead, o: '-z',startX: 0 , startZ: 0, modDel: 0, modmult: 1});
                 platformsEntity.appendChild(playhead);
 
@@ -497,9 +497,9 @@
                 collectable.setAttribute('material', {color: 'rgb(255,165,0)'});
                 collectable.setAttribute('position', {x: 0, y: platformSize, z: -platformSize*(stepSequenceLength-1)});
                 collectable.setAttribute('rotation', {x: 45, y: 45, z: 45});
-                collectable.setAttribute('width', 0.5);
-                collectable.setAttribute("height", 0.5);
-                collectable.setAttribute("depth", 0.5);
+                collectable.setAttribute('width', platformSize / 6);
+                collectable.setAttribute("height", platformSize / 6);
+                collectable.setAttribute("depth", platformSize / 6);
                 collectable.setAttribute("box-collider", '');
                 collectables.push(collectable);
                 platformsEntity.appendChild(collectable);  
@@ -700,7 +700,11 @@
 
                 for (let i = 0; i < playheads.length; i++) {
                     let localMetro = playheads[i].modmult == 2 ? doubleMetro : metro;
-                    const modMetro = -(localMetro - playheads[i].modDel) % stepSequenceLength;
+                    let modMetro = -(localMetro - playheads[i].modDel) % stepSequenceLength;
+                    if(modMetro <-15){
+                        modMetro = -15.;
+                    }
+                    console.log(modMetro);
                     const playheadPos = playheads[i].p.getAttribute('position');
                     const playheadSize = parseFloat(playheads[i].p.getAttribute('width'));
 
@@ -888,9 +892,9 @@
 
                 //our kick PlayHeads
                 if(sequenceOrder[sequenceOrder.length-1] == 0){
-                    playhead.setAttribute('width', 3* platformSize-0.1);
+                    playhead.setAttribute('width', ((platformSize-0.1)*3));
                     playhead.setAttribute("height", platformSize-0.1);
-                    playhead.setAttribute("depth",3 * platformSize-0.1);
+                    playhead.setAttribute("depth", ((platformSize-0.1)*3));
                     //snare playheads
                 } 
                 else if(sequenceOrder[sequenceOrder.length-1] == 1){
@@ -958,7 +962,7 @@
                     val = 0;
                 }
                 //set orientation
-                let newPosition = {x: myX, y: playerPos.y + platformSize + 0.01, z: myZ};
+                let newPosition = {x: myX, y: playerPos.y + platformSize + 0.001, z: myZ};
                 playhead.setAttribute('position', newPosition);
                 let playheadData = {
                     p: playhead,
@@ -1397,25 +1401,26 @@
                 }
                 for (let i = 0; i < reorderedSamples.length; i++) {
                     if (reorderedSamples[i] === true) {
-                     
+                      
+                        
                         let platform = platforms[i + base];
 
                         switch (selector) {
                             case 0:
-                                updatePlatformAttributes(platform, platformSize*3, platformSize, platformSize*3);
+                                updatePlatformAttributes(platform, platformSize * 3, platformSize, platformSize * 3);
                                 break;
                             case 1:
-                                let width = (platform.orientation == 'x' || platform.orientation == '-x') ? platformSize*2 : platformSize/2;
-                                let depth = (platform.orientation == 'x' || platform.orientation == '-x') ? platformSize/2 : platformSize*2;
-                                updatePlatformAttributes(platform, width, platformSize*3, depth);
+                                let width = (platform.orientation == 'x' || platform.orientation == '-x') ? platformSize * 2 : platformSize / 2;
+                                let depth = (platform.orientation == 'x' || platform.orientation == '-x') ? platformSize / 2 : platformSize * 2;
+                                updatePlatformAttributes(platform, width, 9, depth);
                                 break;
                             case 2:
-                                let hatWidth = (platform.orientation == 'x' || platform.orientation == '-x') ? platformSize*3 : platformSize/2;
-                                let hatDepth = (platform.orientation == 'x' || platform.orientation == '-x') ? platformSize/2 : platformSize*3;
-                                updatePlatformAttributes(platform, hatWidth, platformSize/4, hatDepth);
+                                let hatWidth = (platform.orientation == 'x' || platform.orientation == '-x') ? platformSize * 3 : platformSize / 2;
+                                let hatDepth = (platform.orientation == 'x' || platform.orientation == '-x') ? platformSize / 2 : platformSize * 3;
+                                updatePlatformAttributes(platform, hatWidth, platformSize / 4, hatDepth);
                                 break;
                             case 3:
-                                updatePlatformAttributes(platform, platformSize*3, platformSize/4, platformSize*3);
+                                updatePlatformAttributes(platform, platformSize * 3, platforSize, platformSize * 3);
                                 break;
                         }
                     }
@@ -1475,9 +1480,10 @@
                     backingMidSynth.setParam("lfoPitchMod", filter);
                     backingMidSynth.setParam("lfoPitchMod", filter);
                 } 
+                //falling sounds
                 let fall = player.getAttribute('position').y;
                 if(fall < -2){
-                    let drop = scale(fall,-2, -30, 1.0, 0.1);
+                    let drop = scale(fall,-2, -30, 0.5, 0.1);
                     sampler.setParam("rate_0", drop);
                     sampler.setParam("rate_1", drop);
                     bassSynth.setParams(["adsrPitchMod", drop*-1],["cutoff", drop*100]);
@@ -1668,11 +1674,11 @@
                 bassSynth.mapped = ["lfoFrequency", "pan", "cutoff" ,"adsrPitchMod"];
 
                 sampler = instruments.addSampler();
-                sampler.loadSample("BD-ER1-CR8000ish.wav", 0);
-                sampler.loadSample("DR660SnareLofinice.wav", 1);
-                sampler.loadSample("TOM-ER-MicroTom2.wav", 2);
-                sampler.loadSample("FX-ER-Sonario.wav", 3);
-                sampler.loadSample("FX-ER1-Woodzblox.wav", 4);
+                sampler.loadSample("/sounds/kit1/BD-ER1-CR8000ish.wav", 0);
+                sampler.loadSample("/sounds/DR660SnareLofinice.wav", 1);
+                sampler.loadSample("/sounds/kit1/TOM-ER-MicroTom2.wav", 2);
+                sampler.loadSample("/sounds/kit1/FX-ER-Sonario.wav", 3);
+                sampler.loadSample("/sounds/kit1/FX-ER1-Woodzblox.wav", 4);
 
                 sampler.setParam("rate_0", 1);
                 sampler.setParam("rate_1", 1);
@@ -1761,7 +1767,7 @@
                     bassSynth.unmute;
                     instruments.playPause();
                 }
-                sequenceTracker(myDrumSequence);
+                //sequenceTracker(myDrumSequence);
 
             }
 
