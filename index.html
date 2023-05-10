@@ -1,7 +1,7 @@
 <html>
     <head>
-<!--           <script src="./enable-threads.js"></script>
-  <script crossorigin src = "maxiInstruments.v.0.7.1.js"></script> -->
+          <script src="./enable-threads.js"></script>
+  <script crossorigin src = "maxiInstruments.v.0.7.2.js"></script>
         <script src="./dist/aframe-master.min.js"></script>
         <!--        JUMP AND FALL (BUT NEVER DEATH, STUCK IN THIS ETERNAL LOOP FOREVER. FOREVAAAAAAAAA)-->
         <script>AFRAME.registerComponent('jump', {
@@ -397,7 +397,7 @@
                 {p:4, s:8, v:40},
                 {p:4, s:12, v:60}];
 
-            //const instruments = new MaxiInstruments();
+            const instruments = new MaxiInstruments(".");
             let scene = document.querySelector('a-scene');
             let player= document.getElementById('player');
             let platformsEntity = document.getElementById('platformsEntity');
@@ -1572,168 +1572,168 @@
 
                 }
             }
-//             instruments.loadModules().then(()=> {
+            instruments.loadModules().then(()=> {
 
-//                 enemySynth = instruments.addSynth();
-//                 backingMidSynth = instruments.addSynth();
-//                 bassSynth = instruments.addSynth();
-//                 backingMidSynth.setOsc(1);
-//                 bassSynth.setOsc(1);
-//                 enemySynth.setOsc(1);
+                enemySynth = instruments.addSynth();
+                backingMidSynth = instruments.addSynth();
+                bassSynth = instruments.addSynth();
+                backingMidSynth.setOsc(1);
+                bassSynth.setOsc(1);
+                enemySynth.setOsc(1);
 
-//                 var dm79 = [50, 57, 64, 65, 72];
-//                 var eb911 = [51, 58, 65, 67, 69];
-//                 var a7sus4 = [45, 57, 64, 67,47];
-//                 var cadd9 = [48, 62, 64, 67, 72];
+                var dm79 = [50, 57, 64, 65, 72];
+                var eb911 = [51, 58, 65, 67, 69];
+                var a7sus4 = [45, 57, 64, 67,47];
+                var cadd9 = [48, 62, 64, 67, 72];
 
-//                 var midSynthSeq = [
-//                     //start, length, pitches
-//                     {s:0, l:8, p:dm79},
-//                     {s:16, l:8, p:eb911},
-//                     {s:32, l:8, p:a7sus4},
-//                     {s:48, l:8, p:cadd9},
-//                 ];
-//                 var bassSynthSeq = [ {s:0, l:16, p:38}];
+                var midSynthSeq = [
+                    //start, length, pitches
+                    {s:0, l:8, p:dm79},
+                    {s:16, l:8, p:eb911},
+                    {s:32, l:8, p:a7sus4},
+                    {s:48, l:8, p:cadd9},
+                ];
+                var bassSynthSeq = [ {s:0, l:16, p:38}];
 
 
-//                 backingMidSynth.setParams([
-//                     ["oscFn",3],
-//                     ["lfoOscFn",0],
-//                     ["gain",0.4],
-//                     ["pan",0.5],
-//                     ["attack",165],
-//                     ["decay",330],
-//                     ["sustain",0.58],
-//                     ["release",495],
-//                     ["lfoFrequency",0.7],
-//                     ["lfoPitchMod",0],
-//                     ["lfoFilterMod",1000],
-//                     ["lfoAmpMod",0.68],
-//                     ["adsrPitchMod",1],
-//                     ["cutoff",957.6],
-//                     ["reverbMix",0.33],
-//                     ["roomSize",0.27],
-//                     ["delay",0],
-//                     ["delayMix",0.35],
-//                     ["frequency",440],
-//                     ["frequency2",220],
-//                 ]);
-//                 enemySynth.setParams([
-//                     ["oscFn",3],
-//                     ["lfoOscFn",1],
-//                     ["gain",2],
-//                     ["pan",0.5],
-//                     ["attack",0],
-//                     ["decay",330],
-//                     ["sustain",0.1],
-//                     ["release",1500],
-//                     ["lfoFrequency",6.3],
-//                     ["lfoPitchMod",0],
-//                     ["lfoFilterMod",220],
-//                     ["lfoAmpMod",0.88],
-//                     ["adsrPitchMod",0],
-//                     ["cutoff",1372],
-//                     ["reverbMix",0.12],
-//                     ["roomSize",0],
-//                     ["delay",0],
-//                     ["delayMix",0],
-//                     ["frequency",440],
-//                     ["frequency2",220],
-//                 ]);
-//                 bassSynth.setParams([
-//                     ["oscFn",3],
-//                     ["lfoOscFn",1],
-//                     ["gain",0],
-//                     ["pan",0.53],
-//                     ["attack",1155],
-//                     ["decay",480],
-//                     ["sustain",0.58],
-//                     ["release",1185],
-//                     ["lfoFrequency",10],
-//                     ["lfoPitchMod",0],
-//                     ["lfoFilterMod",1000],
-//                     ["lfoAmpMod",0.78],
-//                     ["adsrPitchMod",1],
-//                     ["cutoff",40],
-//                     ["reverbMix",0],
-//                     ["roomSize",0],
-//                     ["delay",0],
-//                     ["delayMix",0.35],
-//                     ["frequency",440],
-//                     ["frequency2",220],
-//                 ]);
+                backingMidSynth.setParams([
+                    ["oscFn",3],
+                    ["lfoOscFn",0],
+                    ["gain",0.4],
+                    ["pan",0.5],
+                    ["attack",165],
+                    ["decay",330],
+                    ["sustain",0.58],
+                    ["release",495],
+                    ["lfoFrequency",0.7],
+                    ["lfoPitchMod",0],
+                    ["lfoFilterMod",1000],
+                    ["lfoAmpMod",0.68],
+                    ["adsrPitchMod",1],
+                    ["cutoff",957.6],
+                    ["reverbMix",0.33],
+                    ["roomSize",0.27],
+                    ["delay",0],
+                    ["delayMix",0.35],
+                    ["frequency",440],
+                    ["frequency2",220],
+                ]);
+                enemySynth.setParams([
+                    ["oscFn",3],
+                    ["lfoOscFn",1],
+                    ["gain",2],
+                    ["pan",0.5],
+                    ["attack",0],
+                    ["decay",330],
+                    ["sustain",0.1],
+                    ["release",1500],
+                    ["lfoFrequency",6.3],
+                    ["lfoPitchMod",0],
+                    ["lfoFilterMod",220],
+                    ["lfoAmpMod",0.88],
+                    ["adsrPitchMod",0],
+                    ["cutoff",1372],
+                    ["reverbMix",0.12],
+                    ["roomSize",0],
+                    ["delay",0],
+                    ["delayMix",0],
+                    ["frequency",440],
+                    ["frequency2",220],
+                ]);
+                bassSynth.setParams([
+                    ["oscFn",3],
+                    ["lfoOscFn",1],
+                    ["gain",0],
+                    ["pan",0.53],
+                    ["attack",1155],
+                    ["decay",480],
+                    ["sustain",0.58],
+                    ["release",1185],
+                    ["lfoFrequency",10],
+                    ["lfoPitchMod",0],
+                    ["lfoFilterMod",1000],
+                    ["lfoAmpMod",0.78],
+                    ["adsrPitchMod",1],
+                    ["cutoff",40],
+                    ["reverbMix",0],
+                    ["roomSize",0],
+                    ["delay",0],
+                    ["delayMix",0.35],
+                    ["frequency",440],
+                    ["frequency2",220],
+                ]);
 
-//                 enemySynth.mapped = ["gain","reverbMix","roomSize", "delay","delayMix"];
-//                 backingMidSynth.mapped = ["gain", "lfoFrequency", "lfoPitchMod", "reverb"];
-//                 bassSynth.mapped = ["lfoFrequency", "pan", "cutoff" ,"adsrPitchMod"];
+                enemySynth.mapped = ["gain","reverbMix","roomSize", "delay","delayMix"];
+                backingMidSynth.mapped = ["gain", "lfoFrequency", "lfoPitchMod", "reverb"];
+                bassSynth.mapped = ["lfoFrequency", "pan", "cutoff" ,"adsrPitchMod"];
 
-//                 sampler = instruments.addSampler();
-//                 sampler.loadSample("BD-ER1-CR8000ish.wav", 0);
-//                 sampler.loadSample("DR660SnareLofinice.wav", 1);
-//                 sampler.loadSample("TOM-ER-MicroTom2.wav", 2);
-//                 sampler.loadSample("FX-ER-Sonario.wav", 3);
-//                 sampler.loadSample("FX-ER1-Woodzblox.wav", 4);
+                sampler = instruments.addSampler();
+                sampler.loadSample("BD-ER1-CR8000ish.wav", 0);
+                sampler.loadSample("DR660SnareLofinice.wav", 1);
+                sampler.loadSample("TOM-ER-MicroTom2.wav", 2);
+                sampler.loadSample("FX-ER-Sonario.wav", 3);
+                sampler.loadSample("FX-ER1-Woodzblox.wav", 4);
 
-//                 sampler.setParam("rate_0", 1);
-//                 sampler.setParam("rate_1", 1);
-//                 sampler.setParam("rate_2", 1);
-//                 sampler.setParam("rate_3", 1);
-//                 sampler.setParam("rate_4", 1);
-//                 sampler.setParam("pan_0", 0.5);
-//                 sampler.setParam("pan_1", 0.5);
-//                 sampler.setParam("pan_2", 0.5);
-//                 sampler.setParam("pan_3", 0.5);
-//                 sampler.setParam("pan_4", 0.5);
-//                 sampler.setParam("gain_0", 1);
-//                 sampler.setParam("gain_1", 1);
-//                 sampler.setParam("gain_2", 1);    
-//                 sampler.setParam("gain_3", 1);    
-//                 sampler.setParam("gain_4", 1);    
+                sampler.setParam("rate_0", 1);
+                sampler.setParam("rate_1", 1);
+                sampler.setParam("rate_2", 1);
+                sampler.setParam("rate_3", 1);
+                sampler.setParam("rate_4", 1);
+                sampler.setParam("pan_0", 0.5);
+                sampler.setParam("pan_1", 0.5);
+                sampler.setParam("pan_2", 0.5);
+                sampler.setParam("pan_3", 0.5);
+                sampler.setParam("pan_4", 0.5);
+                sampler.setParam("gain_0", 1);
+                sampler.setParam("gain_1", 1);
+                sampler.setParam("gain_2", 1);    
+                sampler.setParam("gain_3", 1);    
+                sampler.setParam("gain_4", 1);    
 
-//                 instruments.playPause();
-//                 instruments.setTempo(tempo);
-//                 sampler.setSequence(myDrumSequence, 4);
+                instruments.playPause();
+                instruments.setTempo(tempo);
+                sampler.setSequence(myDrumSequence, 4);
 
-//                 //Sequence and loop set at 4 ticks per beat (1/16ths)
-//                 backingMidSynth.setSequence(midSynthSeq, 4);
-//                 bassSynth.setSequence(bassSynthSeq, 4);
-//                 backingMidSynth.setLoop(16,4);
-//                 bassSynth.setLoop(16,4);
-//                 sampler.setLoop(16,4);
-//                 //instruments.setLoop(32,4);
+                //Sequence and loop set at 4 ticks per beat (1/16ths)
+                backingMidSynth.setSequence(midSynthSeq, 4);
+                bassSynth.setSequence(bassSynthSeq, 4);
+                backingMidSynth.setLoop(16,4);
+                bassSynth.setLoop(16,4);
+                sampler.setLoop(16,4);
+                //instruments.setLoop(32,4);
 
-//                 instruments.setOnTick((playHeads)=> {
-//                     //The current playhead of the third instrument added
-//                     if(playHeads[2] % 3 == 2) {
-//                         metro+=0.5;
-//                         //metro++;
-// //                        sequenceTrigger = true;
-//                     }
-//                     //double speed
-//                     if(playHeads[2] % 3 == 1) {
-//                         doubleMetro++;
-//                     }
-//                     if(playHeads[2] % 48 == 4) {
-//                         sequenceTrigger = true;
-//                     } 
-//                 });
+                instruments.setOnTick((playHeads)=> {
+                    //The current playhead of the third instrument added
+                    if(playHeads[2] % 3 == 2) {
+                        metro+=0.5;
+                        //metro++;
+//                        sequenceTrigger = true;
+                    }
+                    //double speed
+                    if(playHeads[2] % 3 == 1) {
+                        doubleMetro++;
+                    }
+                    if(playHeads[2] % 48 == 4) {
+                        sequenceTrigger = true;
+                    } 
+                });
 
-//             }).catch((err)=> {
-//                 console.log("error", err);
-//             });
-//             //start the step sequencer
-//             document.addEventListener('keydown', (event) => {
-//                 if (event.key){
-//                     if(soundUP == false){
-//                         enemySynth.unmute();
-//                         backingMidSynth.unmute();
-//                         bassSynth.unmute();
-//                         sampler.unmute();
-//                         instruments.playPause();
-//                         soundUP = true; 
-//                     } 
-//                 }
-//             });
+            }).catch((err)=> {
+                console.log("error", err);
+            });
+            //start the step sequencer
+            document.addEventListener('keydown', (event) => {
+                if (event.key){
+                    if(soundUP == false){
+                        enemySynth.unmute();
+                        backingMidSynth.unmute();
+                        bassSynth.unmute();
+                        sampler.unmute();
+                        instruments.playPause();
+                        soundUP = true; 
+                    } 
+                }
+            });
             setInterval(run, 50);
             function run() {
                 if (soundUP) {
@@ -1745,23 +1745,23 @@
                     updatePlatforms();
                     destroyer();
                 }
-//                 if(hasEnded == true){
-//                     end();
-//                 }
-//                 if(canStart == true && hasEnded == true){
-//                     player.setAttribute('position', {x:0, y: 2, z:8});
-//                     scene.setAttribute('background', {color: 'blue'});
-//                     killplane.setAttribute('color', 'red');
-//                     startup();
-//                     sampler.setParams([["gain_0", 1],["gain_1", 1],["gain_2", 1],["gain_3", 1] ]);
-//                     bassSynth.setParam('gain', 1);
-//                     backingMidSynthSeq.setParam('gain', 1);
-//                     sampler.unmute;
-//                     backingMidSynth.unmute;
-//                     bassSynth.unmute;
-//                     instruments.playPause();
-//                 }
-                //sequenceTracker(myDrumSequence);
+                if(hasEnded == true){
+                    end();
+                }
+                if(canStart == true && hasEnded == true){
+                    player.setAttribute('position', {x:0, y: 2, z:8});
+                    scene.setAttribute('background', {color: 'blue'});
+                    killplane.setAttribute('color', 'red');
+                    startup();
+                    sampler.setParams([["gain_0", 1],["gain_1", 1],["gain_2", 1],["gain_3", 1] ]);
+                    bassSynth.setParam('gain', 1);
+                    backingMidSynthSeq.setParam('gain', 1);
+                    sampler.unmute;
+                    backingMidSynth.unmute;
+                    bassSynth.unmute;
+                    instruments.playPause();
+                }
+                sequenceTracker(myDrumSequence);
 
             }
 
