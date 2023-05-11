@@ -365,11 +365,11 @@
             <!--this is where the magic happens-->
             <a-entity class="ground" id="platformsEntity"></a-entity>
             <!--player/camera-->
-            <a-entity id="leftHand" hand-controls="left" thumbstick-controls></a-entity>
-            <a-entity id="rightHand" hand-controls="right" thumbstick-controls></a-entity>
-            <a-entity id="player" camera position="0 1 5"width="1.0" height="2"depth="1" look-controls wasd-controls="acceleration: 60" jump>
-
-            </a-entity>
+            <<a-entity id="rig">
+            <a-entity id="player" camera position="0 0 5"width="1.0" height="2"depth="1" look-controls wasd-controls="acceleration: 60" jump><camera position="0 1.6 0"> </camera>
+                <a-entity oculus-touch-controls="hand: left"></a-entity>
+                <a-entity oculus-touch-controls="hand: right"></a-entity>
+            </a-entity></a-entity>
             <!--killplane-->
             <a-plane id="killplane" side="double" position="0 -18 0" rotation="-90 0 0" width="500" height="500" color="red"></a-plane>
             <!--start point-->
@@ -401,6 +401,8 @@
             // pass the origin in when loading your instruments
             const instruments = new MaxiInstruments(origin);
             let scene = document.querySelector('a-scene');
+            var rig = document.querySelector('#rig');
+
             let player= document.getElementById('player');
             let platformsEntity = document.getElementById('platformsEntity');
             let destroyStep = false;
@@ -513,6 +515,24 @@
             } else {
                 scene.addEventListener('loaded', run);
             }
+           rig.addEventListener('thumbstickmoved', function (evt) {
+                // Change this value to adjust the speed.
+                var speed = 0.1;
+
+                // Use the event detail to determine how much to move.
+                var moveX = evt.detail.x * speed;
+                var moveZ = evt.detail.y * speed;
+
+                // Get the current position of the rig.
+                var position =  rig.getAttribute('position');
+
+                // Update the position of the rig.
+                rig.setAttribute('position', {
+                    x: position.x + moveX,
+                    y: position.y,
+                    z: position.z - moveZ  // This is negative because the thumbstick's y is positive in the downward direction.
+                });
+            });
             // Left controller (X and Y buttons)
             leftHand.addEventListener('xbuttondown', function () {
                 kickTrigger = true;
