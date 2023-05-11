@@ -4,6 +4,49 @@
  <script src="enable-threads.js"></script>
   <script crossorigin src = "maxiInstruments.v.0.7.2.js"></script>
    <script src="./dist/aframe-master.min.js"></script>
+  <script>AFRAME.registerComponent('thumbstick-controls', {
+                schema: {
+                    speed: {default: 0.1}
+                },
+
+                init: function () {
+                    this.velocity = new THREE.Vector3();
+                },
+
+                tick: function (time, timeDelta) {
+                    var data = this.data;
+                    var velocity = this.velocity;
+                    var el = this.el;
+
+                    // Get the input data from the hand-controls component.
+                    var input = el.components['hand-controls'].data;
+
+                    // If the thumbstick is moved, set the velocity.
+                    if (input.thumbstick) {
+                        velocity.x = input.thumbstick.x * data.speed;
+                        velocity.z = input.thumbstick.y * data.speed;
+                    } else {
+                        velocity.x = 0;
+                        velocity.z = 0;
+                    }
+
+                    // Get the camera direction.
+                    var camera = document.querySelector('#camera');
+                    var direction = camera.getAttribute('rotation');
+
+                    // Apply the rotation to the velocity direction.
+                    var rotation = new THREE.Euler(THREE.Math.degToRad(direction.x), THREE.Math.degToRad(direction.y), 0);
+                    velocity.applyEuler(rotation);
+
+                    // Update the position of the rig.
+                    var player = document.querySelector('#player');
+                    var position = rig.getAttribute('position');
+                    position.x += velocity.x * timeDelta / 1000;
+                    position.z += velocity.z * timeDelta / 1000;
+                    player.setAttribute('position', position);
+                }
+            });
+        </script>
 <!--        JUMP AND FALL (BUT NEVER DEATH, STUCK IN THIS ETERNAL LOOP FOREVER. FOREVAAAAAAAAA)-->
         <script>AFRAME.registerComponent('jump', {
                 schema: {
@@ -322,9 +365,11 @@
             <!--this is where the magic happens-->
             <a-entity class="ground" id="platformsEntity"></a-entity>
             <!--player/camera-->
+          
+           
             <a-entity id="player" camera position="0 1 5"width="1.0" height="2"depth="1" look-controls wasd-controls="acceleration: 60" jump>
-                  <a-entity id="leftHand" oculus-touch-controls="hand: left;"></a-entity>
-                  <a-entity id="rightHand" oculus-touch-controls="hand: right;"></a-entity>
+                 <a-entity id="leftHand" hand-controls="left" thumbstick-controls></a-entity>
+           <a-entity id="rightHand" hand-controls="right" thumbstick-controls></a-entity>
             </a-entity>
             <!--killplane-->
             <a-plane id="killplane" side="double" position="0 -18 0" rotation="-90 0 0" width="500" height="500" color="red"></a-plane>
@@ -508,29 +553,6 @@
             rightHand.addEventListener('triggerup', function () {
                 //console.log('Left hand trigger released');
             });
-
-            document.querySelector('[oculus-touch-controls]').addEventListener('thumbstickmoved', function (evt) {
-                var cameraEl = document.querySelector('#camera');
-                var position = cameraEl.getAttribute('position');
-
-                // Get the thumbstick's x and y values from the event detail.
-                var x = evt.detail.x;
-                var y = evt.detail.y;
-
-                // Use a small multiplier for the movement to not be too fast.
-                var multiplier = 0.05;
-
-                // Add the thumbstick's x value to the camera's x position for side-to-side movement.
-                position.x += x * multiplier;
-
-                // Subtract the thumbstick's y value from the camera's z position for forward and backward movement.
-                position.z -= y * multiplier;
-
-                // Update the camera's position.
-                cameraEl.setAttribute('position', position);
-            });
-
-
             //inputs key down
             document.addEventListener("keydown", function(event) {
                 if(event.key == '1'){
