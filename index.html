@@ -3,6 +3,7 @@
   <!-- must use the keyword 'crossorigin' when specifying src !! -->
  <script src="./libs/enable-threads.js"></script>
   <script crossorigin src = "./libs/maxiInstruments.v.0.7.2.js"></script>
+  <script src="./dist/aframe-master.min.js"></script>
 </head>
 <body>
   <button onclick = "launchSynth()">Play Sampler (User input required)</button>
@@ -19,9 +20,9 @@
     instruments.loadModules().then(()=> {
       
       sampler = instruments.addSampler();
-      sampler.loadSample("BD-ER1-CR8000ish.wav", 0);
-      sampler.loadSample("DR660SnareLofinice.wav", 1);
-      sampler.loadSample("FX-ER-Sonario.wav", 2);
+      sampler.loadSample("./kit1/BD-ER1-CR8000ish.wav", 0);
+      sampler.loadSample("./kit1/DR660SnareLofinice.wav", 1);
+      sampler.loadSample("./kit1/FX-ER-Sonario.wav", 2);
       sampler.mapped = ["rate_0"];
       sampler.setParam("rate_0", 1)
       //Make your own drum sequence, pitch refers to sample index
