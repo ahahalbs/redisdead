@@ -11,20 +11,82 @@
   <script type = "text/javascript">
     
     var synth;
+    let backingMidSynth;
+    
     // make clear that the origin is on mimicproject
     var origin = "https://mimicproject.com/libs";
     // pass the origin in when loading your instruments
     const instruments = new MaxiInstruments(origin);
     const launchSynth = ()=> {    
-    instruments.guiElement = document.getElementById("synths");
     instruments.loadModules().then(()=> {
       
       sampler = instruments.addSampler();
+      backingMidSynth = instruments.addSynth();
+      backingMidSynth.setOsc(1);
+      
       sampler.loadSample("./kit1/BD-ER1-CR8000ish.wav", 0);
       sampler.loadSample("./kit1/DR660SnareLofinice.wav", 1);
       sampler.loadSample("./kit1/FX-ER-Sonario.wav", 2);
       sampler.mapped = ["rate_0"];
-      sampler.setParam("rate_0", 1)
+      sampler.setParam("rate_0", 1);
+      
+      //chords
+      let dm79 = [50, 57, 64, 65, 72];
+      let eb911 = [51, 58, 65, 67, 69];
+      let a7sus4 = [45, 57, 64, 67,47];
+      let cadd9 = [48, 62, 64, 67, 72];
+        
+      backingMidSynth.setParams([
+                    ["oscFn",3],
+                    ["lfoOscFn",0],
+                    ["gain",0.4],
+                    ["pan",0.5],
+                    ["attack",165],
+                    ["decay",330],
+                    ["sustain",0.58],
+                    ["release",495],
+                    ["lfoFrequency",0.7],
+                    ["lfoPitchMod",0],
+                    ["lfoFilterMod",1000],
+                    ["lfoAmpMod",0.68],
+                    ["adsrPitchMod",1],
+                    ["cutoff",957.6],
+                    ["reverbMix",0.33],
+                    ["roomSize",0.27],
+                    ["delay",0],
+                    ["delayMix",0.35],
+                    ["frequency",440],
+                    ["frequency2",220],
+                ]);
+      
+      sampler.setParam("rate_0", 1);
+      sampler.setParam("rate_1", 1);
+      sampler.setParam("rate_2", 1);
+      sampler.setParam("rate_3", 1);
+      sampler.setParam("rate_4", 1);
+      sampler.setParam("pan_0", 0.5);
+      sampler.setParam("pan_1", 0.5);
+      sampler.setParam("pan_2", 0.5);
+      sampler.setParam("pan_3", 0.5);
+      sampler.setParam("pan_4", 0.5);
+      sampler.setParam("gain_0", 1);
+      sampler.setParam("gain_1", 1);
+      sampler.setParam("gain_2", 1);    
+      sampler.setParam("gain_3", 1);    
+      sampler.setParam("gain_4", 1);    
+      
+      enemySynth.mapped = ["gain","reverbMix","roomSize", "delay","delayMix"];
+      backingMidSynth.mapped = ["gain", "lfoFrequency", "lfoPitchMod", "reverb"];
+      bassSynth.mapped = ["lfoFrequency", "pan", "cutoff" ,"adsrPitchMod"];
+      
+      var midSynthSeq = [
+                    {s:0, l:8, p:dm79},
+                    {s:16, l:8, p:eb911},
+                    {s:32, l:8, p:a7sus4},
+                    {s:48, l:8, p:cadd9},
+                ];
+            
+      
       //Make your own drum sequence, pitch refers to sample index
       //24 Steps per beat
       let drums = [
@@ -39,8 +101,11 @@
 
       //Set the sequences to the instruments
       instruments.setTempo(120);
+      
+      backingMidSynth.setSequence(midSynthSeq, 4);
+      backingMidSynth.setLoop(16,4);
       sampler.setSequence(drums);
-      sampler.setLoop(48);
+      sampler.setLoop(16,4);
     }).catch((err)=> {
       console.log("error", err);
     });
