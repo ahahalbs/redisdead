@@ -365,11 +365,10 @@
             <!--this is where the magic happens-->
             <a-entity class="ground" id="platformsEntity"></a-entity>
             <!--player/camera-->
-          
-           
+            <a-entity id="leftHand" hand-controls="left" thumbstick-controls></a-entity>
+            <a-entity id="rightHand" hand-controls="right" thumbstick-controls></a-entity>
             <a-entity id="player" camera position="0 1 5"width="1.0" height="2"depth="1" look-controls wasd-controls="acceleration: 60" jump>
-                 <a-entity id="leftHand" hand-controls="left" thumbstick-controls></a-entity>
-           <a-entity id="rightHand" hand-controls="right" thumbstick-controls></a-entity>
+
             </a-entity>
             <!--killplane-->
             <a-plane id="killplane" side="double" position="0 -18 0" rotation="-90 0 0" width="500" height="500" color="red"></a-plane>
