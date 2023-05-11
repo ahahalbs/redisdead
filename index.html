@@ -10,6 +10,12 @@
   <script type = "text/javascript">
     
     var synth;
+    let backingMidSynth;
+    var dm79 = [50, 57, 64, 65, 72];
+    var eb911 = [51, 58, 65, 67, 69];
+    var a7sus4 = [45, 57, 64, 67,47];
+    var cadd9 = [48, 62, 64, 67, 72];
+    
     // make clear that the origin is on mimicproject
     var origin = "https://mimicproject.com/libs";
     // pass the origin in when loading your instruments
@@ -17,6 +23,40 @@
     const launchSynth = ()=> {    
     instruments.guiElement = document.getElementById("synths");
     instruments.loadModules().then(()=> {
+      
+      backingMidSynth = instruments.addSynth();
+      var midSynthSeq = [
+                    //start, length, pitches
+                    {s:0, l:8, p:dm79},
+                    {s:16, l:8, p:eb911},
+                    {s:32, l:8, p:a7sus4},
+                    {s:48, l:8, p:cadd9},
+                ];
+      backingMidSynth.setParams([
+                    ["oscFn",3],
+                    ["lfoOscFn",0],
+                    ["gain",0.4],
+                    ["pan",0.5],
+                    ["attack",165],
+                    ["decay",330],
+                    ["sustain",0.58],
+                    ["release",495],
+                    ["lfoFrequency",0.7],
+                    ["lfoPitchMod",0],
+                    ["lfoFilterMod",1000],
+                    ["lfoAmpMod",0.68],
+                    ["adsrPitchMod",1],
+                    ["cutoff",957.6],
+                    ["reverbMix",0.33],
+                    ["roomSize",0.27],
+                    ["delay",0],
+                    ["delayMix",0.35],
+                    ["frequency",440],
+                    ["frequency2",220],
+                ]);
+      backingMidSynth.mapped = ["gain", "lfoFrequency", "lfoPitchMod", "reverb"];
+      backingMidSynth.setSequence(midSynthSeq, 4);
+      backingMidSynth.setLoop(16,4);
       
       sampler = instruments.addSampler();
       sampler.loadSample("BD-ER1-CR8000ish.wav", 0);
