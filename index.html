@@ -226,6 +226,7 @@
            rightController.addEventListener('thumbstickmoved', function(evt) {
                console.log('Thumbstick moved:', evt.detail.x, evt.detail.y);
            });
+	       
           const launchSynth = ()=> {    
          instruments.loadModules().then(()=> {
       
@@ -288,7 +289,8 @@
     }).catch((err)=> {
       console.log("error", err);
     });
-          }    
+     }
+	  }
     </script>
   </body>
 </html>
