@@ -3,51 +3,121 @@
   <!-- must use the keyword 'crossorigin' when specifying src !! -->
  <script src="enable-threads.js"></script>
   <script crossorigin src = "maxiInstruments.v.0.7.2.js"></script>
-   <script src="./dist/aframe-master.min.js"></script>
-  <script>AFRAME.registerComponent('thumbstick-controls', {
+  <script src="./dist/aframe-master.min.js"></script>
+        <!--        CONTROLLER ABRIDGED NON-NONSENSE HACK OF LEE STEMKOSKIS-->
+        <script>AFRAME.registerComponent('controller', {
                 schema: {
-                    speed: {default: 0.1}
+                    leftControllerId:  {type: 'string',  default: "#left-controller"},
+                    rightControllerId: {type: 'string',  default: "#right-controller"},
+                    moveSpeed: {type: 'number', default: 1.6},
+                    smoothness: {type: 'number', default: 0.05}
                 },
+                init: function() {
+                    this.leftController  = document.querySelector(this.data.leftControllerId);
+                    this.rightController = document.querySelector(this.data.rightControllerId);
 
-                init: function () {
-                    this.velocity = new THREE.Vector3();
+                    this.leftAxisX   = 0;
+                    this.leftAxisY   = 0;
+
+                    let self = this;
+
+                    this.leftController.addEventListener('thumbstickmoved', function(event) {
+                        self.leftAxisX = event.detail.x;
+                        self.leftAxisY = event.detail.y;
+                    });
+
+                    // X button
+                    this.el.addEventListener("xbuttondown", function(event) {
+                        self.el.emit('xbuttonpressed', {pressed: true});
+                    });
+
+                    this.el.addEventListener("xbuttonup", function(event) {
+                        self.el.emit('xbuttonreleased', {pressed: false});
+                    });
+
+                    // Y button
+                    this.el.addEventListener("ybuttondown", function(event) {
+                        self.el.emit('ybuttonpressed', {pressed: true});
+                    });
+
+                    this.el.addEventListener("ybuttonup", function(event) {
+                        self.el.emit('ybuttonreleased', {pressed: false});
+                    });
+
+                    // A button
+                    this.el.addEventListener("abuttondown", function(event) {
+                        self.el.emit('abuttonpressed', {pressed: true});
+                    });
+
+                    this.el.addEventListener("abuttonup", function(event) {
+                        self.el.emit('abuttonreleased', {pressed: false});
+                    });
+
+                    // B button
+                    this.el.addEventListener("bbuttondown", function(event) {
+                        self.el.emit('bbuttonpressed', {pressed: true});
+                    });
+
+                    this.el.addEventListener("bbuttonup", function(event) {
+                        self.el.emit('bbuttonreleased', {pressed: false});
+                    });
+
+                    // Left trigger
+                    this.el.addEventListener("triggerdown", function(event) {
+                        self.el.emit('lefttriggerpressed', {pressed: true});
+                    });
+
+                    this.el.addEventListener("triggerup", function(event) {
+                        self.el.emit('lefttriggerreleased', {pressed: false});
+                    });
+
+                    // Right trigger
+                    this.el.addEventListener("triggerdown", function(event) {
+                        self.el.emit('righttriggerpressed', {pressed: true});
+                    });
+
+                    this.el.addEventListener("triggerup", function(event) {
+                        self.el.emit('righttriggerreleased', {pressed: false});
+                    });
+
+                    // Thumbstick
+                    this.el.addEventListener("thumbstickmoved", function(event) {
+                        self.el.emit('thumbstickmoved', {x: event.detail.x, y: event.detail.y});
+                    });
                 },
+                tick: function() {
+                    let player = document.querySelector("#player");
+                    let direction = new THREE.Vector3();
+                    let left = new THREE.Vector3();
 
-                tick: function (time, timeDelta) {
-                    var data = this.data;
-                    var velocity = this.velocity;
-                    var el = this.el;
+                    // Use the camera's direction for movement
+                    player.object3D.getWorldDirection(direction);
 
-                    // Get the input data from the hand-controls component.
-                    var input = el.components['hand-controls'].data;
+                    // Invert direction
+                    direction.negate();
 
-                    // If the thumbstick is moved, set the velocity.
-                    if (input.thumbstick) {
-                        velocity.x = input.thumbstick.x * data.speed;
-                        velocity.z = input.thumbstick.y * data.speed;
-                    } else {
-                        velocity.x = 0;
-                        velocity.z = 0;
-                    }
+                    // Calculate left direction
+                    left.crossVectors(player.object3D.up, direction);
 
-                    // Get the camera direction.
-                    var camera = document.querySelector('#camera');
-                    var direction = camera.getAttribute('rotation');
+                    // Calculate movement based on thumbstick position and speed
+                    let dx = direction.x * this.leftAxisY * this.data.moveSpeed - left.x * this.leftAxisX * this.data.moveSpeed;
+                    let dz = direction.z * this.leftAxisY * this.data.moveSpeed - left.z * this.leftAxisX * this.data.moveSpeed;
 
-                    // Apply the rotation to the velocity direction.
-                    var rotation = new THREE.Euler(THREE.Math.degToRad(direction.x), THREE.Math.degToRad(direction.y), 0);
-                    velocity.applyEuler(rotation);
+                    // Create a new vector for the desired position
+                    let desiredPosition = new THREE.Vector3(
+                        player.object3D.position.x + dx,
+                        player.object3D.position.y,
+                        player.object3D.position.z -+ dz
+                    );
 
-                    // Update the position of the rig.
-                    var player = document.querySelector('#player');
-                    var position = rig.getAttribute('position');
-                    position.x += velocity.x * timeDelta / 1000;
-                    position.z += velocity.z * timeDelta / 1000;
-                    player.setAttribute('position', position);
-                }
+                    // Smoothly transition to the desired position
+                    player.object3D.position.lerp(desiredPosition, this.data.smoothness);
+                },
             });
+
+
         </script>
-<!--        JUMP AND FALL (BUT NEVER DEATH, STUCK IN THIS ETERNAL LOOP FOREVER. FOREVAAAAAAAAA)-->
+        <!--        JUMP AND FALL (BUT NEVER DEATH, STUCK IN THIS ETERNAL LOOP FOREVER. FOREVAAAAAAAAA)-->
         <script>AFRAME.registerComponent('jump', {
                 schema: {
                     groundSelector: { type: "string", default: ".ground"},
@@ -63,11 +133,14 @@
                     this.fallSpeed = 0.5;
                     this.canJump = true;
 
-                    document.querySelector('#leftHand').addEventListener('triggerdown', () => {
-                        if (!this.isJumping && this.canJump) {
-                            this.isJumping = true;
-                            this.jumpSpeed = 0.38;
-                            this.isOnGround = false;
+
+                    document.querySelector('#left-controller').addEventListener('lefttriggerpressed', function(evt) {
+                        if (evt === true && !this.isJumping) {
+                            if (this.canJump == true) {
+                                this.isJumping = true;
+                                this.jumpSpeed = this.jumpHeight;
+                                this.isOnGround = false;
+                            }
                         }
                     });
 
@@ -362,14 +435,18 @@
     </head>
     <body>
         <a-scene background="color: #005AFF">
+            <!--vr controller-->
+            <a-entity id="left-controller" oculus-touch-controls="hand: left" controller></a-entity>
+            <a-entity id="right-controller" oculus-touch-controls="hand: right" controller></a-entity>
             <!--this is where the magic happens-->
             <a-entity class="ground" id="platformsEntity"></a-entity>
             <!--player/camera-->
-            <<a-entity id="rig">
-            <a-entity id="player" camera position="0 0 5"width="1.0" height="2"depth="1" look-controls wasd-controls="acceleration: 60" jump><camera position="0 1.6 0"> </camera>
-                <a-entity oculus-touch-controls="hand: left"></a-entity>
-                <a-entity oculus-touch-controls="hand: right"></a-entity>
-            </a-entity></a-entity>
+            <a-entity id="player" camera position="0 1.6 6"width="1.0" height="2"depth="1" look-controls wasd-controls="acceleration: 60" jump>
+            </a-entity>
+<!--
+            <a-entity id="player" position="0 -1 6"width="1.0" height="2"depth="1" look-controls wasd-controls="acceleration: 60" jump><camera position="0 1.6 0"> </camera>
+            </a-entity>
+-->
             <!--killplane-->
             <a-plane id="killplane" side="double" position="0 -18 0" rotation="-90 0 0" width="500" height="500" color="red"></a-plane>
             <!--start point-->
@@ -396,13 +473,11 @@
                 {p:4, s:8, v:40},
                 {p:4, s:12, v:60}];
 
-
-             var origin = "https://mimicproject.com/libs";
+            // make clear that the origin is on mimicproject
+            var origin = "https://mimicproject.com/libs";
             // pass the origin in when loading your instruments
             const instruments = new MaxiInstruments(origin);
             let scene = document.querySelector('a-scene');
-            var rig = document.querySelector('#rig');
-
             let player= document.getElementById('player');
             let platformsEntity = document.getElementById('platformsEntity');
             let destroyStep = false;
@@ -466,6 +541,8 @@
                     let calc = Math.round(Math.abs((255/16) *i));
                     let rgbString = `rgb(${calc}, ${calc}, ${calc})`;
                     platform.setAttribute('material', 'color', rgbString);
+                    //platform.setAttribute('material', {color: rgbString, transparent: 'true', opacity: '0.5'});
+
                     platform.setAttribute('position', {x: 0, y: 0, z: -i*platformSize});
                     platform.setAttribute('width', platformSize);
                     platform.setAttribute("height", platformSize);
@@ -489,7 +566,7 @@
                 playhead.setAttribute('width', platformSize-0.1);
                 playhead.setAttribute("height", platformSize-0.1);
                 playhead.setAttribute("depth", platformSize-0.1);
-                playhead.setAttribute("box-collider", ''); 
+                //playhead.setAttribute("box-collider", ''); 
                 playheads.push({p: playhead, o: '-z',startX: 0 , startZ: 0, modDel: 0, modmult: 1});
                 platformsEntity.appendChild(playhead);
 
@@ -515,62 +592,79 @@
             } else {
                 scene.addEventListener('loaded', run);
             }
-           rig.addEventListener('thumbstickmoved', function (evt) {
-                // Change this value to adjust the speed.
-                var speed = 0.1;
+            document.addEventListener('DOMContentLoaded', function() {
+                let leftController = document.querySelector('#left-controller');
+                let rightController = document.querySelector('#right-controller');
 
-                // Use the event detail to determine how much to move.
-                var moveX = evt.detail.x * speed;
-                var moveZ = evt.detail.y * speed;
-
-                // Get the current position of the rig.
-                var position =  rig.getAttribute('position');
-
-                // Update the position of the rig.
-                rig.setAttribute('position', {
-                    x: position.x + moveX,
-                    y: position.y,
-                    z: position.z - moveZ  // This is negative because the thumbstick's y is positive in the downward direction.
+                // X button
+                leftController.addEventListener('xbuttonpressed', function(evt) {
+                    if(evt.detail.pressed) {
+                        kickTrigger = true;
+                    }
                 });
-            });
-            // Left controller (X and Y buttons)
-            leftHand.addEventListener('xbuttondown', function () {
-                kickTrigger = true;
-            });
-            leftHand.addEventListener('xbuttonup', function () {
-                kickTrigger = false;
-            });
-            leftHand.addEventListener('ybuttondown', function () {
-                bellTrigger = true;
-            });
-            leftHand.addEventListener('ybuttonup', function () {
-                bellTrigger = false;
-            });
-            leftHand.addEventListener('triggerdown', function () {
-                destroyStep = true;
-            });
-            leftHand.addEventListener('triggerup', function () {
-                destroyStep = false; 
-            });
 
-            // Right controller (A and B buttons)
-            rightHand.addEventListener('abuttondown', function () {
-                snareTrigger = true;
-            });
-            rightHand.addEventListener('abuttonup', function () {
-                snareTrigger = false;
-            });
-            rightHand.addEventListener('bbuttondown', function () {
-                hihatTrigger = true;
-            });
-            rightHand.addEventListener('bbuttonup', function () {
-                hihatTrigger = false;
-            });
-            rightHand.addEventListener('triggerdown', function () {
-                //console.log('Right trigger pressed');
-            });
-            rightHand.addEventListener('triggerup', function () {
-                //console.log('Left hand trigger released');
+                leftController.addEventListener('xbuttonreleased', function(evt) {
+                    kickTrigger = false;
+                });
+
+                // Y button
+                leftController.addEventListener('ybuttonpressed', function(evt) {
+                    if(evt.detail.pressed) {
+                        bellTrigger = true;
+                    }
+                });
+
+                leftController.addEventListener('ybuttonreleased', function(evt) {
+                    bellTrigger = false;
+                });
+
+                // A button
+                rightController.addEventListener('abuttonpressed', function(evt) {
+                    if(evt.detail.pressed) {
+                        snareTrigger = true;
+                    }
+                });
+
+                rightController.addEventListener('abuttonreleased', function(evt) {
+                    snareTrigger = false;
+                });
+
+                // B button
+                rightController.addEventListener('bbuttonpressed', function(evt) {
+                    if(evt.detail.pressed) {
+                        hihatTrigger = true;
+                    }
+                });
+
+                rightController.addEventListener('bbuttonreleased', function(evt) {
+                    hihatTrigger = false;
+                });
+
+                // Left Trigger
+                leftController.addEventListener('lefttriggerpressed', function(evt) {
+                    isJumping = true;
+                });
+
+                leftController.addEventListener('lefttriggerreleased', function(evt) {
+                    isJumping = false;
+                });
+
+                // Right Trigger
+                rightController.addEventListener('righttriggerpressed', function(evt) {
+                    destroyStep = true;
+                });
+
+                rightController.addEventListener('righttriggerreleased', function(evt) {
+                    destroyStep = false;
+                });
+
+                // Thumbstick
+                leftController.addEventListener('thumbstickmoved', function(evt) {
+                    soundUp = true;
+                });
+
+                rightController.addEventListener('thumbstickmoved', function(evt) {
+                });
             });
             //inputs key down
             document.addEventListener("keydown", function(event) {
@@ -726,7 +820,7 @@
                 for (let i = 0; i < playheads.length; i++) {
                     let localMetro = playheads[i].modmult == 2 ? doubleMetro : metro;
                     let modMetro = -(localMetro - playheads[i].modDel) % stepSequenceLength;
-                    
+
                     const playheadPos = playheads[i].p.getAttribute('position');
                     const playheadSize = parseFloat(playheads[i].p.getAttribute('width'));
 
@@ -1353,7 +1447,7 @@
                     bassSynth.setParam("adsrPitchMod", drop*-1000);
                     bassSynth.setParam('cutoff', drop*-100);
                     bassSynth.setParam("lfoFrequency", 10-drop);
-//                        ,["cutoff", drop*1000],["lfoFrequency", drop],);
+                    //                        ,["cutoff", drop*1000],["lfoFrequency", drop],);
                     backingMidSynth.setParam("lfoFrequency", drop);
                     sampler.setParam("rate_4", drop);
                 } 
@@ -1361,11 +1455,11 @@
                     sampler.setParam("rate_0", 0.5);
                     sampler.setParam("rate_1", 0.5);
                     bassSynth.setParam("adsrPitchMod", 0);
-//                                        ["cutoff",40]);
+                    //                                        ["cutoff",40]);
                     //backingMidSynth.setParam("reverbMix", 0.12);
                 }
 
-                                //our arrangement for backing synths
+                //our arrangement for backing synths
                 if(collectablesFound == 1 && collectablePicked == true){
 
                     bassSynth.setParam('gain', 1);
@@ -1562,7 +1656,7 @@
                 sampler.setParam("gain_2", 1);    
                 sampler.setParam("gain_3", 1);    
                 sampler.setParam("gain_4", 1);  
-                
+
                 sampler.mapped = ["rate_0", "rate_1", "rate_2", "rate_3", "rate_4"];
 
                 instruments.playPause();
@@ -1581,9 +1675,6 @@
                     //The current playhead of the third instrument added
                     if(playHeads[2] % 6 == 2) {
                         metro++;
-                        
-                        //metro++;
-                        //                        sequenceTrigger = true;
                     }
                     //double speed
                     if(playHeads[2] % 3 == 2) {
@@ -1599,7 +1690,7 @@
             });
             //start the step sequencer
             document.addEventListener('keydown', (event) => {
-                if (event.key){
+                if (event.key ){
                     if(soundUP == false){
                         enemySynth.unmute();
                         backingMidSynth.unmute();
@@ -1609,6 +1700,7 @@
                         soundUP = true; 
                     } 
                 }
+
             });
             setInterval(run, 50);
             function run() {
