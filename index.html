@@ -1,296 +1,295 @@
 
 <!DOCTYPE html>
 <html>
-  <head>
-    <script src="./dist/aframe-master.min.js"></script>
- 	<script crossorigin src = "maxiInstruments.v.0.7.2.js"></script>
-    
-    <script>
-    AFRAME.registerComponent('controller-listener', {
-     schema: {
-          leftControllerId:  {type: 'string',  default: "#left-controller"},
-          rightControllerId: {type: 'string',  default: "#right-controller"},
-          moveSpeed: {type: 'number', default: 1.60},
-       	  smoothness: {type: 'number', default: 0.051}
-        },
-      init: function() {
-        this.leftController  = document.querySelector(this.data.leftControllerId);
-        this.rightController = document.querySelector(this.data.rightControllerId);
+    <head>
+        <script src="./dist/aframe-master.min.js"></script>
+        <script crossorigin src = "maxiInstruments.v.0.7.2.js"></script>
 
-        this.leftAxisX   = 0;
-        this.leftAxisY   = 0;
+        <script>
+            AFRAME.registerComponent('controller-listener', {
+                schema: {
+                    leftControllerId:  {type: 'string',  default: "#left-controller"},
+                    rightControllerId: {type: 'string',  default: "#right-controller"},
+                    moveSpeed: {type: 'number', default: 1.60},
+                    smoothness: {type: 'number', default: 0.051}
+                },
+                init: function() {
+                    this.leftController  = document.querySelector(this.data.leftControllerId);
+                    this.rightController = document.querySelector(this.data.rightControllerId);
 
-        let self = this;
-        
-        this.leftController.addEventListener('thumbstickmoved', function(event) {
-            self.leftAxisX = event.detail.x;
-            self.leftAxisY = event.detail.y;
-          });
+                    this.leftAxisX   = 0;
+                    this.leftAxisY   = 0;
 
-        // X button
-        this.el.addEventListener("xbuttondown", function(event) {
-          self.el.emit('xbuttonpressed', {pressed: true});
-        });
+                    let self = this;
 
-        this.el.addEventListener("xbuttonup", function(event) {
-          self.el.emit('xbuttonreleased', {pressed: false});
-        });
+                    this.leftController.addEventListener('thumbstickmoved', function(event) {
+                        self.leftAxisX = event.detail.x;
+                        self.leftAxisY = event.detail.y;
+                    });
 
-        // Y button
-        this.el.addEventListener("ybuttondown", function(event) {
-          self.el.emit('ybuttonpressed', {pressed: true});
-        });
+                    // X button
+                    this.el.addEventListener("xbuttondown", function(event) {
+                        self.el.emit('xbuttonpressed', {pressed: true});
+                    });
 
-        this.el.addEventListener("ybuttonup", function(event) {
-          self.el.emit('ybuttonreleased', {pressed: false});
-        });
+                    this.el.addEventListener("xbuttonup", function(event) {
+                        self.el.emit('xbuttonreleased', {pressed: false});
+                    });
 
-        // A button
-        this.el.addEventListener("abuttondown", function(event) {
-          self.el.emit('abuttonpressed', {pressed: true});
-        });
+                    // Y button
+                    this.el.addEventListener("ybuttondown", function(event) {
+                        self.el.emit('ybuttonpressed', {pressed: true});
+                    });
 
-        this.el.addEventListener("abuttonup", function(event) {
-          self.el.emit('abuttonreleased', {pressed: false});
-        });
+                    this.el.addEventListener("ybuttonup", function(event) {
+                        self.el.emit('ybuttonreleased', {pressed: false});
+                    });
 
-        // B button
-        this.el.addEventListener("bbuttondown", function(event) {
-          self.el.emit('bbuttonpressed', {pressed: true});
-        });
+                    // A button
+                    this.el.addEventListener("abuttondown", function(event) {
+                        self.el.emit('abuttonpressed', {pressed: true});
+                    });
 
-        this.el.addEventListener("bbuttonup", function(event) {
-          self.el.emit('bbuttonreleased', {pressed: false});
-        });
+                    this.el.addEventListener("abuttonup", function(event) {
+                        self.el.emit('abuttonreleased', {pressed: false});
+                    });
 
-        // Left trigger
-        this.el.addEventListener("triggerdown", function(event) {
-          self.el.emit('lefttriggerpressed', {pressed: true});
-        });
+                    // B button
+                    this.el.addEventListener("bbuttondown", function(event) {
+                        self.el.emit('bbuttonpressed', {pressed: true});
+                    });
 
-        this.el.addEventListener("triggerup", function(event) {
-          self.el.emit('lefttriggerreleased', {pressed: false});
-        });
+                    this.el.addEventListener("bbuttonup", function(event) {
+                        self.el.emit('bbuttonreleased', {pressed: false});
+                    });
 
-        // Right trigger
-        this.el.addEventListener("triggerdown", function(event) {
-          self.el.emit('righttriggerpressed', {pressed: true});
-        });
+                    // Left trigger
+                    this.el.addEventListener("triggerdown", function(event) {
+                        self.el.emit('lefttriggerpressed', {pressed: true});
+                    });
 
-        this.el.addEventListener("triggerup", function(event) {
-          self.el.emit('righttriggerreleased', {pressed: false});
-        });
+                    this.el.addEventListener("triggerup", function(event) {
+                        self.el.emit('lefttriggerreleased', {pressed: false});
+                    });
 
-        // Thumbstick
-        this.el.addEventListener("thumbstickmoved", function(event) {
-          self.el.emit('thumbstickmoved', {x: event.detail.x, y: event.detail.y});
-        });
-      },
-      tick: function() {
-          let player = document.querySelector("#player");
-          let direction = new THREE.Vector3();
-          let left = new THREE.Vector3();
+                    // Right trigger
+                    this.el.addEventListener("triggerdown", function(event) {
+                        self.el.emit('righttriggerpressed', {pressed: true});
+                    });
 
-          // Use the camera's direction for movement
-          player.object3D.getWorldDirection(direction);
+                    this.el.addEventListener("triggerup", function(event) {
+                        self.el.emit('righttriggerreleased', {pressed: false});
+                    });
 
-          // Invert direction
-          direction.negate();
+                    // Thumbstick
+                    this.el.addEventListener("thumbstickmoved", function(event) {
+                        self.el.emit('thumbstickmoved', {x: event.detail.x, y: event.detail.y});
+                    });
+                },
+                tick: function() {
+                    let player = document.querySelector("#player");
+                    let direction = new THREE.Vector3();
+                    let left = new THREE.Vector3();
 
-          // Calculate left direction
-          left.crossVectors(player.object3D.up, direction);
+                    // Use the camera's direction for movement
+                    player.object3D.getWorldDirection(direction);
 
-          // Calculate movement based on thumbstick position and speed
-          let dx = direction.x * this.leftAxisY * this.data.moveSpeed - left.x * this.leftAxisX * this.data.moveSpeed;
-          let dz = direction.z * this.leftAxisY * this.data.moveSpeed - left.z * this.leftAxisX * this.data.moveSpeed;
+                    // Invert direction
+                    direction.negate();
 
-          // Create a new vector for the desired position
-          let desiredPosition = new THREE.Vector3(
-            player.object3D.position.x + dx,
-            player.object3D.position.y,
-            player.object3D.position.z -+ dz
-          );
+                    // Calculate left direction
+                    left.crossVectors(player.object3D.up, direction);
 
-          // Smoothly transition to the desired position
-          player.object3D.position.lerp(desiredPosition, this.data.smoothness);
-        },
-      });
-    </script>
-  </head>
-  <body>
-    <a-scene background="color:blue">
-      <a-entity id="left-controller" oculus-touch-controls="hand: left" controller-listener></a-entity>
-      <a-entity id="right-controller" oculus-touch-controls="hand: right" controller-listener></a-entity>
-      <a-entity id="player">
-        <a-camera position="0 1.6 0"> </a-camera>   
-      </a-entity>
-      <a-box id="box" position="0 1 -5"></a-box>
-      <a-box id="floor_0001" position="0 0 -3" rotation="0 0 0" material="color: #46aa46" width="30" height="1" depth="30"></a-box>
-    </a-scene>
-    <script>
-       var synth;
-       let backingMidSynth;
-       var dm79 = [50, 57, 64, 65, 72];
-       var eb911 = [51, 58, 65, 67, 69];
-       var a7sus4 = [45, 57, 64, 67,47];
-       var cadd9 = [48, 62, 64, 67, 72];
-	   // make clear that the origin is on mimicproject
-       var origin = "https://mimicproject.com/libs";
-       // pass the origin in when loading your instruments
-       const instruments = new MaxiInstruments(origin);
-      
-      
-      
-       let box;
-       document.addEventListener('DOMContentLoaded', function() {
-           box = document.querySelector('#box');
-           let leftController = document.querySelector('#left-controller');
-           let rightController = document.querySelector('#right-controller');
+                    // Calculate movement based on thumbstick position and speed
+                    let dx = direction.x * this.leftAxisY * this.data.moveSpeed - left.x * this.leftAxisX * this.data.moveSpeed;
+                    let dz = direction.z * this.leftAxisY * this.data.moveSpeed - left.z * this.leftAxisX * this.data.moveSpeed;
 
-           // X button
-           leftController.addEventListener('xbuttonpressed', function(evt) {
-               console.log('X button pressed:', evt.detail.pressed);
-               if(evt.detail.pressed) {
-                   box.setAttribute('color', 'red');
-                 launchSynth();
-               }
-           });
+                    // Create a new vector for the desired position
+                    let desiredPosition = new THREE.Vector3(
+                        player.object3D.position.x + dx,
+                        player.object3D.position.y,
+                        player.object3D.position.z -+ dz
+                    );
 
-           leftController.addEventListener('xbuttonreleased', function(evt) {
-               console.log('X button released:', evt.detail.pressed);
-               box.setAttribute('color', 'white');
-           });
+                    // Smoothly transition to the desired position
+                    player.object3D.position.lerp(desiredPosition, this.data.smoothness);
+                },
+            });
+        </script>
+    </head>
+    <body>
+        <a-scene background="color:blue">
+            <a-entity id="left-controller" oculus-touch-controls="hand: left" controller-listener></a-entity>
+            <a-entity id="right-controller" oculus-touch-controls="hand: right" controller-listener></a-entity>
+            <a-entity id="player">
+                <a-camera position="0 1.6 0"> </a-camera>   
+            </a-entity>
+            <a-box id="box" position="0 1 -5"></a-box>
+            <a-box id="floor_0001" position="0 0 -3" rotation="0 0 0" material="color: #46aa46" width="30" height="1" depth="30"></a-box>
+        </a-scene>
+        <script>
+            var synth;
+            let backingMidSynth;
+            var dm79 = [50, 57, 64, 65, 72];
+            var eb911 = [51, 58, 65, 67, 69];
+            var a7sus4 = [45, 57, 64, 67,47];
+            var cadd9 = [48, 62, 64, 67, 72];
+            // make clear that the origin is on mimicproject
+            var origin = "https://mimicproject.com/libs";
+            // pass the origin in when loading your instruments
+            const instruments = new MaxiInstruments(origin);
 
-           // Y button
-           leftController.addEventListener('ybuttonpressed', function(evt) {
-               console.log('Y button pressed:', evt.detail.pressed);
-               if(evt.detail.pressed) {
-                   box.setAttribute('color', 'yellow');
-               }
-           });
 
-           leftController.addEventListener('ybuttonreleased', function(evt) {
-               console.log('Y button released:', evt.detail.pressed);
-               box.setAttribute('color', 'white');
-           });
 
-           // A button
-           rightController.addEventListener('abuttonpressed', function(evt) {
-               console.log('A button pressed:', evt.detail.pressed);
-               if(evt.detail.pressed) {
-                   box.setAttribute('color', 'green');
-               }
-           });
+            let box;
+            document.addEventListener('DOMContentLoaded', function() {
+                box = document.querySelector('#box');
+                let leftController = document.querySelector('#left-controller');
+                let rightController = document.querySelector('#right-controller');
 
-           rightController.addEventListener('abuttonreleased', function(evt) {
-               console.log('A button released:', evt.detail.pressed);
-               box.setAttribute('color', 'white');
-           });
+                // X button
+                leftController.addEventListener('xbuttonpressed', function(evt) {
+                    console.log('X button pressed:', evt.detail.pressed);
+                    if(evt.detail.pressed) {
+                        box.setAttribute('color', 'red');
+                        launchSynth();
+                    }
+                });
 
-           // B button
-           rightController.addEventListener('bbuttonpressed', function(evt) {
-               console.log('B button pressed:', evt.detail.pressed);
-               if(evt.detail.pressed) {
-                   box.setAttribute('color', 'blue');
-               }
-           });
+                leftController.addEventListener('xbuttonreleased', function(evt) {
+                    console.log('X button released:', evt.detail.pressed);
+                    box.setAttribute('color', 'white');
+                });
 
-           rightController.addEventListener('bbuttonreleased', function(evt) {
-               console.log('B button released:', evt.detail.pressed);
-               box.setAttribute('color', 'white');
-           });
+                // Y button
+                leftController.addEventListener('ybuttonpressed', function(evt) {
+                    console.log('Y button pressed:', evt.detail.pressed);
+                    if(evt.detail.pressed) {
+                        box.setAttribute('color', 'yellow');
+                    }
+                });
 
-           // Left Trigger
-           leftController.addEventListener('lefttriggerpressed', function(evt) {
-               box.setAttribute('color', 'purple');
-           });
+                leftController.addEventListener('ybuttonreleased', function(evt) {
+                    console.log('Y button released:', evt.detail.pressed);
+                    box.setAttribute('color', 'white');
+                });
 
-           leftController.addEventListener('lefttriggerreleased', function(evt) {
-               box.setAttribute('color', 'white');
-           });
+                // A button
+                rightController.addEventListener('abuttonpressed', function(evt) {
+                    console.log('A button pressed:', evt.detail.pressed);
+                    if(evt.detail.pressed) {
+                        box.setAttribute('color', 'green');
+                    }
+                });
 
-           // Right Trigger
-           rightController.addEventListener('righttriggerpressed', function(evt) {
-               box.setAttribute('color', 'pink');
-           });
+                rightController.addEventListener('abuttonreleased', function(evt) {
+                    console.log('A button released:', evt.detail.pressed);
+                    box.setAttribute('color', 'white');
+                });
 
-           rightController.addEventListener('righttriggerreleased', function(evt) {
-               box.setAttribute('color', 'white');
-           });
+                // B button
+                rightController.addEventListener('bbuttonpressed', function(evt) {
+                    console.log('B button pressed:', evt.detail.pressed);
+                    if(evt.detail.pressed) {
+                        box.setAttribute('color', 'blue');
+                    }
+                });
 
-           // Thumbstick
-           leftController.addEventListener('thumbstickmoved', function(evt) {
-               console.log('Thumbstick moved:', evt.detail.x, evt.detail.y);
-           });
+                rightController.addEventListener('bbuttonreleased', function(evt) {
+                    console.log('B button released:', evt.detail.pressed);
+                    box.setAttribute('color', 'white');
+                });
 
-           rightController.addEventListener('thumbstickmoved', function(evt) {
-               console.log('Thumbstick moved:', evt.detail.x, evt.detail.y);
-           });
-	       
-          const launchSynth = ()=> {    
-         instruments.loadModules().then(()=> {
-      
-         backingMidSynth = instruments.addSynth();
-         var midSynthSeq = [
-                    //start, length, pitches
-                    {s:0, l:8, p:dm79},
-                    {s:16, l:8, p:eb911},
-                    {s:32, l:8, p:a7sus4},
-                    {s:48, l:8, p:cadd9},
-                ];
-          backingMidSynth.setParams([
-                    ["oscFn",3],
-                    ["lfoOscFn",0],
-                    ["gain",0.4],
-                    ["pan",0.5],
-                    ["attack",165],
-                    ["decay",330],
-                    ["sustain",0.58],
-                    ["release",495],
-                    ["lfoFrequency",0.7],
-                    ["lfoPitchMod",0],
-                    ["lfoFilterMod",1000],
-                    ["lfoAmpMod",0.68],
-                    ["adsrPitchMod",1],
-                    ["cutoff",957.6],
-                    ["reverbMix",0.33],
-                    ["roomSize",0.27],
-                    ["delay",0],
-                    ["delayMix",0.35],
-                    ["frequency",440],
-                    ["frequency2",220],
-                ]);
-        backingMidSynth.mapped = ["gain", "lfoFrequency", "lfoPitchMod", "reverb"];
-        backingMidSynth.setSequence(midSynthSeq, 4);
-        backingMidSynth.setLoop(16,4);
-      
-        sampler = instruments.addSampler();
-        sampler.loadSample("BD-ER1-CR8000ish.wav", 0);
-        sampler.loadSample("DR660SnareLofinice.wav", 1);
-        sampler.loadSample("FX-ER-Sonario.wav", 2);
-        sampler.mapped = ["rate_0"];
-        sampler.setParam("rate_0", 1)
-        //Make your own drum sequence, pitch refers to sample index
-        //24 Steps per beat
-        let drums = [
-        {p:1, s:0, v:127},
-        {p:1, s:36, v:127},
-        {p:0, s:24, v:127},
-        {p:2, s:0, v:20},
-        {p:2, s:12, v:127},
-        {p:2, s:24, v:20},
-        {p:2, s:36, v:127}
-      ]
+                // Left Trigger
+                leftController.addEventListener('lefttriggerpressed', function(evt) {
+                    box.setAttribute('color', 'purple');
+                });
 
-      //Set the sequences to the instruments
-      instruments.setTempo(120);
-      sampler.setSequence(drums);
-      sampler.setLoop(48);
-    }).catch((err)=> {
-      console.log("error", err);
-    });
-     }
-	  });
-    </script>
-  </body>
+                leftController.addEventListener('lefttriggerreleased', function(evt) {
+                    box.setAttribute('color', 'white');
+                });
+
+                // Right Trigger
+                rightController.addEventListener('righttriggerpressed', function(evt) {
+                    box.setAttribute('color', 'pink');
+                });
+
+                rightController.addEventListener('righttriggerreleased', function(evt) {
+                    box.setAttribute('color', 'white');
+                });
+
+                // Thumbstick
+                leftController.addEventListener('thumbstickmoved', function(evt) {
+                    console.log('Thumbstick moved:', evt.detail.x, evt.detail.y);
+                });
+
+                rightController.addEventListener('thumbstickmoved', function(evt) {
+                    console.log('Thumbstick moved:', evt.detail.x, evt.detail.y);
+                });
+
+                const launchSynth = ()=> {    
+                    instruments.loadModules().then(()=> {
+
+                        backingMidSynth = instruments.addSynth();
+                        var midSynthSeq = [
+                            //start, length, pitches
+                            {s:0, l:8, p:dm79},
+                            {s:16, l:8, p:eb911},
+                            {s:32, l:8, p:a7sus4},
+                            {s:48, l:8, p:cadd9},
+                        ];
+                        backingMidSynth.setParams([
+                            ["oscFn",3],
+                            ["lfoOscFn",0],
+                            ["gain",0.4],
+                            ["pan",0.5],
+                            ["attack",165],
+                            ["decay",330],
+                            ["sustain",0.58],
+                            ["release",495],
+                            ["lfoFrequency",0.7],
+                            ["lfoPitchMod",0],
+                            ["lfoFilterMod",1000],
+                            ["lfoAmpMod",0.68],
+                            ["adsrPitchMod",1],
+                            ["cutoff",957.6],
+                            ["reverbMix",0.33],
+                            ["roomSize",0.27],
+                            ["delay",0],
+                            ["delayMix",0.35],
+                            ["frequency",440],
+                            ["frequency2",220],
+                        ]);
+                        backingMidSynth.mapped = ["gain", "lfoFrequency", "lfoPitchMod", "reverb"];
+                        backingMidSynth.setSequence(midSynthSeq, 4);
+                        backingMidSynth.setLoop(16,4);
+
+                        sampler = instruments.addSampler();
+                        sampler.loadSample("BD-ER1-CR8000ish.wav", 0);
+                        sampler.loadSample("DR660SnareLofinice.wav", 1);
+                        sampler.loadSample("FX-ER-Sonario.wav", 2);
+                        sampler.mapped = ["rate_0"];
+                        sampler.setParam("rate_0", 1)
+                        //Make your own drum sequence, pitch refers to sample index
+                        //24 Steps per beat
+                        let drums = [
+                            {p:1, s:0, v:127},
+                            {p:1, s:36, v:127},
+                            {p:0, s:24, v:127},
+                            {p:2, s:0, v:20},
+                            {p:2, s:12, v:127},
+                            {p:2, s:24, v:20},
+                            {p:2, s:36, v:127}
+                        ]
+
+                        //Set the sequences to the instruments
+                        instruments.setTempo(120);
+                        sampler.setSequence(drums);
+                        sampler.setLoop(48);
+                    }).catch((err)=> {
+                        console.log("error", err);
+                    });
+                };
+        </script>
+    </body>
 </html>
