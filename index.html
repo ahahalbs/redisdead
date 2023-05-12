@@ -441,11 +441,11 @@
             <!--this is where the magic happens-->
             <a-entity class="ground" id="platformsEntity"></a-entity>
             <!--player/camera-->
-            <a-entity id="player" camera position="0 1.6 6"width="1.0" height="2"depth="1" look-controls wasd-controls="acceleration: 60" jump>
-            </a-entity>
+<!--             <a-entity id="player" camera position="0 1.6 6"width="1.0" height="2"depth="1" look-controls wasd-controls="acceleration: 60" jump>
+            </a-entity> -->
 <!--
-            <a-entity id="player" position="0 -1 6"width="1.0" height="2"depth="1" look-controls wasd-controls="acceleration: 60" jump><camera position="0 1.6 0"> </camera>
-            </a-entity>
+<!--             <a-entity id="player" position="0 -1 6"width="1.0" height="2"depth="1" look-controls wasd-controls="acceleration: 60" jump><camera position="0 1.6 0"> </camera>
+            </a-entity> -->
 -->
             <!--killplane-->
             <a-plane id="killplane" side="double" position="0 -18 0" rotation="-90 0 0" width="500" height="500" color="red"></a-plane>
@@ -599,7 +599,7 @@
                 // X button
                 leftController.addEventListener('xbuttonpressed', function(evt) {
                     if(evt.detail.pressed) {
-                        kickTrigger = true;
+                        kickTrigger = true; 
                     }
                 });
 
@@ -1700,7 +1700,21 @@
                         soundUP = true; 
                     } 
                 }
-
+            });
+          document.addEventListener('DOMContentLoaded', function() {
+                let leftController = document.querySelector('#left-controller');
+                leftController.addEventListener('xbuttonpressed', function(evt) {
+                    if(evt.detail.pressed) {
+                        if(soundUP == false){
+                        enemySynth.unmute();
+                        backingMidSynth.unmute();
+                        bassSynth.unmute();
+                        sampler.unmute();
+                        instruments.playPause();
+                        soundUP = true; 
+                      }     
+                    }
+                }
             });
             setInterval(run, 50);
             function run() {
