@@ -3,9 +3,8 @@
   <!-- must use the keyword 'crossorigin' when specifying src !! -->
  <script src="enable-threads.js"></script>
   <script crossorigin src = "maxiInstruments.v.0.7.2.js"></script>
-  <script src="./dist/aframe-master.min.js"></script>
+   <script src="/aframe/dist/aframe-master.min.js"></script>
         <!--        CONTROLLER ABRIDGED NON-NONSENSE HACK OF LEE STEMKOSKIS-->
-        <<!--        CONTROLLER ABRIDGED NON-NONSENSE HACK OF LEE STEMKOSKIS-->
         <script>AFRAME.registerComponent('controller', {
                 schema: {
                     leftControllerId:  {type: 'string',  default: "#left-controller"},
@@ -442,11 +441,14 @@
             <!--this is where the magic happens-->
             <a-entity class="ground" id="platformsEntity"></a-entity>
             <!--player/camera-->
+<!--
             <a-entity id="player" camera position="0 1.6 6"width="1.0" height="2"depth="1" look-controls wasd-controls="acceleration: 60" jump>
             </a-entity>
-<!--
-            <a-entity id="player" position="0 -1 6"width="1.0" height="2"depth="1" look-controls wasd-controls="acceleration: 60" jump><camera position="0 1.6 0"> </camera>
-            </a-entity>-->
+-->
+
+            <a-entity id="player" position="0 0 6" width="0.25" height="1.6"depth="0.25" look-controls wasd-controls="acceleration: 60" jump>
+            <a-entity id="camera" camera position="0 0.0 0"></a-entity>
+            </a-entity>
             <!--killplane-->
             <a-plane id="killplane" side="double" position="0 -18 0" rotation="-90 0 0" width="500" height="500" color="red"></a-plane>
             <!--start point-->
@@ -477,6 +479,7 @@
             var origin = "https://mimicproject.com/libs";
             // pass the origin in when loading your instruments
             const instruments = new MaxiInstruments(origin);
+
             let scene = document.querySelector('a-scene');
             let player= document.getElementById('player');
             let platformsEntity = document.getElementById('platformsEntity');
@@ -815,7 +818,7 @@
             }
             //we move this shit
             function movePlayheads() {
-                const reverseOffset = (stepSequenceLength - 1) * platformSize;
+                const reverseOffset = (stepSequenceLength - 0.5) * platformSize;
 
                 for (let i = 0; i < playheads.length; i++) {
                     let localMetro = playheads[i].modmult == 2 ? doubleMetro : metro;
@@ -1388,11 +1391,16 @@
             //destroy our playforms if our players want to do that
             function destroyer(){
                 if(destroyStep == true && currentBranch > 0){
-                    for (let i = platforms.length - 1; i >= 0; i--) {
+                    let base = currentBranch * 16;
+                    
+                    for (let i = base; i < base + 16; i++) {
                         if (platforms[i].branch === currentBranch) {
                             platforms[i].p.remove();
                             platforms.splice(i, 1); 
                             collectableCount+=1;
+                            collectables.splice(0,1);
+                            platformsEntity.removeChild(collectable);
+
                         }
                     }
                 }
@@ -1537,6 +1545,10 @@
                     if(staging %10){
                         scene.setAttribute('background', 'black');
                     }
+                    if(staging %20){
+                        scene.setAttribute('background', 'black');
+                        
+                    }
 
                 }
             }
@@ -1635,11 +1647,11 @@
                 bassSynth.mapped = ["lfoFrequency", "pan", "cutoff" ,"adsrPitchMod", "frequency"];
 
                 sampler = instruments.addSampler();
-                sampler.loadSample("/sounds/kit1/BD-ER1-CR8000ish.wav", 0);
-                sampler.loadSample("/sounds/DR660SnareLofinice.wav", 1);
-                sampler.loadSample("/sounds/kit1/TOM-ER-MicroTom2.wav", 2);
-                sampler.loadSample("/sounds/kit1/FX-ER-Sonario.wav", 3);
-                sampler.loadSample("/sounds/kit1/FX-ER1-Woodzblox.wav", 4);
+                sampler.loadSample("BD-ER1-CR8000ish.wav", 0);
+                sampler.loadSample("DR660SnareLofinice.wav", 1);
+                sampler.loadSample("TOM-ER-MicroTom2.wav", 2);
+                sampler.loadSample("FX-ER-Sonario.wav", 3);
+                sampler.loadSample("FX-ER1-Woodzblox.wav", 4);
 
                 sampler.setParam("rate_0", 1);
                 sampler.setParam("rate_1", 1);
@@ -1674,7 +1686,7 @@
                 instruments.setOnTick((playHeads)=> {
                     //The current playhead of the third instrument added
                     if(playHeads[2] % 6 == 2) {
-                        metro++;
+                        metro+=0.5;
                     }
                     //double speed
                     if(playHeads[2] % 3 == 2) {
