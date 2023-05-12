@@ -5,6 +5,7 @@
   <script crossorigin src = "maxiInstruments.v.0.7.2.js"></script>
   <script src="./dist/aframe-master.min.js"></script>
         <!--        CONTROLLER ABRIDGED NON-NONSENSE HACK OF LEE STEMKOSKIS-->
+        <<!--        CONTROLLER ABRIDGED NON-NONSENSE HACK OF LEE STEMKOSKIS-->
         <script>AFRAME.registerComponent('controller', {
                 schema: {
                     leftControllerId:  {type: 'string',  default: "#left-controller"},
@@ -441,12 +442,11 @@
             <!--this is where the magic happens-->
             <a-entity class="ground" id="platformsEntity"></a-entity>
             <!--player/camera-->
-<!--             <a-entity id="player" camera position="0 1.6 6"width="1.0" height="2"depth="1" look-controls wasd-controls="acceleration: 60" jump>
-            </a-entity> -->
+            <a-entity id="player" camera position="0 1.6 6"width="1.0" height="2"depth="1" look-controls wasd-controls="acceleration: 60" jump>
+            </a-entity>
 <!--
-<!--             <a-entity id="player" position="0 -1 6"width="1.0" height="2"depth="1" look-controls wasd-controls="acceleration: 60" jump><camera position="0 1.6 0"> </camera>
-            </a-entity> -->
--->
+            <a-entity id="player" position="0 -1 6"width="1.0" height="2"depth="1" look-controls wasd-controls="acceleration: 60" jump><camera position="0 1.6 0"> </camera>
+            </a-entity>-->
             <!--killplane-->
             <a-plane id="killplane" side="double" position="0 -18 0" rotation="-90 0 0" width="500" height="500" color="red"></a-plane>
             <!--start point-->
@@ -599,7 +599,7 @@
                 // X button
                 leftController.addEventListener('xbuttonpressed', function(evt) {
                     if(evt.detail.pressed) {
-                        kickTrigger = true; 
+                        kickTrigger = true;
                     }
                 });
 
@@ -1635,11 +1635,11 @@
                 bassSynth.mapped = ["lfoFrequency", "pan", "cutoff" ,"adsrPitchMod", "frequency"];
 
                 sampler = instruments.addSampler();
-                sampler.loadSample("BD-ER1-CR8000ish.wav", 0);
-                sampler.loadSample("DR660SnareLofinice.wav", 1);
-                sampler.loadSample("TOM-ER-MicroTom2.wav", 2);
-                sampler.loadSample("FX-ER-Sonario.wav", 3);
-                sampler.loadSample("FX-ER1-Woodzblox.wav", 4);
+                sampler.loadSample("/sounds/kit1/BD-ER1-CR8000ish.wav", 0);
+                sampler.loadSample("/sounds/DR660SnareLofinice.wav", 1);
+                sampler.loadSample("/sounds/kit1/TOM-ER-MicroTom2.wav", 2);
+                sampler.loadSample("/sounds/kit1/FX-ER-Sonario.wav", 3);
+                sampler.loadSample("/sounds/kit1/FX-ER1-Woodzblox.wav", 4);
 
                 sampler.setParam("rate_0", 1);
                 sampler.setParam("rate_1", 1);
@@ -1700,21 +1700,7 @@
                         soundUP = true; 
                     } 
                 }
-            });
-          document.addEventListener('DOMContentLoaded', function() {
-                let leftController = document.querySelector('#left-controller');
-                leftController.addEventListener('xbuttonpressed', function(evt) {
-                    if(evt.detail.pressed) {
-                        if(soundUP == false){
-                        enemySynth.unmute();
-                        backingMidSynth.unmute();
-                        bassSynth.unmute();
-                        sampler.unmute();
-                        instruments.playPause();
-                        soundUP = true; 
-                      }     
-                    }
-                });
+
             });
             setInterval(run, 50);
             function run() {
