@@ -1,129 +1,136 @@
+<!DOCTYPE html>
 <html>
-    <head>
-        <script src="enable-threads.js"></script>
-        <script crossorigin src = "maxiInstruments.v.0.7.2.js"></script>
-        </script>
-        <script src="./dist/aframe-master.min.js"></script>
-        <!--        CONTROLLER ABRIDGED NON-NONSENSE HACK OF LEE STEMKOSKIS-->
-        <script>AFRAME.registerComponent('controller', {
-                schema: {
-                    leftControllerId:  {type: 'string',  default: "#left-controller"},
-                    rightControllerId: {type: 'string',  default: "#right-controller"},
-                    moveSpeed: {type: 'number', default: 1.6},
-                    smoothness: {type: 'number', default: 0.05}
-                },
-                init: function() {
-                    this.leftController  = document.querySelector(this.data.leftControllerId);
-                    this.rightController = document.querySelector(this.data.rightControllerId);
+  <head>
+    <script src="enable-threads.js"></script>
+    <script crossorigin src="maxiInstruments.v.0.7.2.js"></script>
+<!--    <script src = "https://accelerate-editor.web.app/libs/aframe-v1.3.0.min.js"></script>  -->
+    <script src="./dist/aframe-master.min.js"></script>  
+<!-- 	CONTROL YO SHIT -->
+    <script>AFRAME.registerComponent('controller', {
+      schema: {
+        moveSpeed: {type: 'number', default: 1.6},
+        smoothness: {type: 'number', default: 0.05}
+      },
+      init: function() {
+        this.leftAxisX = 0;
+         this.leftAxisY = 0;
+        let self = this;
 
-                    this.leftAxisX   = 0;
-                    this.leftAxisY   = 0;
+        this.el.addEventListener('thumbstickmoved', function(event) {
+          self.leftAxisX = event.detail.x;
+          self.leftAxisY = event.detail.y;
+        });
 
-                    let self = this;
+        //X button
+        this.el.addEventListener('xbuttondown', function(event) {
+          self.el.emit('xbuttonpressed', {pressed: true});
+        });
 
-                    this.leftController.addEventListener('thumbstickmoved', function(event) {
-                        self.leftAxisX = event.detail.x;
-                        self.leftAxisY = event.detail.y;
-                    });
+        this.el.addEventListener('xbuttonup', function(event) {
+          self.el.emit('xbuttonreleased', {pressed: false});
+        });
 
-                    // X button
-                    this.el.addEventListener("xbuttondown", function(event) {
-                        self.el.emit('xbuttonpressed', {pressed: true});
-                    });
+        //Y button
+        this.el.addEventListener('ybuttondown', function(event) {
+          self.el.emit('ybuttonpressed', {pressed: true});
+        });
 
-                    this.el.addEventListener("xbuttonup", function(event) {
-                        self.el.emit('xbuttonreleased', {pressed: false});
-                    });
+        this.el.addEventListener('ybuttonup', function(event) {
+          self.el.emit('ybuttonreleased', {pressed: false});
+        });
 
-                    // Y button
-                    this.el.addEventListener("ybuttondown", function(event) {
-                        self.el.emit('ybuttonpressed', {pressed: true});
-                    });
+        //A button
+        this.el.addEventListener('abuttondown', function(event) {
+          self.el.emit('abuttonpressed', {pressed: true});
+        });
 
-                    this.el.addEventListener("ybuttonup", function(event) {
-                        self.el.emit('ybuttonreleased', {pressed: false});
-                    });
+        this.el.addEventListener('abuttonup', function(event) {
+          self.el.emit('abuttonreleased', {pressed: false});
+        });
 
-                    // A button
-                    this.el.addEventListener("abuttondown", function(event) {
-                        self.el.emit('abuttonpressed', {pressed: true});
-                    });
+        //B button
+        this.el.addEventListener('bbuttondown', function(event) {
+          self.el.emit('bbuttonpressed', {pressed: true});
+        });
 
-                    this.el.addEventListener("abuttonup", function(event) {
-                        self.el.emit('abuttonreleased', {pressed: false});
-                    });
+        this.el.addEventListener('bbuttonup', function(event) {
+          self.el.emit('bbuttonreleased', {pressed: false});
+        });
 
-                    // B button
-                    this.el.addEventListener("bbuttondown", function(event) {
-                        self.el.emit('bbuttonpressed', {pressed: true});
-                    });
+        //left trigger
+        this.el.addEventListener('triggerdown', function(event) {
+          self.el.emit('lefttriggerdown', {pressed: true});
+        });
 
-                    this.el.addEventListener("bbuttonup", function(event) {
-                        self.el.emit('bbuttonreleased', {pressed: false});
-                    });
+        this.el.addEventListener('triggerup', function(event) {
+          self.el.emit('lefttriggerup', {pressed: false});
+        });
 
-                    // Left trigger
-                    this.el.addEventListener("triggerdown", function(event) {
-                        self.el.emit('lefttriggerpressed', {pressed: true});
-                    });
+        //right trigger
+        this.el.addEventListener('triggerdown', function(event) {
+          self.el.emit('righttriggerdown', {pressed: true});
+        });
 
-                    this.el.addEventListener("triggerup", function(event) {
-                        self.el.emit('lefttriggerreleased', {pressed: false});
-                    });
+        this.el.addEventListener('triggerup', function(event) {
+          self.el.emit('righttriggerup', {pressed: false});
+        });
 
-                    // Right trigger
-                    this.el.addEventListener("triggerdown", function(event) {
-                        self.el.emit('righttriggerpressed', {pressed: true});
-                    });
+        //left grip
+        this.el.addEventListener('gripdown', function(event) {
+          self.el.emit('leftgripdown', {pressed: true});
+        });
 
-                    this.el.addEventListener("triggerup", function(event) {
-                        self.el.emit('righttriggerreleased', {pressed: false});
-                    });
+        this.el.addEventListener('gripup', function(event) {
+          self.el.emit('leftgripup', {pressed: false});
+        });
 
-                    // Thumbstick
-                    this.el.addEventListener("thumbstickmoved", function(event) {
-                        self.el.emit('thumbstickmoved', {x: event.detail.x, y: event.detail.y});
-                    });
-                },
-                tick: function() {
-                    let player = document.querySelector("#player");
-                    let direction = new THREE.Vector3();
-                    let left = new THREE.Vector3();
+        //right grip
+        this.el.addEventListener('gripdown', function(event) {
+          self.el.emit('rightgripdown', {pressed: true});
+        });
 
-                    // Use the camera's direction for movement
-                    player.object3D.getWorldDirection(direction);
+        this.el.addEventListener('gripup', function(event) {
+          self.el.emit('rightgripup', {pressed: false});
+        });
+      },
+        
+      tick: function() {
+  		let player = document.querySelector("#player");
+        let camera = document.querySelector("#camera");
+        let direction = new THREE.Vector3();
+        let left = new THREE.Vector3();
 
-                    // Invert direction
-                    direction.negate();
+        //camera's direction for movement
+        camera.object3D.getWorldDirection(direction);
+        
+        //lock y
+  		direction.y = 0;
 
-                    // Calculate left direction
-                    left.crossVectors(player.object3D.up, direction);
+  		//normalize the direction vector (tsettingy to 0 can fuck vector length)
+  		direction.normalize();
 
-                    // Calculate movement based on thumbstick position and speed
-                    let dx = direction.x * this.leftAxisY * this.data.moveSpeed - left.x * this.leftAxisX * this.data.moveSpeed;
-                    let dz = direction.z * this.leftAxisY * this.data.moveSpeed - left.z * this.leftAxisX * this.data.moveSpeed;
+        //work out left direction
+        left.crossVectors(camera.object3D.up, direction);
 
-                    // Create a new vector for the desired position
-                    let desiredPosition = new THREE.Vector3(
-                        player.object3D.position.x + dx,
-                        player.object3D.position.y,
-                        player.object3D.position.z -+ dz
-                    );
+        //movement based on thumbstick position and speed
+        let forwardMovement = direction.multiplyScalar(this.leftAxisY * this.data.moveSpeed);
+        let sideMovement = left.multiplyScalar(this.leftAxisX * this.data.moveSpeed);
 
-                    // Smoothly transition to the desired position
-                    player.object3D.position.lerp(desiredPosition, this.data.smoothness);
-                },
-            });
-
-
-        </script>
-        <!--        JUMP AND FALL (BUT NEVER DEATH, STUCK IN THIS ETERNAL LOOP FOREVER. FOREVAAAAAAAAA)-->
-        <script>AFRAME.registerComponent('jump', {
+        //add forward and side movement vectors to get the total movement vector
+        let movement = new THREE.Vector3().addVectors(forwardMovement, sideMovement);
+        let desiredPosition = new THREE.Vector3().addVectors(player.object3D.position, movement);
+        //smooth
+        player.object3D.position.lerp(desiredPosition, this.data.smoothness);
+      },
+});
+    </script>
+<!--     JUMP AND FALL (BUT NEVER DEATH, STUCK IN THIS ETERNAL LOOP FOREVAAAAH) -->
+    <script>AFRAME.registerComponent('jump', {
                 schema: {
                     groundSelector: { type: "string", default: ".ground"},
                 },
                 init: function () {
-                    this.grounds = Array.from(document.querySelectorAll(this.data.groundSelector));
+                    this.grounds = [];
                     this.player = document.querySelector('#player');
                     this.isOverGround = true;
                     this.isOnGround = false;
@@ -132,36 +139,51 @@
                     this.jumpSpeed = this.jumpHeight;
                     this.fallSpeed = 0.5;
                     this.canJump = true;
+                    this.groundCheck = { isOverGround: false, groundY: 0, halfGroundX: 0, halfGroundZ: 0, lowY: 0, highY: 0 };
+                    let self = this; 
+                    //initialize
+                    this.updateGrounds();
 
+                    this.el.sceneEl.addEventListener('child-attached', this.updateGrounds.bind(this));
+                    this.el.sceneEl.addEventListener('child-detached', this.updateGrounds.bind(this));
+					
+                  	//X
+                    document.querySelector('#left-controller').addEventListener('xbuttondown', function(evt) {
+                      if (!self.isJumping) {
+                          if (self.canJump == true) {
+                              self.isJumping = true;
+                              self.jumpSpeed = self.jumpHeight;
+                              self.isOnGround = false;
+                          }
+                      }
+                  });
 
-                    document.querySelector('#left-controller').addEventListener('lefttriggerpressed', function(evt) {
-                        if (evt === true && !this.isJumping) {
-                            if (this.canJump == true) {
-                                this.isJumping = true;
-                                this.jumpSpeed = this.jumpHeight;
-                                this.isOnGround = false;
-                            }
-                        }
-                    });
+                  //A
+                  document.querySelector('#right-controller').addEventListener('abuttondown', function(evt) {
+                      if (!self.isJumping) {
+                          if (self.canJump == true) {
+                              self.isJumping = true;
+                              self.jumpSpeed = self.jumpHeight;
+                              self.isOnGround = false;
+                          }
+                      }
+                  });
 
                     window.addEventListener('keydown', (event) => {
-                        if (event.key === ' ' && !this.isJumping) {
-                            if (this.canJump == true) {
-                                this.isJumping = true;
-                                this.jumpSpeed = this.jumpHeight;
-                                this.isOnGround = false;
+                        if (event.key === ' ' && !self.isJumping) {
+                            if (self.canJump == true) {
+                                self.isJumping = true;
+                                self.jumpSpeed = self.jumpHeight;
+                                self.isOnGround = false;
                             }
                         }
                     });
+                }, updateGrounds: function() {
+                    this.grounds = Array.from(document.querySelectorAll(this.data.groundSelector));
                 },
                 tick: function () {
                     const currentPosition = this.player.object3D.position;
-                    this.grounds = document.querySelectorAll(this.data.groundSelector);
-                    this.isOverGround;
-                    this.isJumping;
                     let lowY, highY;
-
-
                     //see if we're over/under any platforms excluding playheads
                     this.groundCheck = Array.from(this.grounds).reduce((result, ground) => {
 
@@ -200,7 +222,7 @@
                         }
                     }, { isOverGround: false, groundY: 0, halfGroundX: 0, halfGroundZ: 0, lowY: 0, highY: 0 });
 
-                    if (!this.isJumping && this.groundCheck.isOverGround && currentPosition.y <= this.groundCheck.lowY + 0.1) {
+                    if (!this.isJumping && this.groundCheck.isOverGround && currentPosition.y <= this.groundCheck.lowY +0.1 ) {
                         this.isOnGround = true;
                     } else {
                         this.isOnGround = false;
@@ -236,7 +258,7 @@
                         }
                     } 
                     //so we can land on other platforms jumping from a different height
-                    else if(this.groundCheck.isOverGround && currentPosition.y >= this.groundCheck.groundY-0.6|| !this.groundCheck.isOverGround && currentPosition.y > this.groundCheck.lowY){
+                    else if(this.groundCheck.isOverGround && currentPosition.y >= this.groundCheck.highY|| !this.groundCheck.isOverGround && currentPosition.y > this.groundCheck.lowY){
                         this.jumpSpeed = 0.;
                         let fall = -0.5;
 
@@ -275,9 +297,9 @@
                     }
                 },
             });
-        </script>
-        <!--        COLLIDING BOXES AKA PLATFORMS-->
-        <script>AFRAME.registerComponent("box-collider", {
+    </script>
+<!--     EVERYTHING COLLIDES -->
+    <script>AFRAME.registerComponent("box-collider", {
                 schema: {
                     hasBonked: { type: 'boolean', default: false }
                 },
@@ -385,13 +407,9 @@
                     }
                     this.player.object3D.position.copy(playerPos);
                 },
-            });
-
-
-
-        </script>
-        <!--        WE GOT A LURKER HERE PEOPLE-->
-        <script>      AFRAME.registerComponent("lurker", {
+    });</script>
+<!--     LURKING -->
+    <script>AFRAME.registerComponent("lurker", {
                 schema: {
                     target: { type: "selector" },
                     easingFactor: { type: "number", default: 0.03 },
@@ -399,82 +417,118 @@
                 },
 
                 init: function () {
-                    // Store the initial Y position
+                    //initial y position
                     this.initialY = this.el.object3D.position.y;
-                    // Create a new Vector3 for the target's world position and direction
+                    //player being targeted
                     this.targetWorldPosition = new THREE.Vector3();
                     this.offsetVector = new THREE.Vector3();
                 },
 
                 tick: function () {
-                    // Get the target's world position considering the entire scene hierarchy
+                    //world position
                     this.data.target.object3D.getWorldPosition(this.targetWorldPosition);
-
-                    // Get the target's rotation
+                    //players rotation
                     const targetRotation = this.data.target.object3D.rotation;
-
-                    // Calculate the offset position based on the target's rotation
+                    //offset position
                     this.offsetVector.set(
                         -Math.sin(targetRotation.y) * this.data.offset,
                         0,
                         -Math.cos(targetRotation.y) * this.data.offset
                     );
-
-                    // Apply easing to X and Z positions with the offset
+                    //easing to x and z positions with the offset
                     this.el.object3D.position.x +=
                         (this.targetWorldPosition.x + this.offsetVector.x - this.el.object3D.position.x) * this.data.easingFactor;
                     this.el.object3D.position.z +=
                         (this.targetWorldPosition.z + this.offsetVector.z - this.el.object3D.position.z) * this.data.easingFactor;
-
-                    // Keep the Y position constant using the stored initial Y value
+                    //lockY
                     this.el.object3D.position.y = this.initialY;
                 },
             });
         </script>
-        <div id = "synths"></div>
-    </head>
-    <body>
-        <a-scene background="color: #005AFF">
-            <!--vr controller-->
-            <a-entity id="left-controller" oculus-touch-controls="hand: left" controller></a-entity>
-            <a-entity id="right-controller" oculus-touch-controls="hand: right" controller></a-entity>
-            <!--this is where the magic happens-->
-            <a-entity class="ground" id="platformsEntity"></a-entity>
-            <!--player/camera-->
-<!--
-            <a-entity id="player" camera position="0 1.6 6"width="1.0" height="2"depth="1" look-controls wasd-controls="acceleration: 60" jump>
-            </a-entity>
--->
+  </head>
+  <body>
+   <a-scene background="color: #005AFF">
+<!--       vr controllers -->
+      <a-entity id="left-controller" oculus-touch-controls="hand: left" controller></a-entity>
+	  <a-entity id="right-controller" oculus-touch-controls="hand: right" controller></a-entity>
+     
+        <!--this is where the magic happens-->
+       <a-entity class="ground" id="platformsEntity"></a-entity> 
+       
+<!--      vr camera/player/rig/akaballache -->
 
-            <a-entity id="player" position="0 1.6 6" width="0.25" height="1.6"depth="0.25" look-controls wasd-controls="acceleration: 60" jump>
-            <a-entity id="camera" camera position="0 0.0 0"></a-entity>
-            </a-entity>
-            <!--killplane-->
-            <a-plane id="killplane" side="double" position="0 -18 0" rotation="-90 0 0" width="500" height="500" color="red"></a-plane>
-            <!--start point-->
-            <a-box class="ground" id="start" position="0 -0.75 6" width="6" height="1" depth="6" color="white"></a-box>
-            <!--end point-->
-            <a-box class='end' id="lurker" position="0 28 -15" width="4" height="0.25" depth="4" color="black" box-collider lurker="target: #player "></a-box>
-        </a-scene>
-        <script>
-            let tempo = 96;
+     <a-entity id="rig" position="0 0.0 0" >
+      <a-entity id="player" position="0 1.6 6" width="1" height="1.6" depth="1" jump>
+       <a-camera id="camera" camera look controls ></a-camera>
+       </a-entity>
+	   </a-entity> 
+
+<!--       non-VR camera player rig-->
+<!--              <a-entity id="player" camera position="0 0 5"width="1.0" height="1.6"depth="1" look-controls wasd-controls="acceleration: 60"  jump><camera position="0 1.6 0"> </camera>
+            </a-entity>    -->
+   
+       <a-plane id="killplane" side="double" position="0 -18 0" rotation="-90 0 0" width="500" height="500" color="red"></a-plane>
+       <!--start point-->
+       <a-box class="ground" id="start" position="0 -1 6" width="6" height="1" depth="6" color="white"></a-box>
+       <!--end point-->
+       <a-box class='end' id="lurker" position="0 28 -15" width="4" height="0.25" depth="4" color="black" box-collider lurker="target: #player "></a-box>  
+    </a-scene> 
+    <script>
+			let tempo = 96;
             let enemySynth;
             let backingMidSynth;
             let bassSynth;
             let sampler; 
             let staging = 0;
             let soundUP = false;
-            let readyToPlay = true;
+            let readyToPlay= true;
             //we jammin, and i hope you like jammin too
             var dm79 = [50, 57, 64, 65, 72];
             var eb911 = [51, 58, 65, 67, 69];
             var a7sus4 = [45, 57, 64, 67,47];
             var cadd9 = [48, 62, 64, 67, 72];
+
+            var midSynthSeq = [
+                //start, length, pitches
+                {s:0, l:8, p:dm79},
+                {s:16, l:8, p:eb911},
+                {s:32, l:8, p:a7sus4},
+                {s:48, l:8, p:cadd9},
+            ];
+            var bassSynthSeq = [ {s:0, l:16, p:38}];
+            var bassSynthSeq2 = [
+                {s:0, l:14, p:38},
+                {s:15, l:6, p:37},
+                {s:23, l:5, p:41},
+                {s:29, l:2, p:43},
+                {s:32, l:14, p:38},
+                {s:47, l:6, p:37},
+                {s:55, l:4, p:33},
+                {s:59, l:2, p:33},
+                {s:61, l:1, p:35},
+            ];
             let myDrumSequence = [
                 {p:4, s:0, v:10},
                 {p:4, s:4, v:20},
                 {p:4, s:8, v:40},
                 {p:4, s:12, v:60}];
+            let myRhythm = [
+                {p:0, s:0, v:100},
+                {p:1, s:4, v:100},
+                {p:0, s:10, v:100},
+                {p:1, s:12, v:100},
+                {p:2, s:2, v:100},
+                {p:2, s:5, v:100},
+                {p:2, s:10, v:100},
+                {p:2, s:11, v:100},
+                {p:2, s:8, v:100},
+                {p:3, s:9, v:100},
+                {p:3, s:4, v:100},
+                {p:3, s:15, v:100},
+                {p:3, s:1, v:100},
+                {p:0, s:14, v:100},
+                {p:1, s:15, v:100},
+            ];
 
             // make clear that the origin is on mimicproject
             var origin = "https://mimicproject.com/libs";
@@ -482,6 +536,7 @@
             const instruments = new MaxiInstruments(origin);
             let scene = document.querySelector('a-scene');
             let player= document.getElementById('player');
+            const star = document.getElementById('start');
             let platformsEntity = document.getElementById('platformsEntity');
             let destroyStep = false;
             let platforms = [];
@@ -497,6 +552,8 @@
             let previousOrientation = '-z';
             let metro = 0;
             let doubleMetro = 0;
+            let lastEventFixer = -1;
+            let eventChangeCounter = 0;
             let collectableCount = 0;
             let collectablesFound = 0;
             let collectablePicked = false;
@@ -505,6 +562,7 @@
             let movingCollectablesLocations =[];
             let score = 0;
             let keyPressed='';
+      		let ins = -1;
             let hasEnded = false;
             let canStart = false;
             let isJumping = false;
@@ -521,19 +579,19 @@
             let totalSteps = 0;
             let kicks = [false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false];
             let snares= [false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false];
-            let hihats=[false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false];
+            let hihats= [false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false];
             let bells = [false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false];
-
             //things that trigger sound
             let hasBonked = false;
+      		let previousBonking = null;
             let bonking = 0;
             //bonk notes
             let notes = [62, 64, 65, 69 ];
             let reverb = 0;
             let roomSize = 0;
             let filter = 0.1;
-
-            //initialise our environment
+ 
+			//initialise our environment
             function startup(){
                 canStart = false;
                 //Create the first sequence of platforms
@@ -569,7 +627,7 @@
                 playhead.setAttribute('width', platformSize-0.1);
                 playhead.setAttribute("height", platformSize-0.1);
                 playhead.setAttribute("depth", platformSize-0.1);
-                //playhead.setAttribute("box-collider", ''); 
+                playhead.setAttribute("box-collider", ''); 
                 playheads.push({p: playhead, o: '-z',startX: 0 , startZ: 0, modDel: 0, modmult: 1});
                 platformsEntity.appendChild(playhead);
 
@@ -585,143 +643,63 @@
                 collectable.setAttribute("box-collider", '');
                 collectables.push(collectable);
                 platformsEntity.appendChild(collectable);  
-            }
+                onNewEntityAdded(collectable);
+            };
             startup();
-            //Append the platform with everything a single platform has to the scene
+            //append the platform with everything a single platform needs
             scene.appendChild(platformsEntity);
-            //Don't run script until we have a scene!
+            //don't run script until we have a scene!
             if (scene.hasLoaded) {
                 run();
             } else {
                 scene.addEventListener('loaded', run);
             }
-            document.addEventListener('DOMContentLoaded', function() {
-                let leftController = document.querySelector('#left-controller');
-                let rightController = document.querySelector('#right-controller');
+      
+      		let rightController = document.querySelector('#right-controller');
+			let leftController = document.querySelector('#left-controller');
 
-                // X button
-                leftController.addEventListener('xbuttonpressed', function(evt) {
-                    if(evt.detail.pressed) {
-                        kickTrigger = true;
-                        if(readyToPlay){
-                            playSomething();
-                            readyToPlay = false;
-                            soundUP = true;
-                        }
-                    }
-                });
+            //right controller
+			rightController.addEventListener('abuttondown', function(evt) { handleButtonPres(evt); });
+            //rightController.addEventListener('abuttonup', function(evt) {  });
+			rightController.addEventListener('bbuttondown', function(evt) { destroyStep = true; handleButtonPress(evt); });
+            rightController.addEventListener('bbuttonup', function(evt) { destroyStep = false; });
+			rightController.addEventListener('righttriggerdown', function(evt) { snareTrigger = true; ins = 1; handleButtonPress(evt); });
+            rightController.addEventListener('righttriggerup', function(evt) { snareTrigger = false; ins = -1; });
+			rightController.addEventListener('rightgripdown', function(evt) { bellTrigger = true; ins = 3; });
+            rightController.addEventListener('rightgripup', function(evt) { bellTrigger = false; ins = -1; });
 
-                leftController.addEventListener('xbuttonreleased', function(evt) {
-                    kickTrigger = false;
-                });
-
-                // Y button
-                leftController.addEventListener('ybuttonpressed', function(evt) {
-                    if(evt.detail.pressed) {
-                        bellTrigger = true;
-                        if(readyToPlay){
-                            playSomething();
-                            readyToPlay = false;
-                            soundUP = true;
-                        }
-                    }
-                });
-
-                leftController.addEventListener('ybuttonreleased', function(evt) {
-                    bellTrigger = false;
-                });
-
-                // A button
-                rightController.addEventListener('abuttonpressed', function(evt) {
-                    if(evt.detail.pressed) {
-                        snareTrigger = true;
-                        if(readyToPlay){
-                            playSomething();
-                            readyToPlay = false;
-                            soundUP = true;
-                        }
-                    }
-                });
-
-                rightController.addEventListener('abuttonreleased', function(evt) {
-                    snareTrigger = false;
-                });
-
-                // B button
-                rightController.addEventListener('bbuttonpressed', function(evt) {
-                    if(evt.detail.pressed) {
-                        hihatTrigger = true;
-                        if(readyToPlay){
-                            playSomething();
-                            readyToPlay = false;
-                            soundUP = true;
-                        }
-                    }
-                });
-
-                rightController.addEventListener('bbuttonreleased', function(evt) {
-                    hihatTrigger = false;
-                });
-
-                // Left Trigger
-                leftController.addEventListener('lefttriggerpressed', function(evt) {
-                    isJumping = true;
-                    if(readyToPlay){
-                            playSomething();
-                            readyToPlay = false;
-                            soundUP = true;
-                        }
-                
-                });
-
-                leftController.addEventListener('lefttriggerreleased', function(evt) {
-                    isJumping = false;
-                });
-
-                // Right Trigger
-                rightController.addEventListener('righttriggerpressed', function(evt) {
-                    destroyStep = true;
-                    if(readyToPlay){
-                            playSomething();
-                            readyToPlay = false;
-                            soundUP = true;
-                        }
-                });
-
-                rightController.addEventListener('righttriggerreleased', function(evt) {
-                    destroyStep = false;
-                });
-
-                // Thumbstick
-                leftController.addEventListener('thumbstickmoved', function(evt) {
-                    soundUp = true;
-                    if(readyToPlay){
-                            playSomething();
-                            readyToPlay = false;
-                            soundUP = true;
-                        }
-                });
-
-                rightController.addEventListener('thumbstickmoved', function(evt) {
-                    if(readyToPlay){
-                            playSomething();
-                            readyToPlay = false;
-                            soundUP = true;
-                        }
-                });
-            });
-            //inputs key down
+            //left controller
+			leftController.addEventListener('xbuttondown', function(evt) { handleButtonPress(evt); });
+            //leftController.addEventListener('xbuttonup', function(evt) {  });
+			leftController.addEventListener('ybuttondown', function(evt) { destroyStep = true; handleButtonPress(evt); });
+            leftController.addEventListener('ybuttonup', function(evt) { destroyStep = false; });
+			leftController.addEventListener('lefttriggerdown', function(evt) { kickTrigger = true; ins = 0; handleButtonPress(evt); });
+            leftController.addEventListener('lefttriggerup', function(evt) { ins = -1; kickTrigger = false; });
+			leftController.addEventListener('leftgripdown', function(evt) { hihatTrigger = true; ins = 2; handleButtonPress(evt); });
+            leftController.addEventListener('leftgripup', function(evt) { hihatTrigger = false; ins = -1 });
+			//first button presson only
+      		function handleButtonPress(evt) {
+  				if (soundUP == false) {                 
+                    playSomething();  
+                  	soundUP = true;
+  					}
+				}    
+      		//inputs key down for debug
             document.addEventListener("keydown", function(event) {
                 if(event.key == '1'){
-                    kickTrigger = true;
+                    ins = 0;
+                    kickTrigger = true;  
                 }
                 if(event.key == '2'){
+                    ins = 1;
                     snareTrigger = true;
                 }
                 if(event.key == '3'){
+                    ins = 2;
                     hihatTrigger = true;
                 }
                 if(event.key == '4'){
+                    ins = 3;
                     bellTrigger = true;
                 }
                 if(event.key == 'q' || event.key == 'Q'){
@@ -729,26 +707,29 @@
                 }     
                 keyPressed = event.key;
             });
-            //inputs key up
+            //inputs key up for debug
             document.addEventListener("keyup", function(event) {
                 if(event.key == '1'){
+                    ins = -1;
                     kickTrigger = false;
+                 
                 }
                 if(event.key == '2'){
+                    ins = -1;
                     snareTrigger = false;
                 }
                 if(event.key == '3'){
+                    ins = -1;
                     hihatTrigger = false;
                 }
                 if(event.key == '4'){
+                    ins = -1;
                     bellTrigger = false;
                 }
-                if(event.key == 'q' || event.key == 'Q'){
-                    destroyStep = false;
-                } 
+
                 keyPressed = event.key;
             });
-            //have we collected collectable? 
+ 			//have we collected collectable? 
             function logCollected(event) {
                 const collectable = document.getElementById('collectable');
                 collectableCount += 1;
@@ -758,13 +739,13 @@
                     collectables.splice(i,1);
                     platformsEntity.removeChild(collectable);
                 }
-            }
+            };
             function setupEventListener(entity) {
                 // Remove any old event listeners
                 entity.removeEventListener('collected', logCollected);
                 // Add a new event listener
                 entity.addEventListener('collected', logCollected);
-            }
+            };
             document.addEventListener('DOMContentLoaded', () => {
                 const entity = document.querySelector('#collectable');
                 setupEventListener(entity);
@@ -772,7 +753,7 @@
             //add event listener for new collectable
             function onNewEntityAdded(entity) {
                 setupEventListener(entity);
-            }
+            };
             //check if we're jump and overground for collectible use
             document.addEventListener('DOMContentLoaded', function() {
                 let player = document.querySelector('#player');
@@ -819,15 +800,15 @@
                     facing = "eastNorth";
                 }
                 return facing;
-            }
-            //spend collectables (to generate platforms)
+            };   
+    		//spend collectables (to generate platforms)
             function useCollectables(player, facing, inputs) {
                 const playerPos = player.getAttribute('position');
 
                 if (collectableCount <= 0 || isOverGround !== true || isJumping === true) {
                     return;
                 }
-                const validInputs = ['1', '2', '3', '4'];
+                const validInputs = [0, 1, 2, 3];
                 if (!validInputs.includes(inputs)) {
                     return;
                 }
@@ -856,10 +837,10 @@
                 //                /stepSequencer();
                 generatePlatforms(playerPos, stepSequenceLength, inputs, newOrientation);
                 previousOrientation = newOrientation;
-            }
-            //we move this shit
+            };
+  			//we move this shit
             function movePlayheads() {
-                const reverseOffset = (stepSequenceLength - 0.5) * platformSize;
+                const reverseOffset = (stepSequenceLength-0.5) * platformSize;
 
                 for (let i = 0; i < playheads.length; i++) {
                     let localMetro = playheads[i].modmult == 2 ? doubleMetro : metro;
@@ -896,9 +877,8 @@
 
                     playheads[i].p.setAttribute('position', newPosition);
                 }
-            }
-            //everything makes platforms appear
-            function generatePlatforms(playerPos, numSteps, inputs, orientation){
+            };   
+			function generatePlatforms(playerPos, numSteps, inputs, orientation){
                 //make sure we turn off our collectable
                 collectableCount--;
                 difficultyMapper();
@@ -910,7 +890,6 @@
                 //update the offset for our step sequencer based on what platform we are over when we generate new ones. 
                 //stepOffset = currentPlayerStep + stepOffset%16;
                 stepOffset = ((stepOffset + stepCheck)%16);
-                //console.log("stepOffset", stepOffset);
                 //increment placementID - this is used so we can keep track of which platforms relate to which placement (useful for deletion)
                 branchID = branchID + 1;
 
@@ -922,25 +901,25 @@
                 let platformLabel;
 
                 switch (inputs) {
-                    case '1':
+                    case 0:
                         platformLabel = 'kicks';
                         r = 255;
                         g = 165;
                         b = 0;
                         break;
-                    case '2':
+                    case 1:
                         platformLabel = 'snares';
                         r = 255;
                         g = 210;
                         b = 128;
                         break;
-                    case '3':
+                    case 2:
                         platformLabel = 'hihats';
                         r = 0;
                         g = 191;
                         b = 123;
                         break;
-                    case '4':
+                    case 3:
                         platformLabel = 'bells';
                         r = 0;
                         g = 255;
@@ -1037,7 +1016,7 @@
                 //playhead biz
                 let playhead = document.createElement('a-box');
                 playhead.setAttribute('class', 'playheads');
-                //playhead.setAttribute("box-collider", '');
+                playhead.setAttribute("box-collider", '');
                 playhead.setAttribute('id', 'playhead');
                 playhead.setAttribute('material', {color: 'red', transparent: 'true', opacity: '0.5'});
                 playhead.setAttribute('side', 'double');
@@ -1080,7 +1059,6 @@
                         playhead.setAttribute("depth", platformSize-0.1);     
                     }
                 } 
-                //                }
                 //use difficult to seed playheads with different metroSpeeds
                 let modSpeed = 1;
                 if(difficulty < 8){
@@ -1171,8 +1149,8 @@
                 //replace our player so they don't get stuck inside the new dropped platform
                 player.setAttribute('position', {x: playerPos.x, y: playerPos.y + (platformSize*3)+0.1, z: playerPos.z});
 
-            }
-            // use step check and inputs to trigger sound / add them to instrument array 
+            };
+			// use step check and inputs to trigger sound / add them to instrument array 
             function stepSequencer() {
                 const playerPos = player.getAttribute('position');
                 const playerX = playerPos.x;
@@ -1220,8 +1198,8 @@
                         }
                     }
                 }
-            }
-            //grab our sample triggers and store them as bools to do stuff with 
+            };      
+			//grab our sample triggers and store them as bools to do stuff with 
             function sequenceTracker(myDrumSequence) {
                 for (let i = 0; i < myDrumSequence.length; i++) {
                     const drumItem = myDrumSequence[i];
@@ -1244,7 +1222,7 @@
                         }
                     }
                 }
-            }
+            };
             //mapped our beats so we can check their distribution
             function mappedBar(bar) {
                 //steps mapped
@@ -1280,16 +1258,16 @@
                 }  else {
                     return 0;
                 } 
-            }
+            };
             //nifty distance calc for how far things are from other things
             function distance3D(a, b) {
                 return Math.sqrt(Math.pow(a.x - b.x, 2) + Math.pow(a.y - b.y, 2) + Math.pow(a.z - b.z, 2));
-            }
+            };
             //lil scale
             function scale (number, inMin, inMax, outMin, outMax) {
                 return (number - inMin) * (outMax - outMin) / (inMax - inMin) + outMin;
-            }
-            //move our collectables around the steps environment based on step distribution
+            };      
+			//move our collectables around the steps environment based on step distribution
             function difficultyMapper(){
                 //mapped bar returns 16 step Values mapped to 8, 1, 4, 2
                 let mappedKicks = mappedBar(kicks);
@@ -1322,7 +1300,7 @@
                     sumAllSteps.push(allKicksStepValues[i]+allSnaresStepValues[i]+allHihatsStepValues[i]+allBellsStepValues[i]);
                 }
                 //increase difficulty abit every collection
-                for(let i = 0; i<collectablesFound; i++){
+                for(let i = 0; i < collectablesFound; i++){
                     difficulty += 5;
                 }
                 //increase difficult based on kicks
@@ -1330,7 +1308,7 @@
                     difficulty +=25;
                 }
                 //increase difficulty based on snares
-                if(sumSnares > 12 && sumSnares <= 16 ){
+                if(sumSnares > 12  && sumSnares <= 16 ){
                     difficulty +=25;
                 } 
                 else if (sumSnares > 16){
@@ -1350,8 +1328,8 @@
                 //when distribution is too lopsided make target location very far way. 
                 difficulty = difficulty + barCheck(sumAllSteps);
 
-            }
-            //update our collectables / move them around in case one of them gets stuck
+            };
+			//update our collectables / move them around in case one of them gets stuck
             function updateCollectables(){
 
                 let bang = eventFixer%4;
@@ -1364,7 +1342,7 @@
                         collectables[0].setAttribute('position', {x: place.x, y: place.y, z: place.z})
                     }
                 }
-            }
+            };
             //get the shuffled orderd for our new platform layer
             function reorderSamples(sample, currentPlayerStep) {
                 const reordered = [];
@@ -1372,14 +1350,14 @@
                     reordered[i] = sample[(currentPlayerStep + 1 +  i) % 16];
                 }
                 return reordered;
-            }
-            //helper to minimise setAttributes
+            };      
+			//helper to minimise setAttributes
             function updatePlatformAttributes(platform, width, height, depth) {
                 platform.p.setAttribute('width', width);
                 platform.p.setAttribute('height', height);
                 platform.p.setAttribute('depth', depth);
                 platform.p.setAttribute('scale', { x: 1, y: 0.98, z: 1 });
-            }
+            };
             //update our platforms when we trigger the corresponding step yo
             function updatePlatforms() {
                 let base = playerSteps.length * 16;
@@ -1404,8 +1382,8 @@
                 for (let i = 0; i < reorderedSamples.length; i++) {
                     if (reorderedSamples[i] === true) {
 
-
                         let platform = platforms[i + base];
+                        //console.log("updating", platforms[i + base]);
 
                         switch (selector) {
                             case 0:
@@ -1428,49 +1406,50 @@
                     }
                 }
                 selector = -1;
-            }
-            //destroy our playforms if our players want to do that
+            };
+			//destroy our playforms if our players want to do that
             function destroyer(){
+                const collectable = document.getElementById('collectable');
                 if(destroyStep == true && currentBranch > 0){
-                    let base = currentBranch * 16;
-                    
-                    for (let i = base; i < base + 16; i++) {
+                    for (let i = platforms.length - 1; i >= 0; i--) {
                         if (platforms[i].branch === currentBranch) {
                             platforms[i].p.remove();
                             platforms.splice(i, 1); 
-                            collectableCount+=1;
-                            collectables.splice(0,1);
-                            platformsEntity.removeChild(collectable);
-
                         }
                     }
+                    collectableCount+=1;
+                    playerSteps.splice(0,1);
+                    platformsEntity.remove(collectable);
+                    destroyStep = false;
                 }
-            }
+            };
             //this is where the real magic happens
             function updateSounds(){
-                //have we been bonked by a playhead
-                if(hasBonked == true){
-                    let randomNote = notes[Math.floor(Math.random()*notes.length)];
-                    enemySynth.noteon(randomNote, 127);
-                    bonking = 1.0;
-                    roomSize =1.0;
-                    hasBonked = false;
-                }
-                if(bonking > 0){
-                    bonking -= 0.1;
-                    reverb += 0.2;
-                    enemySynth.setParams(["delay", bonking], ["delayMix", 0.5 ],["reverbMix",reverb],["roomSize",roomSize],["gain",bonking],);
-                }
-                if (bonking  <= 0){
-                    hasBonked = false;
-                    enemySynth.noteoff(62);
-                    enemySynth.noteoff(64);
-                    enemySynth.noteoff(65);
-                    enemySynth.noteoff(69);
+               //have we been bonked by a playhead
+              
+                  if(hasBonked == true){
+                      let randomNote = notes[Math.floor(Math.random()*notes.length)];
+                      enemySynth.noteon(randomNote, 127);
+                      bonking = 1.0;
+                      roomSize =1.0;
+                      hasBonked = false;
+                  }
+                  if(bonking > 0){
+                      bonking -= 0.1;
+                      reverb += 0.2;
+                      enemySynth.setParams(["delay", bonking], ["delayMix", 0.5 ],["reverbMix",reverb],["roomSize",roomSize],["gain",bonking]);
+                  }
+                  if (bonking  <= 0.1 && bonking > 0){
+                      hasBonked = false;
+                      enemySynth.noteoff(62);
+                      enemySynth.noteoff(64);
+                      enemySynth.noteoff(65);
+                      enemySynth.noteoff(69);
 
-                    bonking = 0;
-                    enemySynth.setParams(["delay", bonking], ["delayMix", 0.5 ],["reverbMix",reverb],["roomSize",roomSize],["gain",bonking],);
-                } 
+                      bonking = 0;
+                      enemySynth.setParams(["delay", bonking], ["delayMix", 0.5 ],["reverbMix",reverb],["roomSize",roomSize],["gain",bonking]);
+                  } 
+   
 
                 //jump sounds
                 if(isJumping == true){
@@ -1482,10 +1461,13 @@
                     sampler.setParam("rate_2", filter+0.5);
                     sampler.setParam("rate_3", filter-0.5);
                 } else {
+                    if(filter > 0){
+                        backingMidSynth.setParam("lfoFrequency", filter);
+                        backingMidSynth.setParam("lfoPitchMod", filter);
+                        backingMidSynth.setParam("lfoPitchMod", filter);  
+                    }
+
                     filter = 0;
-                    backingMidSynth.setParam("lfoFrequency", filter);
-                    backingMidSynth.setParam("lfoPitchMod", filter);
-                    backingMidSynth.setParam("lfoPitchMod", filter);
                 } 
                 //falling sounds
                 let fall = player.getAttribute('position').y;
@@ -1504,7 +1486,6 @@
                     sampler.setParam("rate_0", 0.5);
                     sampler.setParam("rate_1", 0.5);
                     bassSynth.setParam("adsrPitchMod", 0);
-                    //                                        ["cutoff",40]);
                     //backingMidSynth.setParam("reverbMix", 0.12);
                 }
 
@@ -1574,223 +1555,231 @@
                 bassSynth.getMappedParameters; 
                 sampler.getMappedParameters;
 
-            }
-            //end game reset
+            }; 
+      		//end game reset
             function end(){
-                if(hasEnded == true){
-                    //TURN OFF SOUND SEQUENTIALLY, REMOVE PLATFORMS, FADE/OR DROP PLAYER TO STARTING POINT, RESET ALL NECESSARY VALUES
-                    // collectable count, difficulty value, playerSteps, sequenceOrder, Empty all arrays
-                    if(metro%16==0){
-                        staging++;
-                    }
-                    if(staging %10){
-                        scene.setAttribute('background', 'black');
-                    }
-                    if(staging %20){
-                        scene.setAttribute('background', 'black');
-                        
-                    }
-
+			  //sequentially do stuff
+              if (eventFixer !== lastEventFixer) {
+                    lastEventFixer = eventFixer;
+                    eventChangeCounter+=0.5;
                 }
-            }
-            const playSomething=()=>{
-            instruments.loadModules().then(()=> {
-
-                enemySynth = instruments.addSynth();
-                backingMidSynth = instruments.addSynth();
-                bassSynth = instruments.addSynth();
-                backingMidSynth.setOsc(1);
-                bassSynth.setOsc(1);
-                enemySynth.setOsc(1);
-
-                var dm79 = [50, 57, 64, 65, 72];
-                var eb911 = [51, 58, 65, 67, 69];
-                var a7sus4 = [45, 57, 64, 67,47];
-                var cadd9 = [48, 62, 64, 67, 72];
-
-                var midSynthSeq = [
-                    //start, length, pitches
-                    {s:0, l:8, p:dm79},
-                    {s:16, l:8, p:eb911},
-                    {s:32, l:8, p:a7sus4},
-                    {s:48, l:8, p:cadd9},
-                ];
-                var bassSynthSeq = [ {s:0, l:16, p:38}];
-
-                backingMidSynth.setParams([
-                    ["oscFn",3],
-                    ["lfoOscFn",0],
-                    ["gain",0.4],
-                    ["pan",0.5],
-                    ["attack",165],
-                    ["decay",330],
-                    ["sustain",0.58],
-                    ["release",495],
-                    ["lfoFrequency",0.7],
-                    ["lfoPitchMod",0],
-                    ["lfoFilterMod",1000],
-                    ["lfoAmpMod",0.68],
-                    ["adsrPitchMod",1],
-                    ["cutoff",957.6],
-                    ["reverbMix",0.33],
-                    ["roomSize",0.27],
-                    ["delay",0],
-                    ["delayMix",0.35],
-                    ["frequency",440],
-                    ["frequency2",220],
-                ]);
-                enemySynth.setParams([
-                    ["oscFn",3],
-                    ["lfoOscFn",1],
-                    ["gain",2],
-                    ["pan",0.5],
-                    ["attack",0],
-                    ["decay",330],
-                    ["sustain",0.1],
-                    ["release",1500],
-                    ["lfoFrequency",6.3],
-                    ["lfoPitchMod",0],
-                    ["lfoFilterMod",220],
-                    ["lfoAmpMod",0.88],
-                    ["adsrPitchMod",0],
-                    ["cutoff",1372],
-                    ["reverbMix",0.12],
-                    ["roomSize",0],
-                    ["delay",0],
-                    ["delayMix",0],
-                    ["frequency",440],
-                    ["frequency2",220],
-                ]);
-                bassSynth.setParams([
-                    ["oscFn",3],
-                    ["lfoOscFn",1],
-                    ["gain",0],
-                    ["pan",0.53],
-                    ["attack",1155],
-                    ["decay",480],
-                    ["sustain",0.58],
-                    ["release",1185],
-                    ["lfoFrequency",10],
-                    ["lfoPitchMod",0],
-                    ["lfoFilterMod",1000],
-                    ["lfoAmpMod",0.78],
-                    ["adsrPitchMod",1],
-                    ["cutoff",40],
-                    ["reverbMix",0],
-                    ["roomSize",0],
-                    ["delay",0],
-                    ["delayMix",0.35],
-                    ["frequency",440],
-                    ["frequency2",220],
-                ]);
-
-                enemySynth.mapped = ["gain","reverbMix","roomSize", "delay","delayMix"];
-                backingMidSynth.mapped = ["gain", "lfoFrequency", "lfoPitchMod", "reverb"];
-                bassSynth.mapped = ["lfoFrequency", "pan", "cutoff" ,"adsrPitchMod", "frequency"];
-
-                sampler = instruments.addSampler();
-                sampler.loadSample("BD-ER1-CR8000ish.wav", 0);
-                sampler.loadSample("DR660SnareLofinice.wav", 1);
-                sampler.loadSample("TOM-ER-MicroTom2.wav", 2);
-                sampler.loadSample("FX-ER-Sonario.wav", 3);
-                sampler.loadSample("FX-ER1-Woodzblox.wav", 4);
-
-                sampler.setParam("rate_0", 1);
-                sampler.setParam("rate_1", 1);
-                sampler.setParam("rate_2", 1);
-                sampler.setParam("rate_3", 1);
-                sampler.setParam("rate_4", 1);
-                sampler.setParam("pan_0", 0.5);
-                sampler.setParam("pan_1", 0.5);
-                sampler.setParam("pan_2", 0.5);
-                sampler.setParam("pan_3", 0.5);
-                sampler.setParam("pan_4", 0.5);
-                sampler.setParam("gain_0", 1);
-                sampler.setParam("gain_1", 1);
-                sampler.setParam("gain_2", 1);    
-                sampler.setParam("gain_3", 1);    
-                sampler.setParam("gain_4", 1);  
-
-                sampler.mapped = ["rate_0", "rate_1", "rate_2", "rate_3", "rate_4"];
-
-                instruments.playPause();
-                instruments.setTempo(tempo);
-                sampler.setSequence(myDrumSequence, 4);
-
-                //Sequence and loop set at 4 ticks per beat (1/16ths)
-                backingMidSynth.setSequence(midSynthSeq, 4);
-                bassSynth.setSequence(bassSynthSeq, 4);
-                backingMidSynth.setLoop(16,4);
-                bassSynth.setLoop(16,4);
-                sampler.setLoop(16,4);
-                //instruments.setLoop(32,4);
-
-                instruments.setOnTick((playHeads)=> {
-                    //The current playhead of the third instrument added
-                    if(playHeads[2] % 6 == 2) {
-                        metro+=0.5;
+                if (eventChangeCounter % 5 === 2) { 
+                    scene.setAttribute('background',{color: 'black'});
+                } 
+                else if (eventChangeCounter % 5 === 3) {
+                    killplane.setAttribute('color', 'black' );
+                    for(let i = 0; i < platforms.length; i++){
+                        platforms[i].p.remove();
+                        platforms.splice(i, 1);
+                        //platformsEntity.removeAll();
                     }
-                    //double speed
-                    if(playHeads[2] % 3 == 2) {
-                        doubleMetro++;
-                    }
-                    if(playHeads[2] % 48 == 4) {
-                        sequenceTrigger = true;
-                    } 
-                });
-
-            }).catch((err)=> {
-                console.log("error", err);
-            });
-            
+                    collectables.splice(0, collectables.length);
+                    platformsEntity.remove(collectable);
+                } 
+                else if (eventChangeCounter % 5 === 4) {
+                    star.setAttribute('color', 'Black');
+                    sampler.mute;
+                    backingMidSynth.mute;
+                    bassSynth.mute;
+                    instruments.playPause;
+                    instruments.rewind;
+                } 
+                else if (eventChangeCounter % 5 === 0 && eventChangeCounter !== 0) {
+                    canStart = true;
+                    hasEnded = false;
+                }
             };
-            //start the step sequencer
+      		//we pushin' speakers 
+			const playSomething=()=>{
+                instruments.loadModules().then(()=> {
+
+                    enemySynth = instruments.addSynth();
+                    backingMidSynth = instruments.addSynth();
+                    bassSynth = instruments.addSynth();
+                    backingMidSynth.setOsc(1);
+                    bassSynth.setOsc(1);
+                    enemySynth.setOsc(1);
+
+                    backingMidSynth.setParams([
+                        ["oscFn",3],
+                        ["lfoOscFn",0],
+                        ["gain",0.4],
+                        ["pan",0.5],
+                        ["attack",165],
+                        ["decay",330],
+                        ["sustain",0.58],
+                        ["release",495],
+                        ["lfoFrequency",0.7],
+                        ["lfoPitchMod",0],
+                        ["lfoFilterMod",1000],
+                        ["lfoAmpMod",0.68],
+                        ["adsrPitchMod",1],
+                        ["cutoff",957.6],
+                        ["reverbMix",0.33],
+                        ["roomSize",0.27],
+                        ["delay",0],
+                        ["delayMix",0.35],
+                        ["frequency",440],
+                        ["frequency2",220],
+                    ]);
+                    enemySynth.setParams([
+                        ["oscFn",3],
+                        ["lfoOscFn",1],
+                        ["gain",2],
+                        ["pan",0.5],
+                        ["attack",0],
+                        ["decay",330],
+                        ["sustain",0.1],
+                        ["release",1500],
+                        ["lfoFrequency",6.3],
+                        ["lfoPitchMod",0],
+                        ["lfoFilterMod",220],
+                        ["lfoAmpMod",0.88],
+                        ["adsrPitchMod",0],
+                        ["cutoff",1372],
+                        ["reverbMix",0.12],
+                        ["roomSize",0],
+                        ["delay",0],
+                        ["delayMix",0],
+                        ["frequency",440],
+                        ["frequency2",220],
+                    ]);
+                    bassSynth.setParams([
+                        ["oscFn",3],
+                        ["lfoOscFn",1],
+                        ["gain",0],
+                        ["pan",0.53],
+                        ["attack",1155],
+                        ["decay",480],
+                        ["sustain",0.58],
+                        ["release",1185],
+                        ["lfoFrequency",10],
+                        ["lfoPitchMod",0],
+                        ["lfoFilterMod",1000],
+                        ["lfoAmpMod",0.78],
+                        ["adsrPitchMod",1],
+                        ["cutoff",40],
+                        ["reverbMix",0],
+                        ["roomSize",0],
+                        ["delay",0],
+                        ["delayMix",0.35],
+                        ["frequency",440],
+                        ["frequency2",220],
+                    ]);
+
+                    enemySynth.mapped = ["gain","reverbMix","roomSize", "delay","delayMix"];
+                    backingMidSynth.mapped = ["gain", "lfoFrequency", "lfoPitchMod", "reverb"];
+                    bassSynth.mapped = ["lfoFrequency", "pan", "cutoff" ,"adsrPitchMod", "frequency"];
+
+                    sampler = instruments.addSampler();
+                    sampler.loadSample("BD-ER1-CR8000ish.wav", 0);
+                    sampler.loadSample("DR660SnareLofinice.wav", 1);
+                    sampler.loadSample("TOM-ER-MicroTom2.wav", 2);
+                    sampler.loadSample("FX-ER-Sonario.wav", 3);
+                    sampler.loadSample("FX-ER1-Woodzblox.wav", 4);
+
+                    sampler.setParam("rate_0", 1);
+                    sampler.setParam("rate_1", 1);
+                    sampler.setParam("rate_2", 1);
+                    sampler.setParam("rate_3", 1);
+                    sampler.setParam("rate_4", 1);
+                    sampler.setParam("pan_0", 0.5);
+                    sampler.setParam("pan_1", 0.5);
+                    sampler.setParam("pan_2", 0.5);
+                    sampler.setParam("pan_3", 0.5);
+                    sampler.setParam("pan_4", 0.5);
+                    sampler.setParam("gain_0", 1);
+                    sampler.setParam("gain_1", 1);
+                    sampler.setParam("gain_2", 1);    
+                    sampler.setParam("gain_3", 1);    
+                    sampler.setParam("gain_4", 1);  
+
+                    sampler.mapped = ["rate_0", "rate_1", "rate_2", "rate_3", "rate_4"];
+
+
+                    instruments.playPause();
+                    instruments.setTempo(tempo);
+                    sampler.setSequence(myDrumSequence, 4);
+
+                    //Sequence and loop set at 4 ticks per beat (1/16ths)
+                    backingMidSynth.setSequence(midSynthSeq, 4);
+                    bassSynth.setSequence(bassSynthSeq, 4);
+                    backingMidSynth.setLoop(16,4);
+                    bassSynth.setLoop(16,4);
+                    sampler.setLoop(16,4);
+                    instruments.playPause();
+
+                    instruments.setOnTick((playHeads)=> {
+                        //The current playhead of the third instrument added
+                        if(playHeads[2] % 3 == 2) {
+                            metro+=0.5;
+                        }
+                        //double speed
+                        if(playHeads[2] % 3 == 2) {
+                            doubleMetro++;
+                        }
+                        if(playHeads[2] % 48 == 4) {
+                            sequenceTrigger = true;
+                            eventFixer++;
+                        } 
+                    });
+                }).catch((err)=> {
+                    //console.log("error", err);
+                });
+            };
+    		//start the step sequencer
             document.addEventListener('keydown', (event) => {
-                
-                if (event.key){
-                    playSomething();
-                    if(soundUP == false){
-                        enemySynth.unmute();
-                        backingMidSynth.unmute();
-                        bassSynth.unmute();
-                        sampler.unmute();
-                        instruments.playPause();
+                if (event.key && soundUP == false){
+                        playSomething();
+                        //enemySynth.unmute();
+                        //backingMidSynth.unmute();
+                        //bassSynth.unmute();
+                        //sampler.unmute();
+                        //instruments.playPause();
                         soundUP = true; 
-                    } 
                 }
-                
             });
+      		
             setInterval(run, 50);
             function run() {
                 if (soundUP) {
                     movePlayheads();
                     stepSequencer();
-                    useCollectables(player, headingDirection(player), keyPressed);
+                    useCollectables(player, headingDirection(player), ins);
                     updateSounds();
                     sequenceTracker(myDrumSequence);
                     updatePlatforms();
                     destroyer();
+
                 }
                 if(hasEnded == true){
                     end();
                 }
-                if(canStart == true && hasEnded == true){
+                if(canStart == true ){
+                    star.setAttribute('color', 'white');
                     player.setAttribute('position', {x:0, y: 2, z:8});
-                    scene.setAttribute('background', {color: 'blue'});
+                    scene.setAttribute('background', {color: 'white'});
                     killplane.setAttribute('color', 'red');
                     startup();
+                    scene.appendChild(platformsEntity);
+                    collectableCount = 0;
+                    collectablesFound = 0;
+                    collectablePicked = false;
+                    instruments.setTempo(172);
                     sampler.setParams([["gain_0", 1],["gain_1", 1],["gain_2", 1],["gain_3", 1] ]);
-                    bassSynth.setParam('gain', 1);
-                    backingMidSynthSeq.setParam('gain', 1);
+                    bassSynth.setParam('gain', 0);
+                    backingMidSynth.setParam('gain', 1);
+                    backingMidSynth.setSequence(midSynthSeq, 2);
+                    bassSynth.setSequence(bassSynthSeq2, 4);
+                    instruments.rewind;
+                    backingMidSynth.setLoop(16,4);
+                    bassSynth.setLoop(64,4);
+                    sampler.setLoop(64,4);
                     sampler.unmute;
                     backingMidSynth.unmute;
                     bassSynth.unmute;
-                    instruments.playPause();
                 }
-                //sequenceTracker(myDrumSequence);
-
-            }
-
-        </script>
-    </body>
+            }  
+    </script>
+  </body>
 </html>
