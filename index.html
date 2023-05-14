@@ -681,7 +681,7 @@
       		function handleButtonPress(evt) {
   				if (soundUP == false) {                 
                     playSomething();  
-                  	soundUP = true;
+                  	//soundUP = true;
   					}
 				}    
       		//inputs key down for debug
@@ -729,7 +729,7 @@
 
                 keyPressed = event.key;
             });
- 			//have we collected collectable? 
+ 	    //have we collected collectable? 
             function logCollected(event) {
                 const collectable = document.getElementById('collectable');
                 collectableCount += 1;
@@ -834,11 +834,10 @@
                 } else {
                     newOrientation = (direction.z === 'z' || direction.z === '-z') ? direction.z : direction.x;
                 }
-                //                /stepSequencer();
                 generatePlatforms(playerPos, stepSequenceLength, inputs, newOrientation);
                 previousOrientation = newOrientation;
             };
-  			//we move this shit
+  	     //we move this shit
             function movePlayheads() {
                 const reverseOffset = (stepSequenceLength-0.5) * platformSize;
 
@@ -888,7 +887,6 @@
                 let playerFlooredZ = Math.floor(0.5+(playerPos.z)/platformSize)*platformSize;
 
                 //update the offset for our step sequencer based on what platform we are over when we generate new ones. 
-                //stepOffset = currentPlayerStep + stepOffset%16;
                 stepOffset = ((stepOffset + stepCheck)%16);
                 //increment placementID - this is used so we can keep track of which platforms relate to which placement (useful for deletion)
                 branchID = branchID + 1;
@@ -1199,7 +1197,7 @@
                     }
                 }
             };      
-			//grab our sample triggers and store them as bools to do stuff with 
+	    //grab our sample triggers and store them as bools to do stuff with 
             function sequenceTracker(myDrumSequence) {
                 for (let i = 0; i < myDrumSequence.length; i++) {
                     const drumItem = myDrumSequence[i];
@@ -1267,7 +1265,7 @@
             function scale (number, inMin, inMax, outMin, outMax) {
                 return (number - inMin) * (outMax - outMin) / (inMax - inMin) + outMin;
             };      
-			//move our collectables around the steps environment based on step distribution
+            //move our collectables around the steps environment based on step distribution
             function difficultyMapper(){
                 //mapped bar returns 16 step Values mapped to 8, 1, 4, 2
                 let mappedKicks = mappedBar(kicks);
@@ -1282,7 +1280,6 @@
                 let allSnaresBeatValues = mappedBar(snares).beatValues;
                 let allHihatsBeatValues = mappedBar(hihats).beatValues;
                 let allBellsBeatValues = mappedBar(bells).beatValues;
-                //let difficulty = 0;
                 //our distances so we know where we're mapping notes too
                 let sumKicks = 0;
                 let sumSnares = 0;
@@ -1407,7 +1404,7 @@
                 }
                 selector = -1;
             };
-			//destroy our playforms if our players want to do that
+  	    //destroy our playforms if our players want to do that
             function destroyer(){
                 const collectable = document.getElementById('collectable');
                 if(destroyStep == true && currentBranch > 0){
@@ -1454,17 +1451,17 @@
                 //jump sounds
                 if(isJumping == true){
                     filter += 0.5;  
-                    //backingMidSynth.setParam("lfoFrequency", filter);
-                    //backingMidSynth.setParam("lfoPitchMod", filter);
-                    //bassSynth.setParam("cutoff", filter *40);
-                    //sampler.setParam("rate_1", scale(filter, -2, 1, 0.1, 0.5)) ;
-                    //sampler.setParam("rate_2", filter+0.5);
-                    //sampler.setParam("rate_3", filter-0.5);
+                    backingMidSynth.setParam("lfoFrequency", filter);
+                    backingMidSynth.setParam("lfoPitchMod", filter);
+                    bassSynth.setParam("cutoff", filter *40);
+                    sampler.setParam("rate_1", scale(filter, -2, 1, 0.1, 0.5)) ;
+                    sampler.setParam("rate_2", filter+0.5);
+                    sampler.setParam("rate_3", filter-0.5);
                 } else {
-                    if(filter > 0){
-                        //backingMidSynth.setParam("lfoFrequency", filter);
-                        ///backingMidSynth.setParam("lfoPitchMod", filter);
-                        //backingMidSynth.setParam("lfoPitchMod", filter);  
+                    if(filter > 0.1){
+                        backingMidSynth.setParam("lfoFrequency", filter);
+                        backingMidSynth.setParam("lfoPitchMod", filter);
+                        backingMidSynth.setParam("lfoPitchMod", filter);  
                     }
 
                     filter = 0;
@@ -1473,19 +1470,18 @@
                 let fall = player.getAttribute('position').y;
                 if(fall < -2){
                     let drop = scale(fall,-30,0, 0.5, 0.1);
-                    //sampler.setParam("rate_0", drop);
-                    //sampler.setParam("rate_1", drop);
-                    //bassSynth.setParam("adsrPitchMod", drop*-1000);
-                    //bassSynth.setParam('cutoff', drop*-100);
-                    //bassSynth.setParam("lfoFrequency", 10-drop);
-                    //                        ,["cutoff", drop*1000],["lfoFrequency", drop],);
-                    //backingMidSynth.setParam("lfoFrequency", drop);
-                    //sampler.setParam("rate_4", drop);
+                    sampler.setParam("rate_0", drop);
+                    sampler.setParam("rate_1", drop);
+                    bassSynth.setParam("adsrPitchMod", drop*-1000);
+                    bassSynth.setParam('cutoff', drop*-100);
+                    bassSynth.setParam("lfoFrequency", 10-drop);
+                    backingMidSynth.setParam("lfoFrequency", drop);
+                    sampler.setParam("rate_4", drop);
                 } 
                 if(fall <= -70){
-                    //sampler.setParam("rate_0", 0.5);
-                    //sampler.setParam("rate_1", 0.5);
-                    //bassSynth.setParam("adsrPitchMod", 0);
+                    sampler.setParam("rate_0", 0.5);
+                    sampler.setParam("rate_1", 0.5);
+                    bassSynth.setParam("adsrPitchMod", 0);
                     //backingMidSynth.setParam("reverbMix", 0.12);
                 }
 
@@ -1550,10 +1546,10 @@
                     }
                 }
 
-                //enemySynth.getMappedParameters;
-                //backingMidSynth.getMappedParameters;
-                //bassSynth.getMappedParameters; 
-                //sampler.getMappedParameters;
+                enemySynth.getMappedParameters;
+                backingMidSynth.getMappedParameters;
+                bassSynth.getMappedParameters; 
+                sampler.getMappedParameters;
 
             }; 
       		//end game reset
@@ -1708,7 +1704,9 @@
                     bassSynth.setLoop(16,4);
                     sampler.setLoop(16,4);
                     instruments.playPause();
-
+		   
+		    soundUP = true; 
+			
                     instruments.setOnTick((playHeads)=> {
                         //The current playhead of the third instrument added
                         if(playHeads[2] % 3 == 2) {
@@ -1736,7 +1734,7 @@
                         //bassSynth.unmute();
                         //sampler.unmute();
                         //instruments.playPause();
-                        soundUP = true; 
+                        //soundUP = true; 
                 }
             });
       		
