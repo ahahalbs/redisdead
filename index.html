@@ -1435,6 +1435,7 @@
                       bonking -= 0.1;
                       reverb += 0.2;
                       enemySynth.setParams(["delay", bonking], ["delayMix", 0.5 ],["reverbMix",reverb],["roomSize",roomSize],["gain",bonking]);
+		      enemySynth.getMappedParameters;
                   }
                   if (bonking  <= 0.1 && bonking > 0){
                       hasBonked = false;
@@ -1445,6 +1446,7 @@
 
                       bonking = 0;
                       enemySynth.setParams(["delay", bonking], ["delayMix", 0.5 ],["reverbMix",reverb],["roomSize",roomSize],["gain",bonking]);
+		      enemySynth.getMappedParameters;
                   } 
    
 
@@ -1546,7 +1548,7 @@
                     }
                 }
 
-                enemySynth.getMappedParameters;
+                
                 backingMidSynth.getMappedParameters;
                 bassSynth.getMappedParameters; 
                 sampler.getMappedParameters;
@@ -1753,30 +1755,30 @@
                 if(hasEnded == true){
                     end();
                 }
-//                 if(canStart == true ){
-//                     star.setAttribute('color', 'white');
-//                     player.setAttribute('position', {x:0, y: 2, z:8});
-//                     scene.setAttribute('background', {color: 'white'});
-//                     killplane.setAttribute('color', 'red');
-//                     startup();
-//                     scene.appendChild(platformsEntity);
-//                     collectableCount = 0;
-//                     collectablesFound = 0;
-//                     collectablePicked = false;
-//                     instruments.setTempo(172);
-//                     sampler.setParams([["gain_0", 1],["gain_1", 1],["gain_2", 1],["gain_3", 1] ]);
-//                     bassSynth.setParam('gain', 0);
-//                     backingMidSynth.setParam('gain', 1);
-//                     backingMidSynth.setSequence(midSynthSeq, 2);
-//                     bassSynth.setSequence(bassSynthSeq2, 4);
-//                     instruments.rewind;
-//                     backingMidSynth.setLoop(16,4);
-//                     bassSynth.setLoop(64,4);
-//                     sampler.setLoop(64,4);
-//                     sampler.unmute;
-//                     backingMidSynth.unmute;
-//                     bassSynth.unmute;
-//                 }
+                if(canStart == true ){
+                    star.setAttribute('color', 'white');
+                    player.setAttribute('position', {x:0, y: 2, z:8});
+                    scene.setAttribute('background', {color: 'white'});
+                    killplane.setAttribute('color', 'red');
+                    startup();
+                    scene.appendChild(platformsEntity);
+                    collectableCount = 0;
+                    collectablesFound = 0;
+                    collectablePicked = false;
+                    instruments.setTempo(172);
+                    sampler.setParams([["gain_0", 1],["gain_1", 1],["gain_2", 1],["gain_3", 1] ]);
+                    bassSynth.setParam('gain', 0);
+                    backingMidSynth.setParam('gain', 1);
+                    backingMidSynth.setSequence(midSynthSeq, 2);
+                    bassSynth.setSequence(bassSynthSeq2, 4);
+                    instruments.rewind;
+                    backingMidSynth.setLoop(16,4);
+                    bassSynth.setLoop(64,4);
+                    sampler.setLoop(64,4);
+                    sampler.unmute;
+                    backingMidSynth.unmute;
+                    bassSynth.unmute;
+                }
             }  
     </script>
   </body>
