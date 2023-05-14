@@ -1454,17 +1454,17 @@
                 //jump sounds
                 if(isJumping == true){
                     filter += 0.5;  
-                    backingMidSynth.setParam("lfoFrequency", filter);
-                    backingMidSynth.setParam("lfoPitchMod", filter);
-                    bassSynth.setParam("cutoff", filter *40);
-                    sampler.setParam("rate_1", scale(filter, -2, 1, 0.1, 0.5)) ;
-                    sampler.setParam("rate_2", filter+0.5);
-                    sampler.setParam("rate_3", filter-0.5);
+                    //backingMidSynth.setParam("lfoFrequency", filter);
+                    //backingMidSynth.setParam("lfoPitchMod", filter);
+                    //bassSynth.setParam("cutoff", filter *40);
+                    //sampler.setParam("rate_1", scale(filter, -2, 1, 0.1, 0.5)) ;
+                    //sampler.setParam("rate_2", filter+0.5);
+                    //sampler.setParam("rate_3", filter-0.5);
                 } else {
                     if(filter > 0){
-                        backingMidSynth.setParam("lfoFrequency", filter);
-                        backingMidSynth.setParam("lfoPitchMod", filter);
-                        backingMidSynth.setParam("lfoPitchMod", filter);  
+                        //backingMidSynth.setParam("lfoFrequency", filter);
+                        ///backingMidSynth.setParam("lfoPitchMod", filter);
+                        //backingMidSynth.setParam("lfoPitchMod", filter);  
                     }
 
                     filter = 0;
@@ -1473,19 +1473,19 @@
                 let fall = player.getAttribute('position').y;
                 if(fall < -2){
                     let drop = scale(fall,-30,0, 0.5, 0.1);
-                    sampler.setParam("rate_0", drop);
-                    sampler.setParam("rate_1", drop);
-                    bassSynth.setParam("adsrPitchMod", drop*-1000);
-                    bassSynth.setParam('cutoff', drop*-100);
-                    bassSynth.setParam("lfoFrequency", 10-drop);
+                    //sampler.setParam("rate_0", drop);
+                    //sampler.setParam("rate_1", drop);
+                    //bassSynth.setParam("adsrPitchMod", drop*-1000);
+                    //bassSynth.setParam('cutoff', drop*-100);
+                    //bassSynth.setParam("lfoFrequency", 10-drop);
                     //                        ,["cutoff", drop*1000],["lfoFrequency", drop],);
-                    backingMidSynth.setParam("lfoFrequency", drop);
-                    sampler.setParam("rate_4", drop);
+                    //backingMidSynth.setParam("lfoFrequency", drop);
+                    //sampler.setParam("rate_4", drop);
                 } 
                 if(fall <= -70){
-                    sampler.setParam("rate_0", 0.5);
-                    sampler.setParam("rate_1", 0.5);
-                    bassSynth.setParam("adsrPitchMod", 0);
+                    //sampler.setParam("rate_0", 0.5);
+                    //sampler.setParam("rate_1", 0.5);
+                    //bassSynth.setParam("adsrPitchMod", 0);
                     //backingMidSynth.setParam("reverbMix", 0.12);
                 }
 
