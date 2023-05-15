@@ -1412,9 +1412,9 @@
 		if (bonking > 0) {
 		    bonking -= 0.1;
 		    //reverb += 0.05;
-		    enemySynth.setParam("gain", bonking * 2);
-		    enemySynth.setParam("delay", 0.2);
-	            enemySynth.setParam("reverbMix", bonking *0.5);
+		    enemySynth.setParam("gain", bonking * 3);
+		    //enemySynth.setParam("delay", 0.2);
+	            //enemySynth.setParam("reverbMix", bonking *0.5);
 		}
 
 		// Check if bonking has ended
@@ -1687,8 +1687,9 @@
 		   			
                     instruments.setOnTick((playHeads)=> {
                         //The current playhead of the third instrument added
-                        if(playHeads[2] % 3 == 2) {
-                            metro+=0.5;
+                        if(playHeads[2] % 6 == 4) {
+                           // metro+=0.5;
+				metro+=;
                         }
                         //double speed
                         if(playHeads[2] % 3 == 2) {
