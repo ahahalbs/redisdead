@@ -2,8 +2,7 @@
   <html>
   <head>
     <script src="enable-threads.js"></script>
-    <script crossorigin src="maxiInstruments.v.0.7.2.js"></script>
-<!--    <script src = "https://accelerate-editor.web.app/libs/aframe-v1.3.0.min.js"></script>  -->
+    <script crossorigin src="maxiInstruments.v.0.7.1.js"></script>
 	<script src="./dist/aframe-master.min.js"></script>  
 <!-- 	CONTROL YO SHIT -->
     <script>AFRAME.registerComponent('controller', {
@@ -474,7 +473,7 @@
        <a-box class='end' id="lurker" position="0 28 -15" width="4" height="0.25" depth="4" color="black" box-collider lurker="target: #player "></a-box>  
     </a-scene> 
     <script>
-			let tempo = 96;
+	    let tempo = 96;
             let enemySynth;
             let backingMidSynth;
             let bassSynth;
@@ -574,10 +573,10 @@
             let roomSize = 0;
             let filter = 0.1;
  
-			//initialise our environment
+	    //initialise our environment
             function startup(){
                 canStart = false;
-                //Create the first sequence of platforms
+                //create the first sequence of platforms
                 for(let i = stepSequenceLength-1; i >= 0 ; i--){
                     let platform = document.createElement('a-box');
                     platform.setAttribute('class', 'ground');
@@ -642,7 +641,7 @@
 			let leftController = document.querySelector('#left-controller');
 
             //right controller
-			rightController.addEventListener('abuttondown', function(evt) { handleButtonPres(evt); });
+			rightController.addEventListener('abuttondown', function(evt) { handleButtonPress(evt); });
             //rightController.addEventListener('abuttonup', function(evt) {  });
 			rightController.addEventListener('bbuttondown', function(evt) { destroyStep = true; handleButtonPress(evt); });
             rightController.addEventListener('bbuttonup', function(evt) { destroyStep = false; });
@@ -662,11 +661,11 @@
             leftController.addEventListener('leftgripup', function(evt) { hihatTrigger = false; ins = -1 });
 			//first button presson only
       		function handleButtonPress(evt) {
-  				if (soundUP == false) {                 
-                    playSomething();  
-                  	soundUP = true;
-  					}
-				}    
+  			if (soundUP == false) {                 
+                    		playSomething();  
+                  		soundUP = true;
+  				}
+			}    
       		//inputs key down for debug
             document.addEventListener("keydown", function(event) {
                 if(event.key == '1'){
@@ -1367,7 +1366,7 @@
                                 updatePlatformAttributes(platform, hatWidth, platformSize / 4, hatDepth);
                                 break;
                             case 3:
-                                updatePlatformAttributes(platform, platformSize * 3, platformSize/2, platformSize * 3);
+                                updatePlatformAttributes(platform, platformSize * 3, platformSize/4, platformSize * 3);
                                 break;
                         }
                     }
