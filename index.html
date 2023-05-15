@@ -1411,7 +1411,7 @@
 		if (bonking > 0) {
 		    bonking -= 0.1;
 		    reverb += 0.2;
-		    enemySynth.setParams(["delay", bonking], ["delayMix", 0.5], ["reverbMix", reverb], ["roomSize", roomSize], ["gain", bonking]);
+		    enemySynth.setParams([["delay", bonking], ["delayMix", 0.5], ["reverbMix", reverb], ["roomSize", roomSize], ["gain", bonking],]);
 		}
 
 		// Check if bonking has ended
@@ -1425,7 +1425,7 @@
 		    }
 
 		    bonking = 0;
-		    enemySynth.setParams(["delay", bonking], ["delayMix", 0.5], ["reverbMix", reverb], ["roomSize", roomSize], ["gain", bonking]);
+		    enemySynth.setParams([["delay", bonking], ["delayMix", 0.5], ["reverbMix", reverb], ["roomSize", roomSize], ["gain", bonking],]);
 		}
   
                 //jump sounds
