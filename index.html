@@ -1431,7 +1431,7 @@
                       roomSize =1.0;
                       hasBonked = false;
                   }
-                  if(bonking > 0){
+                  if(bonking > 0.1){
                       bonking -= 0.1;
                       reverb += 0.2;
                       enemySynth.setParams(["delay", bonking], ["delayMix", 0.5 ],["reverbMix",reverb],["roomSize",roomSize],["gain",bonking]);
@@ -1549,9 +1549,9 @@
                 }
 
                 
-                backingMidSynth.getMappedParameters;
-                bassSynth.getMappedParameters; 
-                sampler.getMappedParameters;
+//                 backingMidSynth.getMappedParameters;
+//                 bassSynth.getMappedParameters; 
+//                 sampler.getMappedParameters;
 
             }; 
       		//end game reset
@@ -1736,7 +1736,7 @@
                         //bassSynth.unmute();
                         //sampler.unmute();
                         //instruments.playPause();
-                        //soundUP = true; 
+                        soundUP = true; 
                 }
             });
       		
