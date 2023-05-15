@@ -454,7 +454,7 @@
         <script>
             const platformSize = 3;
             AFRAME.registerComponent('kick-playhead', {
-                dependencies: ['geometry', 'material', 'box-collider'],
+                dependencies: ['geometry', 'material'],
                 init: function() {
                     this.el.setAttribute('geometry', {
                         primitive: 'box',
@@ -468,12 +468,11 @@
                         opacity: 0.5,
                         side: 'double' 
                     });
-                    this.el.setAttribute('box-collider', {});
                 },
             });
 
             AFRAME.registerComponent('snare-playhead', {
-                dependencies: ['geometry', 'material','box-collider'],
+                dependencies: ['geometry', 'material'],
                 init: function() {
                     this.el.setAttribute('geometry', {
                         primitive: 'box',
@@ -488,12 +487,11 @@
                         side: 'double' 
 
                     });
-                    this.el.setAttribute('box-collider', {});
                 },
             });
 
             AFRAME.registerComponent('hihat-playhead', {
-                dependencies: ['geometry', 'material','box-collider'],
+                dependencies: ['geometry', 'material',],
                 init: function() {
                     if (orientation === 'x' || orientation === '-x') {
                         this.el.setAttribute('geometry', {
@@ -516,12 +514,11 @@
                         opacity: 0.5,
                          side: 'double'
                     });
-                    this.el.setAttribute('box-collider', {});
                 },
             });
 
             AFRAME.registerComponent('bell-playhead', {
-                dependencies: ['geometry', 'material','box-collider'],
+                dependencies: ['geometry', 'material',],
                 init: function() {
                     if (orientation === 'x' || orientation === '-x') {
                         this.el.setAttribute('geometry', {
@@ -544,7 +541,6 @@
                         opacity: 0.5,
                         side: 'double' 
                     });
-                    this.el.setAttribute('box-collider', {});
                 },
             });
 
