@@ -1084,10 +1084,8 @@
                     platformsEntity.appendChild(platform);
                 }
                 //playhead biz
-                let playhead = document.createElement('a-box');
-                playhead.setAttribute('class', 'playheads');
-                playhead.setAttribute('id', 'playhead');
-                playhead.setAttribute("box-collider", ''); 
+                let playhead = document.createElement('a-entity');
+
 
 
 
@@ -1108,6 +1106,9 @@
 
                 // Apply the appropriate mixin based on the playhead type
                 playhead.setAttribute(playheadType, {});
+                playhead.setAttribute('class', 'playheads');
+                playhead.setAttribute('id', 'playhead');
+                playhead.setAttribute("box-collider", ''); 
 
                 let newPosition = {x: playerFlooredX, y: playerPos.y + platformSize + 0.001, z: playerFlooredZ};
                 playhead.setAttribute('position', newPosition);
