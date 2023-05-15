@@ -1,135 +1,135 @@
- 
-  <html>
-  <head>
-  <style>
-    #rightHand, #leftHand {
-        display: none;
-    }
-   </style>
-    <script src="enable-threads.js"></script>
-    <script crossorigin src="maxiInstruments.v.0.7.1.js"></script>
-	<script src="./dist/aframe-master.min.js"></script>  
-<!-- 	CONTROL YO SHIT -->
-    <script>AFRAME.registerComponent('controller', {
-      schema: {
-        moveSpeed: {type: 'number', default: 3.6},
-        smoothness: {type: 'number', default: 0.05}
-      },
-      init: function() {
-        this.leftAxisX = 0;
-         this.leftAxisY = 0;
-        let self = this;
 
-        this.el.addEventListener('thumbstickmoved', function(event) {
-          self.leftAxisX = event.detail.x;
-          self.leftAxisY = event.detail.y;
-        });
+<html>
+    <head>
+        <style>
+            #rightHand, #leftHand {
+                display: none;
+            }
+        </style>
+        <script src="enable-threads.js"></script>
+        <script crossorigin src="maxiInstruments.v.0.7.1.js"></script>
+        <script src="./dist/aframe-master.min.js"></script>  
+        <!-- 	CONTROL YO SHIT -->
+        <script>AFRAME.registerComponent('controller', {
+                schema: {
+                    moveSpeed: {type: 'number', default: 3.6},
+                    smoothness: {type: 'number', default: 0.05}
+                },
+                init: function() {
+                    this.leftAxisX = 0;
+                    this.leftAxisY = 0;
+                    let self = this;
 
-        //X button
-        this.el.addEventListener('xbuttondown', function(event) {
-          self.el.emit('xbuttonpressed', {pressed: true});
-        });
+                    this.el.addEventListener('thumbstickmoved', function(event) {
+                        self.leftAxisX = event.detail.x;
+                        self.leftAxisY = event.detail.y;
+                    });
 
-        this.el.addEventListener('xbuttonup', function(event) {
-          self.el.emit('xbuttonreleased', {pressed: false});
-        });
+                    //X button
+                    this.el.addEventListener('xbuttondown', function(event) {
+                        self.el.emit('xbuttonpressed', {pressed: true});
+                    });
 
-        //Y button
-        this.el.addEventListener('ybuttondown', function(event) {
-          self.el.emit('ybuttonpressed', {pressed: true});
-        });
+                    this.el.addEventListener('xbuttonup', function(event) {
+                        self.el.emit('xbuttonreleased', {pressed: false});
+                    });
 
-        this.el.addEventListener('ybuttonup', function(event) {
-          self.el.emit('ybuttonreleased', {pressed: false});
-        });
+                    //Y button
+                    this.el.addEventListener('ybuttondown', function(event) {
+                        self.el.emit('ybuttonpressed', {pressed: true});
+                    });
 
-        //A button
-        this.el.addEventListener('abuttondown', function(event) {
-          self.el.emit('abuttonpressed', {pressed: true});
-        });
+                    this.el.addEventListener('ybuttonup', function(event) {
+                        self.el.emit('ybuttonreleased', {pressed: false});
+                    });
 
-        this.el.addEventListener('abuttonup', function(event) {
-          self.el.emit('abuttonreleased', {pressed: false});
-        });
+                    //A button
+                    this.el.addEventListener('abuttondown', function(event) {
+                        self.el.emit('abuttonpressed', {pressed: true});
+                    });
 
-        //B button
-        this.el.addEventListener('bbuttondown', function(event) {
-          self.el.emit('bbuttonpressed', {pressed: true});
-        });
+                    this.el.addEventListener('abuttonup', function(event) {
+                        self.el.emit('abuttonreleased', {pressed: false});
+                    });
 
-        this.el.addEventListener('bbuttonup', function(event) {
-          self.el.emit('bbuttonreleased', {pressed: false});
-        });
+                    //B button
+                    this.el.addEventListener('bbuttondown', function(event) {
+                        self.el.emit('bbuttonpressed', {pressed: true});
+                    });
 
-        //left trigger
-        this.el.addEventListener('triggerdown', function(event) {
-          self.el.emit('lefttriggerdown', {pressed: true});
-        });
+                    this.el.addEventListener('bbuttonup', function(event) {
+                        self.el.emit('bbuttonreleased', {pressed: false});
+                    });
 
-        this.el.addEventListener('triggerup', function(event) {
-          self.el.emit('lefttriggerup', {pressed: false});
-        });
+                    //left trigger
+                    this.el.addEventListener('triggerdown', function(event) {
+                        self.el.emit('lefttriggerdown', {pressed: true});
+                    });
 
-        //right trigger
-        this.el.addEventListener('triggerdown', function(event) {
-          self.el.emit('righttriggerdown', {pressed: true});
-        });
+                    this.el.addEventListener('triggerup', function(event) {
+                        self.el.emit('lefttriggerup', {pressed: false});
+                    });
 
-        this.el.addEventListener('triggerup', function(event) {
-          self.el.emit('righttriggerup', {pressed: false});
-        });
+                    //right trigger
+                    this.el.addEventListener('triggerdown', function(event) {
+                        self.el.emit('righttriggerdown', {pressed: true});
+                    });
 
-        //left grip
-        this.el.addEventListener('gripdown', function(event) {
-          self.el.emit('leftgripdown', {pressed: true});
-        });
+                    this.el.addEventListener('triggerup', function(event) {
+                        self.el.emit('righttriggerup', {pressed: false});
+                    });
 
-        this.el.addEventListener('gripup', function(event) {
-          self.el.emit('leftgripup', {pressed: false});
-        });
+                    //left grip
+                    this.el.addEventListener('gripdown', function(event) {
+                        self.el.emit('leftgripdown', {pressed: true});
+                    });
 
-        //right grip
-        this.el.addEventListener('gripdown', function(event) {
-          self.el.emit('rightgripdown', {pressed: true});
-        });
+                    this.el.addEventListener('gripup', function(event) {
+                        self.el.emit('leftgripup', {pressed: false});
+                    });
 
-        this.el.addEventListener('gripup', function(event) {
-          self.el.emit('rightgripup', {pressed: false});
-        });
-      },
-        
-      tick: function() {
-  		let player = document.querySelector("#player");
-        let camera = document.querySelector("#camera");
-        let direction = new THREE.Vector3();
-        let left = new THREE.Vector3();
+                    //right grip
+                    this.el.addEventListener('gripdown', function(event) {
+                        self.el.emit('rightgripdown', {pressed: true});
+                    });
 
-        //camera's direction for movement
-        camera.object3D.getWorldDirection(direction);
-        
-        //lock y
-  		direction.y = 0;
+                    this.el.addEventListener('gripup', function(event) {
+                        self.el.emit('rightgripup', {pressed: false});
+                    });
+                },
 
-  		//normalize the direction vector (tsettingy to 0 can fuck vector length)
-  		direction.normalize();
+                tick: function() {
+                    let player = document.querySelector("#player");
+                    let camera = document.querySelector("#camera");
+                    let direction = new THREE.Vector3();
+                    let left = new THREE.Vector3();
 
-        //work out left direction
-        left.crossVectors(camera.object3D.up, direction);
+                    //camera's direction for movement
+                    camera.object3D.getWorldDirection(direction);
 
-        //movement based on thumbstick position and speed
-        let forwardMovement = direction.multiplyScalar(this.leftAxisY * this.data.moveSpeed);
-        let sideMovement = left.multiplyScalar(this.leftAxisX * this.data.moveSpeed);
+                    //lock y
+                    direction.y = 0;
 
-        //add forward and side movement vectors to get the total movement vector
-        let movement = new THREE.Vector3().addVectors(forwardMovement, sideMovement);
-        let desiredPosition = new THREE.Vector3().addVectors(player.object3D.position, movement);
-        //smooth
-        player.object3D.position.lerp(desiredPosition, this.data.smoothness);
-      },
-});
-    </script>
-<!--     JUMP AND FALL (BUT NEVER DEATH, STUCK IN THIS ETERNAL LOOP FOREVAAAAH) -->
-    <script>AFRAME.registerComponent('jump', {
+                    //normalize the direction vector (tsettingy to 0 can fuck vector length)
+                    direction.normalize();
+
+                    //work out left direction
+                    left.crossVectors(camera.object3D.up, direction);
+
+                    //movement based on thumbstick position and speed
+                    let forwardMovement = direction.multiplyScalar(this.leftAxisY * this.data.moveSpeed);
+                    let sideMovement = left.multiplyScalar(this.leftAxisX * this.data.moveSpeed);
+
+                    //add forward and side movement vectors to get the total movement vector
+                    let movement = new THREE.Vector3().addVectors(forwardMovement, sideMovement);
+                    let desiredPosition = new THREE.Vector3().addVectors(player.object3D.position, movement);
+                    //smooth
+                    player.object3D.position.lerp(desiredPosition, this.data.smoothness);
+                },
+            });
+        </script>
+        <!--     JUMP AND FALL (BUT NEVER DEATH, STUCK IN THIS ETERNAL LOOP FOREVAAAAH) -->
+        <script>AFRAME.registerComponent('jump', {
                 schema: {
                     groundSelector: { type: "string", default: ".ground"},
                 },
@@ -150,29 +150,29 @@
 
                     this.el.sceneEl.addEventListener('child-attached', this.updateGrounds.bind(this));
                     this.el.sceneEl.addEventListener('child-detached', this.updateGrounds.bind(this));
-					
-                  	//X
-                    document.querySelector('#left-controller').addEventListener('xbuttondown', function(evt) {
-                      if (!self.isJumping) {
-                          if (self.canJump == true) {
-                              self.isJumping = true;
-                              self.jumpSpeed = self.jumpHeight;
-                              self.isOnGround = false;
-                          }
-                      }
-                  });
 
-                  //A
-                  document.querySelector('#right-controller').addEventListener('abuttondown', function(evt) {
-                      if (!self.isJumping) {
-                          if (self.canJump == true) {
-                              self.isJumping = true;
-                              self.jumpSpeed = self.jumpHeight;
-                              self.isOnGround = false;
-                          }
-                      }
-                  });
-			
+                    //X
+                    document.querySelector('#left-controller').addEventListener('xbuttondown', function(evt) {
+                        if (!self.isJumping) {
+                            if (self.canJump == true) {
+                                self.isJumping = true;
+                                self.jumpSpeed = self.jumpHeight;
+                                self.isOnGround = false;
+                            }
+                        }
+                    });
+
+                    //A
+                    document.querySelector('#right-controller').addEventListener('abuttondown', function(evt) {
+                        if (!self.isJumping) {
+                            if (self.canJump == true) {
+                                self.isJumping = true;
+                                self.jumpSpeed = self.jumpHeight;
+                                self.isOnGround = false;
+                            }
+                        }
+                    });
+
                 }, updateGrounds: function() {
                     this.grounds = Array.from(document.querySelectorAll(this.data.groundSelector));
                 },
@@ -292,9 +292,9 @@
                     }
                 },
             });
-    </script>
-<!--     EVERYTHING COLLIDES -->
-    <script>AFRAME.registerComponent("box-collider", {
+        </script>
+        <!--     EVERYTHING COLLIDES -->
+        <script>AFRAME.registerComponent("box-collider", {
                 schema: {
                     hasBonked: { type: 'boolean', default: false }
                 },
@@ -402,9 +402,9 @@
                     }
                     this.player.object3D.position.copy(playerPos);
                 },
-    });</script>
-<!--     LURKING -->
-    <script>AFRAME.registerComponent("lurker", {
+            });</script>
+        <!--     LURKING -->
+        <script>AFRAME.registerComponent("lurker", {
                 schema: {
                     target: { type: "selector" },
                     easingFactor: { type: "number", default: 0.03 },
@@ -440,32 +440,124 @@
                 },
             });
         </script>
-  </head>
-  <body>
-   <a-scene stats background="color: #005AFF">
-<!--       vr controllers -->
-      <a-entity id="left-controller" oculus-touch-controls="hand: left" controller></a-entity>
-	  <a-entity id="right-controller" oculus-touch-controls="hand: right" controller></a-entity>
-     
-        <!--this is where the magic happens-->
-       <a-entity class="ground" id="platformsEntity"></a-entity> 
-       
-<!--      vr camera/player/rig/akaballache -->
+        <script>
+            AFRAME.registerComponent('kick-playhead', {
+                dependencies: ['geometry', 'material'],
+                init: function() {
+                    this.el.setAttribute('geometry', {
+                        primitive: 'box',
+                        width: (platformSize * 3) - 0.01,
+                        height: platformSize - 0.01,
+                        depth: (platformSize * 3) - 0.01
+                    });
+                    this.el.setAttribute('material', {
+                        color: 'red',
+                        transparent: true,
+                        opacity: 0.5
+                    });
+                    this.el.setAttribute('side', 'double');
+                },
+            });
 
-       <a-entity id="rig" position="0 0 0" >
-       <a-entity id="player" position="0 1.6 6" width="1" height="1.6" depth="1" look controls jump>
-       <a-camera id="camera" camera look controls ></a-camera>
-       </a-entity>
-       </a-entity> 
-   
-       <a-plane id="killplane" side="double" position="0 -18 0" rotation="-90 0 0" width="500" height="500" color="red"></a-plane>
-       <!--start point-->
-       <a-box class="ground" id="start" position="0 -1 6" width="6" height="1" depth="6" color="white"></a-box>
-       <!--end point-->
-       <a-box class='end' id="lurker" position="0 28 -15" width="4" height="0.25" depth="4" color="black" box-collider lurker="target: #player "></a-box>  
-       </a-scene> 
-       <script>
-	    let tempo = 96;
+            AFRAME.registerComponent('snare-playhead', {
+                dependencies: ['geometry', 'material'],
+                init: function() {
+                    this.el.setAttribute('geometry', {
+                        primitive: 'box',
+                        width: (platformSize / 2) - 0.1,
+                        height: (platformSize * 3) - 0.1,
+                        depth: (platformSize / 2) - 0.1
+                    });
+                    this.el.setAttribute('material', {
+                        color: 'red',
+                        transparent: true,
+                        opacity: 0.5
+                    });
+                    this.el.setAttribute('side', 'double');
+                },
+            });
+
+            AFRAME.registerComponent('hihat-playhead', {
+                dependencies: ['geometry', 'material'],
+                init: function() {
+                    if (orientation === 'x' || orientation === '-x') {
+                        this.el.setAttribute('geometry', {
+                            primitive: 'box',
+                            width: (platformSize * 4) - 0.1,
+                            height: (platformSize / 4) - 0.1,
+                            depth: (platformSize / 4) - 0.1
+                        });
+                    } else {
+                        this.el.setAttribute('geometry', {
+                            primitive: 'box',
+                            width: (platformSize / 4) - 0.1,
+                            height: (platformSize / 4) - 0.1,
+                            depth: (platformSize * 4) - 0.1
+                        });
+                    }
+                    this.el.setAttribute('material', {
+                        color: 'red',
+                        transparent: true,
+                        opacity: 0.5
+                    });
+                    this.el.setAttribute('side', 'double');
+                },
+            });
+
+            AFRAME.registerComponent('bell-playhead', {
+                dependencies: ['geometry', 'material'],
+                init: function() {
+                    if (orientation === 'x' || orientation === '-x') {
+                        this.el.setAttribute('geometry', {
+                            primitive: 'box',
+                            width: platformSize - 0.1,
+                            height: (platformSize / 4) - 0.1,
+                            depth: (platformSize * 3) - 0.1
+                        });
+                    } else {
+                        this.el.setAttribute('geometry', {
+                            primitive: 'box',
+                            width: (platformSize * 3) - 0.1,
+                            height: (platformSize / 4) - 0.1,
+                            depth: platformSize - 0.1
+                        });
+                    }
+                    this.el.setAttribute('material', {
+                        color: 'red',
+                        transparent: true,
+                        opacity: 0.5
+                    });
+                    this.el.setAttribute('side', 'double');
+                },
+            });
+
+        </script>
+    </head>
+    <body>
+        <a-scene stats background="color: #005AFF">
+            <!--       vr controllers -->
+            <a-entity id="left-controller" oculus-touch-controls="hand: left" controller></a-entity>
+            <a-entity id="right-controller" oculus-touch-controls="hand: right" controller></a-entity>
+
+            <!--this is where the magic happens-->
+            <a-entity class="ground" id="platformsEntity"></a-entity> 
+
+            <!--      vr camera/player/rig/akaballache -->
+
+            <a-entity id="rig" position="0 0 0" >
+                <a-entity id="player" position="0 1.6 6" width="1" height="1.6" depth="1" look controls jump>
+                    <a-camera id="camera" camera look controls ></a-camera>
+                </a-entity>
+            </a-entity> 
+
+            <a-plane id="killplane" side="double" position="0 -18 0" rotation="-90 0 0" width="500" height="500" color="red"></a-plane>
+            <!--start point-->
+            <a-box class="ground" id="start" position="0 -1 6" width="6" height="1" depth="6" color="white"></a-box>
+            <!--end point-->
+            <a-box class='end' id="lurker" position="0 28 -15" width="4" height="0.25" depth="4" color="black" box-collider lurker="target: #player "></a-box>  
+        </a-scene> 
+        <script>
+            let tempo = 96;
             let enemySynth;
             let backingMidSynth;
             let bassSynth;
@@ -532,7 +624,7 @@
             let collectablePicked = false;
             let difficulty = 0;
             let eventFixer = 0;
-      	    let ins = -1;
+            let ins = -1;
             let hasEnded = false;
             let canStart = false;
             let isJumping = false;
@@ -553,16 +645,16 @@
             let bells = [false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false];
             //things that trigger sound
             let hasBonked = false;
-      	    let activeNote = null;
-	    let pauseBonk = false;
+            let activeNote = null;
+            let pauseBonk = false;
             let bonking = 0;
             //bonk notes
             let notes = [62, 64, 65, 69 ];
             let reverb = 0;
             let roomSize = 0;
             let filter = 0.1;
- 
-	    //initialise our environment
+
+            //initialise our environment
             function startup(){
                 canStart = false;
                 //create the first sequence of platforms
@@ -623,38 +715,38 @@
             } else {
                 scene.addEventListener('loaded', run);
             }
-      
-      		let rightController = document.querySelector('#right-controller');
-			let leftController = document.querySelector('#left-controller');
+
+            let rightController = document.querySelector('#right-controller');
+            let leftController = document.querySelector('#left-controller');
 
             //right controller
-			rightController.addEventListener('abuttondown', function(evt) { handleButtonPress(evt); });
+            rightController.addEventListener('abuttondown', function(evt) { handleButtonPress(evt); });
             //rightController.addEventListener('abuttonup', function(evt) {  });
-			rightController.addEventListener('bbuttondown', function(evt) { destroyStep = true; handleButtonPress(evt); });
+            rightController.addEventListener('bbuttondown', function(evt) { destroyStep = true; handleButtonPress(evt); });
             rightController.addEventListener('bbuttonup', function(evt) { destroyStep = false; });
-			rightController.addEventListener('righttriggerdown', function(evt) { snareTrigger = true; ins = 1; handleButtonPress(evt); });
+            rightController.addEventListener('righttriggerdown', function(evt) { snareTrigger = true; ins = 1; handleButtonPress(evt); });
             rightController.addEventListener('righttriggerup', function(evt) { snareTrigger = false; ins = -1; });
-			rightController.addEventListener('rightgripdown', function(evt) { bellTrigger = true; ins = 3; handleButtonPress(evt);});
+            rightController.addEventListener('rightgripdown', function(evt) { bellTrigger = true; ins = 3; handleButtonPress(evt);});
             rightController.addEventListener('rightgripup', function(evt) { bellTrigger = false; ins = -1; });
 
             //left controller
-			leftController.addEventListener('xbuttondown', function(evt) { handleButtonPress(evt); });
+            leftController.addEventListener('xbuttondown', function(evt) { handleButtonPress(evt); });
             //leftController.addEventListener('xbuttonup', function(evt) {  });
-			leftController.addEventListener('ybuttondown', function(evt) { destroyStep = true; handleButtonPress(evt); });
+            leftController.addEventListener('ybuttondown', function(evt) { destroyStep = true; handleButtonPress(evt); });
             leftController.addEventListener('ybuttonup', function(evt) { destroyStep = false; });
-			leftController.addEventListener('lefttriggerdown', function(evt) { kickTrigger = true; ins = 0; handleButtonPress(evt); });
+            leftController.addEventListener('lefttriggerdown', function(evt) { kickTrigger = true; ins = 0; handleButtonPress(evt); });
             leftController.addEventListener('lefttriggerup', function(evt) { ins = -1; kickTrigger = false; });
-			leftController.addEventListener('leftgripdown', function(evt) { hihatTrigger = true; ins = 2; handleButtonPress(evt); });
+            leftController.addEventListener('leftgripdown', function(evt) { hihatTrigger = true; ins = 2; handleButtonPress(evt); });
             leftController.addEventListener('leftgripup', function(evt) { hihatTrigger = false; ins = -1 });
-			//first button presson only
-      		function handleButtonPress(evt) {
-  			if (soundUP == false) {                 
-                    		playSomething(); 
-				star.setAttribute('color', 'black');
-                  		soundUP = true;
-  				}
-			}    
- 	    //have we collected collectable? 
+            //first button presson only
+            function handleButtonPress(evt) {
+                if (soundUP == false) {                 
+                    playSomething(); 
+                    star.setAttribute('color', 'black');
+                    soundUP = true;
+                }
+            }    
+            //have we collected collectable? 
             function logCollected(event) {
                 const collectable = document.getElementById('collectable');
                 collectableCount += 1;
@@ -725,7 +817,7 @@
                 }
                 return facing;
             };   
-    		//spend collectables (to generate platforms)
+            //spend collectables (to generate platforms)
             function useCollectables(player, facing, inputs) {
                 const playerPos = player.getAttribute('position');
 
@@ -761,7 +853,7 @@
                 generatePlatforms(playerPos, stepSequenceLength, inputs, newOrientation);
                 previousOrientation = newOrientation;
             };
-  	     //we move this shit
+            //we move this shit
             function movePlayheads() {
                 const reverseOffset = (stepSequenceLength-0.5) * platformSize;
 
@@ -799,7 +891,7 @@
                     playheads[i].p.setAttribute('position', newPosition);
                 }
             };   
-		function generatePlatforms(playerPos, numSteps, inputs, orientation){
+            function generatePlatforms(playerPos, numSteps, inputs, orientation){
                 //make sure we turn off our collectable
                 collectableCount--;
                 difficultyMapper();
@@ -933,73 +1025,43 @@
                     platformsEntity.appendChild(platform);
                 }
                 //playhead biz
-                let playhead = document.createElement('a-box');
-                playhead.setAttribute('class', 'playheads');
-                playhead.setAttribute("box-collider", '');
-                playhead.setAttribute('id', 'playhead');
-                playhead.setAttribute('material', {color: 'red', transparent: 'true', opacity: '0.5'});
-                playhead.setAttribute('side', 'double');
+                let playhead = document.createElement('a-entity');
+playhead.setAttribute('class', 'playheads');
+playhead.setAttribute('id', 'playhead');
+playhead.setAttribute("box-collider", '');
+playhead.setAttribute('position', newPosition);
 
-                //use a lil bit of rng to spice up the chance
-                let rng = Math.random();
+// Use a lil bit of rng to spice up the chance
+let rng = Math.random();
 
-                //our kick PlayHeads
-                if(sequenceOrder[sequenceOrder.length-1] == 0){
-                    playhead.setAttribute('width', (platformSize*3)-0.01);
-                    playhead.setAttribute("height", platformSize-0.01);
-                    playhead.setAttribute("depth", (platformSize*3)-0.01);
-                    //snare playheads
-                } 
-                else if(sequenceOrder[sequenceOrder.length-1] == 1){
-                    playhead.setAttribute('width', (platformSize/2)-0.1);
-                    playhead.setAttribute("height",(platformSize*3)-0.1);
-                    playhead.setAttribute("depth", (platformSize/2)-0.1);
-                    //hihat playheads
-                } 
-                else if(sequenceOrder[sequenceOrder.length-1] == 2){
-                    if (orientation == 'x' || orientation == '-x'){
-                        playhead.setAttribute('width', (platformSize*4)-0.1);
-                        playhead.setAttribute("height",(platformSize/4)-0.1);
-                        playhead.setAttribute("depth", (platformSize/4)-0.1);   
-                    } else {
-                        playhead.setAttribute('width', (platformSize/4)-0.1);
-                        playhead.setAttribute("height",(platformSize/4)-0.1);
-                        playhead.setAttribute("depth", (platformSize*4)-0.1);     
-                    }
-                } 
-                else{
-                    if (orientation == 'x' || orientation == '-x'){
-                        playhead.setAttribute('width', platformSize-0.1);
-                        playhead.setAttribute("height",(platformSize/4)-0.1);
-                        playhead.setAttribute("depth", (platformSize*3)-0.1);   
-                    } else {
-                        playhead.setAttribute('width', (platformSize*3)-0.1);
-                        playhead.setAttribute("height",(platformSize/4)-0.1);
-                        playhead.setAttribute("depth", platformSize-0.1);     
-                    }
-                } 
+// Determine the playhead type based on the sequenceOrder
+let playheadType;
+if (sequenceOrder[sequenceOrder.length - 1] === 0) {
+  playheadType = 'kick-playhead';
+} else if (sequenceOrder[sequenceOrder.length - 1] === 1) {
+  playheadType = 'snare-playhead';
+} else if (sequenceOrder[sequenceOrder.length - 1] === 2) {
+  playheadType = 'hihat-playhead';
+} else {
+  playheadType = 'bell-playhead';
+}
 
-                //using number of steps to figure out if we need to offset starting point in the cycle
-                let val;
-                if (playerSteps.length > 3){
-                    val = playerSteps[playerSteps.length-1] - playerSteps[playerSteps.length-2];
-                } else{
-                    val = 0;
-                }
-                //set orientation
-                let newPosition = {x: playerFlooredX, y: playerPos.y + platformSize + 0.001, z: playerFlooredZ};
-                playhead.setAttribute('position', newPosition);
-                let playheadData = {
-                    p: playhead,
-                    o: orientation,
-                    startX: playerFlooredX,
-                    startZ: playerFlooredZ,
-                    modDel: stepOffset - currentPlayerStep,
-                };
-                playheads.push(playheadData);
+// Apply the appropriate mixin based on the playhead type
+playhead.setAttribute(playheadType, {});
 
-                //append to entity in scene
-                platformsEntity.appendChild(playhead);
+// Append the playhead entity to the platformsEntity
+platformsEntity.appendChild(playhead);
+
+// Store playhead data if needed
+let playheadData = {
+  p: playhead,
+  o: orientation,
+  startX: playerFlooredX,
+  startZ: playerFlooredZ,
+  modDel: stepOffset - currentPlayerStep,
+};
+playheads.push(playheadData);
+
                 //wait so our platforms positions are updated and then place collectable
 
                 //generate the collectable for that platform
@@ -1037,7 +1099,7 @@
                 player.setAttribute('position', {x: playerPos.x, y: playerPos.y + (platformSize*3)+0.1, z: playerPos.z});
 
             };
-	    // use step check and inputs to trigger sound / add them to instrument array 
+            // use step check and inputs to trigger sound / add them to instrument array 
             function stepSequencer() {
                 const playerPos = player.getAttribute('position');
                 const playerX = playerPos.x;
@@ -1086,7 +1148,7 @@
                     }
                 }
             };      
-	    //grab our sample triggers and store them as bools to do stuff with 
+            //grab our sample triggers and store them as bools to do stuff with 
             function sequenceTracker(myDrumSequence) {
                 for (let i = 0; i < myDrumSequence.length; i++) {
                     const drumItem = myDrumSequence[i];
@@ -1220,7 +1282,7 @@
                 }
                 return reordered;
             };      
-			//helper to minimise setAttributes
+            //helper to minimise setAttributes
             function updatePlatformAttributes(platform, width, height, depth) {
                 platform.p.setAttribute('width', width);
                 platform.p.setAttribute('height', height);
@@ -1248,35 +1310,35 @@
                     default:
                         return;
                 }
-		if(platforms.length == (playerStep.length * 16)+16){    
-                for (let i = 0; i < reorderedSamples.length; i++) {
-                    if (reorderedSamples[i] === true) {
+                if(platforms.length == (playerStep.length * 16)+16){    
+                    for (let i = 0; i < reorderedSamples.length; i++) {
+                        if (reorderedSamples[i] === true) {
 
-                        let platform = platforms[i + base];
-                        switch (selector) {
-                            case 0:
-                                updatePlatformAttributes(platform, platformSize * 3, platformSize, platformSize * 3);
-                                break;
-                            case 1:
-                                let width = (platform.orient == 'x' || platform.orient == '-x') ? platformSize * 2 : platformSize / 2;
-                                let depth = (platform.orient == 'x' || platform.orient == '-x') ? platformSize / 2 : platformSize * 2;
-                                updatePlatformAttributes(platform, width, platformSize * 3, depth);
-                                break;
-                            case 2:
-                                let hatWidth = (platform.orient == 'x' || platform.orient == '-x') ? platformSize * 3 : platformSize / 2;
-                                let hatDepth = (platform.orient == 'x' || platform.orient == '-x') ? platformSize / 2 : platformSize * 3;
-                                updatePlatformAttributes(platform, hatWidth, platformSize / 4, hatDepth);
-                                break;
-                            case 3:
-                                updatePlatformAttributes(platform, platformSize * 3, platformSize/4, platformSize * 3);
-                                break;
+                            let platform = platforms[i + base];
+                            switch (selector) {
+                                case 0:
+                                    updatePlatformAttributes(platform, platformSize * 3, platformSize, platformSize * 3);
+                                    break;
+                                case 1:
+                                    let width = (platform.orient == 'x' || platform.orient == '-x') ? platformSize * 2 : platformSize / 2;
+                                    let depth = (platform.orient == 'x' || platform.orient == '-x') ? platformSize / 2 : platformSize * 2;
+                                    updatePlatformAttributes(platform, width, platformSize * 3, depth);
+                                    break;
+                                case 2:
+                                    let hatWidth = (platform.orient == 'x' || platform.orient == '-x') ? platformSize * 3 : platformSize / 2;
+                                    let hatDepth = (platform.orient == 'x' || platform.orient == '-x') ? platformSize / 2 : platformSize * 3;
+                                    updatePlatformAttributes(platform, hatWidth, platformSize / 4, hatDepth);
+                                    break;
+                                case 3:
+                                    updatePlatformAttributes(platform, platformSize * 3, platformSize/4, platformSize * 3);
+                                    break;
+                            }
                         }
                     }
+                    selector = -1;
                 }
-                selector = -1;
-		}
             };
-  	    //destroy our playforms if our players want to do that
+            //destroy our playforms if our players want to do that
             function destroyer(){
                 const collectable = document.getElementById('collectable');
                 if(destroyStep == true && currentBranch > 0){
@@ -1294,14 +1356,14 @@
             };
             //this is where the real magic happens
             function updateSounds(){
-               //have we been bonked by a playhead
+                //have we been bonked by a playhead
                 if(hasBonked == true){
                     let randomNote = notes[Math.floor(Math.random()*notes.length)];
                     enemySynth.noteon(randomNote, 127);
                     bonking = 1.0;
                     roomSize =1.0;
                     hasBonked = false;
-		    pauseBonk = true;
+                    pauseBonk = true;
                 }
                 if(bonking > 0){
                     bonking -= 0.1;
@@ -1310,16 +1372,16 @@
                 }
                 if (bonking  <= 0){
                     hasBonked = false;
-			if(pauseBonk){
-                   	 enemySynth.noteoff(62);
-                    	 enemySynth.noteoff(64);
-                    	 enemySynth.noteoff(65);
-                   	 enemySynth.noteoff(69);
-			}
+                    if(pauseBonk){
+                        enemySynth.noteoff(62);
+                        enemySynth.noteoff(64);
+                        enemySynth.noteoff(65);
+                        enemySynth.noteoff(69);
+                    }
                     bonking = 0;
                     //enemySynth.setParams(["delay", bonking], ["delayMix", 0.5 ],["reverbMix",reverb],["roomSize",roomSize],["gain",bonking],);
                 } 
-  
+
                 //jump sounds
                 if(isJumping == true){
                     filter += 0.5;  
@@ -1417,10 +1479,10 @@
                     }
                 }
             }; 
-      		//end game reset
+            //end game reset
             function end(){
-		 //sequentially do stuff
-              if (eventFixer !== lastEventFixer) {
+                //sequentially do stuff
+                if (eventFixer !== lastEventFixer) {
                     lastEventFixer = eventFixer;
                     eventChangeCounter+=0.5;
                 }
@@ -1449,8 +1511,8 @@
                     hasEnded = false;
                 }
             };
-      		//we pushin' speakers 
-		const playSomething=()=>{
+            //we pushin' speakers 
+            const playSomething=()=>{
                 instruments.loadModules().then(()=> {
 
                     enemySynth = instruments.addSynth();
@@ -1568,14 +1630,14 @@
                     bassSynth.setLoop(16,4);
                     sampler.setLoop(16,4);
                     instruments.playPause();
-		   			
+
                     instruments.setOnTick((playHeads)=> {
                         //The current playhead of the third instrument added
                         if(playHeads[2] % 6 == 4) {
                             metro+=0.5;
-				metro++;
+                            metro++;
                         }
-                       
+
                         if(playHeads[2] % 48 == 4) {
                             sequenceTrigger = true;
                             eventFixer++;
@@ -1585,14 +1647,14 @@
                     //console.log("error", err);
                 });
             };
-    		//start the step sequencer
+            //start the step sequencer
             document.addEventListener('keydown', (event) => {
                 if (event.key && soundUP == false){
-                        playSomething();;
-                        soundUP = true; 
+                    playSomething();;
+                    soundUP = true; 
                 }
             });
-      		
+
             setInterval(run, 50);
             function run() {
                 if (soundUP) {
@@ -1601,7 +1663,7 @@
                     useCollectables(player, headingDirection(player), ins);
                     sequenceTracker(myDrumSequence);
                     updatePlatforms();
-		    updateSounds();
+                    updateSounds();
                     destroyer();
 
                 }
@@ -1609,7 +1671,7 @@
                     end();
                 }
                 if(canStart == true ){
-			playerStep = [];
+                    playerStep = [];
                     star.setAttribute('color', 'white');
                     player.setAttribute('position', {x:0, y: 2, z:8});
                     scene.setAttribute('background', {color: 'white'});
@@ -1634,7 +1696,7 @@
                     bassSynth.unmute();
                 }
             } 
-    </script>
-  </body>
+        </script>
+    </body>
 </html> 
-  
+
