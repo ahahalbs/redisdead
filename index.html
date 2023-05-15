@@ -7,7 +7,7 @@
     }
    </style>
     <script src="enable-threads.js"></script>
-    <script crossorigin src="maxiInstruments.v.0.7.1.js"></script>
+    <script crossorigin src="maxiInstruments.v.0.7.2.js"></script>
 	<script src="./dist/aframe-master.min.js"></script>  
 <!-- 	CONTROL YO SHIT -->
     <script>AFRAME.registerComponent('controller', {
@@ -451,7 +451,7 @@
         </script>
   </head>
   <body>
-   <a-scene background="color: #005AFF">
+   <a-scene stats background="color: #005AFF">
 <!--       vr controllers -->
       <a-entity id="left-controller" oculus-touch-controls="hand: left" controller></a-entity>
 	  <a-entity id="right-controller" oculus-touch-controls="hand: right" controller></a-entity>
@@ -830,8 +830,8 @@
                 const reverseOffset = (stepSequenceLength-0.5) * platformSize;
 
                 for (let i = 0; i < playheads.length; i++) {
-                    let localMetro = playheads[i].modmult == 2 ? doubleMetro : metro;
-                    let modMetro = -(localMetro - playheads[i].modDel) % stepSequenceLength;
+                    //let localMetro = playheads[i].modmult == 2 ? doubleMetro : metro;
+                    let modMetro = -(metro - playheads[i].modDel) % stepSequenceLength;
 
                     const playheadPos = playheads[i].p.getAttribute('position');
                     const playheadSize = parseFloat(playheads[i].p.getAttribute('width'));
@@ -1046,32 +1046,32 @@
                     }
                 } 
                 //use difficult to seed playheads with different metroSpeeds
-                let modSpeed = 1;
-                if(difficulty < 8){
-                    modSpeed = 1;
-                }
-                if(difficulty >=8 && difficulty < 16){  
-                    modSpeed = 1; 
+//                 let modSpeed = 1;
+//                 if(difficulty < 8){
+//                     modSpeed = 1;
+//                 }
+//                 if(difficulty >=8 && difficulty < 16){  
+//                     modSpeed = 1; 
 
-                } else if (difficulty >= 16 && difficulty <= 28){
-                    if(rng > 0.8){
-                        modSpeed =2; 
-                    }  else {
-                        modSpeed = 1;
-                    }
-                } else if (difficulty >= 28 && difficulty <=36){
-                    if(rng > 0.7){
-                        modSpeed =2; 
-                    }else{
-                        modSpeed = 1;
-                    }
-                } else if(difficulty > 36 && difficulty <=48){
-                    if(rng > 0.3){
-                        modSpeed =2; 
-                    }else{
-                        modSpeed = 1;
-                    }
-                } 
+//                 } else if (difficulty >= 16 && difficulty <= 28){
+//                     if(rng > 0.8){
+//                         modSpeed =2; 
+//                     }  else {
+//                         modSpeed = 1;
+//                     }
+//                 } else if (difficulty >= 28 && difficulty <=36){
+//                     if(rng > 0.7){
+//                         modSpeed =2; 
+//                     }else{
+//                         modSpeed = 1;
+//                     }
+//                 } else if(difficulty > 36 && difficulty <=48){
+//                     if(rng > 0.3){
+//                         modSpeed =2; 
+//                     }else{
+//                         modSpeed = 1;
+//                     }
+//                 } 
 
                 //using number of steps to figure out if we need to offset starting point in the cycle
                 let val;
@@ -1089,7 +1089,7 @@
                     startX: playerFlooredX,
                     startZ: playerFlooredZ,
                     modDel: stepOffset - currentPlayerStep,
-                    modmult: modSpeed
+//                     modmult: modSpeed
                 };
                 playheads.push(playheadData);
 
@@ -1692,9 +1692,9 @@
 				metro++;
                         }
                         //double speed
-                        if(playHeads[2] % 3 == 2) {
-                            doubleMetro++;
-                        }
+//                         if(playHeads[2] % 3 == 2) {
+//                             doubleMetro++;
+//                         }
                         if(playHeads[2] % 48 == 4) {
                             sequenceTrigger = true;
                             eventFixer++;
