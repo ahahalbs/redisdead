@@ -565,7 +565,7 @@
             let bells = [false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false];
             //things that trigger sound
             let hasBonked = false;
-      		let previousBonking = null;
+      	    let activeNote = null;
             let bonking = 0;
             //bonk notes
             let notes = [62, 64, 65, 69 ];
@@ -1392,31 +1392,36 @@
             //this is where the real magic happens
             function updateSounds(){
                //have we been bonked by a playhead
-                if(hasBonked == true){
-                    let randomNote = notes[Math.floor(Math.random()*notes.length)];
-                    enemySynth.noteon(randomNote, 127);
-                    bonking = 1.0;
-                    roomSize =1.0;
-                    hasBonked = false;
-                }
-                
-                if(bonking > 0){
-                    bonking -= 0.1;
-                    reverb += 0.2;
-                    enemySynth.setParams(["delay", bonking], ["delayMix", 0.5 ],["reverbMix",reverb],["roomSize",roomSize],["gain",bonking],);
-                }
-                console.log("bonking", bonking);
-                if (bonking  <= 0){
-                    
-                    enemySynth.noteoff(62);
-                    enemySynth.noteoff(64);
-                    enemySynth.noteoff(65);
-                    enemySynth.noteoff(69);
+                if (hasBonked == true) {
+		    let randomNote = notes[Math.floor(Math.random() * notes.length)];
+		    enemySynth.noteon(randomNote, 127);
+		    activeNote = randomNote;
+		    bonking = 1.0;
+		    roomSize = 1.0;
+		    hasBonked = false;
+		    pauseBonk = true;
+		}
 
-                    bonking = 0;
-                    enemySynth.setParams(["delay", bonking], ["delayMix", 0.5 ],["reverbMix",reverb],["roomSize",roomSize],["gain",bonking],);
-                } 
-                
+		// Check if bonking is active
+		if (bonking > 0) {
+		    bonking -= 0.1;
+		    reverb += 0.2;
+		    enemySynth.setParams(["delay", bonking], ["delayMix", 0.5], ["reverbMix", reverb], ["roomSize", roomSize], ["gain", bonking]);
+		}
+
+		// Check if bonking has ended
+		if (bonking <= 0) {
+		    if (pauseBonk) {
+			if (activeNote != null) {
+			    enemySynth.noteoff(activeNote);
+			    activeNote = null;
+			}
+			pauseBonk = false;
+		    }
+
+		    bonking = 0;
+		    enemySynth.setParams(["delay", bonking], ["delayMix", 0.5], ["reverbMix", reverb], ["roomSize", roomSize], ["gain", bonking]);
+		}
   
                 //jump sounds
                 if(isJumping == true){
