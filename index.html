@@ -649,7 +649,8 @@
 			//first button presson only
       		function handleButtonPress(evt) {
   			if (soundUP == false) {                 
-                    		playSomething();  
+                    		playSomething(); 
+				star.setAttribute('color', 'black');
                   		soundUP = true;
   				}
 			}    
@@ -1251,8 +1252,6 @@
                     if (reorderedSamples[i] === true) {
 
                         let platform = platforms[i + base];
-                        //console.log("updating", platforms[i + base]);
-
                         switch (selector) {
                             case 0:
                                 updatePlatformAttributes(platform, platformSize * 3, platformSize, platformSize * 3);
@@ -1553,7 +1552,7 @@
                     sampler.mapped = ["rate_0", "rate_1", "rate_2", "rate_3", "rate_4"];
 
 
-                    //instruments.playPause();
+                    instruments.playPause();
                     instruments.setTempo(tempo);
                     sampler.setSequence(myDrumSequence, 4);
 
