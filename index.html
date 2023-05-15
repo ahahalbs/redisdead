@@ -10,123 +10,123 @@
         <script crossorigin src="maxiInstruments.v.0.7.1.js"></script>
         <script src="./dist/aframe-master.min.js"></script>  
         <!-- 	CONTROL YO SHIT -->
-        <script>AFRAME.registerComponent('controller', {
-                schema: {
-                    moveSpeed: {type: 'number', default: 3.6},
-                    smoothness: {type: 'number', default: 0.05}
-                },
-                init: function() {
-                    this.leftAxisX = 0;
-                    this.leftAxisY = 0;
-                    let self = this;
+//         <script>AFRAME.registerComponent('controller', {
+//                 schema: {
+//                     moveSpeed: {type: 'number', default: 3.6},
+//                     smoothness: {type: 'number', default: 0.05}
+//                 },
+//                 init: function() {
+//                     this.leftAxisX = 0;
+//                     this.leftAxisY = 0;
+//                     let self = this;
 
-                    this.el.addEventListener('thumbstickmoved', function(event) {
-                        self.leftAxisX = event.detail.x;
-                        self.leftAxisY = event.detail.y;
-                    });
+//                     this.el.addEventListener('thumbstickmoved', function(event) {
+//                         self.leftAxisX = event.detail.x;
+//                         self.leftAxisY = event.detail.y;
+//                     });
 
-                    //X button
-                    this.el.addEventListener('xbuttondown', function(event) {
-                        self.el.emit('xbuttonpressed', {pressed: true});
-                    });
+//                     //X button
+//                     this.el.addEventListener('xbuttondown', function(event) {
+//                         self.el.emit('xbuttonpressed', {pressed: true});
+//                     });
 
-                    this.el.addEventListener('xbuttonup', function(event) {
-                        self.el.emit('xbuttonreleased', {pressed: false});
-                    });
+//                     this.el.addEventListener('xbuttonup', function(event) {
+//                         self.el.emit('xbuttonreleased', {pressed: false});
+//                     });
 
-                    //Y button
-                    this.el.addEventListener('ybuttondown', function(event) {
-                        self.el.emit('ybuttonpressed', {pressed: true});
-                    });
+//                     //Y button
+//                     this.el.addEventListener('ybuttondown', function(event) {
+//                         self.el.emit('ybuttonpressed', {pressed: true});
+//                     });
 
-                    this.el.addEventListener('ybuttonup', function(event) {
-                        self.el.emit('ybuttonreleased', {pressed: false});
-                    });
+//                     this.el.addEventListener('ybuttonup', function(event) {
+//                         self.el.emit('ybuttonreleased', {pressed: false});
+//                     });
 
-                    //A button
-                    this.el.addEventListener('abuttondown', function(event) {
-                        self.el.emit('abuttonpressed', {pressed: true});
-                    });
+//                     //A button
+//                     this.el.addEventListener('abuttondown', function(event) {
+//                         self.el.emit('abuttonpressed', {pressed: true});
+//                     });
 
-                    this.el.addEventListener('abuttonup', function(event) {
-                        self.el.emit('abuttonreleased', {pressed: false});
-                    });
+//                     this.el.addEventListener('abuttonup', function(event) {
+//                         self.el.emit('abuttonreleased', {pressed: false});
+//                     });
 
-                    //B button
-                    this.el.addEventListener('bbuttondown', function(event) {
-                        self.el.emit('bbuttonpressed', {pressed: true});
-                    });
+//                     //B button
+//                     this.el.addEventListener('bbuttondown', function(event) {
+//                         self.el.emit('bbuttonpressed', {pressed: true});
+//                     });
 
-                    this.el.addEventListener('bbuttonup', function(event) {
-                        self.el.emit('bbuttonreleased', {pressed: false});
-                    });
+//                     this.el.addEventListener('bbuttonup', function(event) {
+//                         self.el.emit('bbuttonreleased', {pressed: false});
+//                     });
 
-                    //left trigger
-                    this.el.addEventListener('triggerdown', function(event) {
-                        self.el.emit('lefttriggerdown', {pressed: true});
-                    });
+//                     //left trigger
+//                     this.el.addEventListener('triggerdown', function(event) {
+//                         self.el.emit('lefttriggerdown', {pressed: true});
+//                     });
 
-                    this.el.addEventListener('triggerup', function(event) {
-                        self.el.emit('lefttriggerup', {pressed: false});
-                    });
+//                     this.el.addEventListener('triggerup', function(event) {
+//                         self.el.emit('lefttriggerup', {pressed: false});
+//                     });
 
-                    //right trigger
-                    this.el.addEventListener('triggerdown', function(event) {
-                        self.el.emit('righttriggerdown', {pressed: true});
-                    });
+//                     //right trigger
+//                     this.el.addEventListener('triggerdown', function(event) {
+//                         self.el.emit('righttriggerdown', {pressed: true});
+//                     });
 
-                    this.el.addEventListener('triggerup', function(event) {
-                        self.el.emit('righttriggerup', {pressed: false});
-                    });
+//                     this.el.addEventListener('triggerup', function(event) {
+//                         self.el.emit('righttriggerup', {pressed: false});
+//                     });
 
-                    //left grip
-                    this.el.addEventListener('gripdown', function(event) {
-                        self.el.emit('leftgripdown', {pressed: true});
-                    });
+//                     //left grip
+//                     this.el.addEventListener('gripdown', function(event) {
+//                         self.el.emit('leftgripdown', {pressed: true});
+//                     });
 
-                    this.el.addEventListener('gripup', function(event) {
-                        self.el.emit('leftgripup', {pressed: false});
-                    });
+//                     this.el.addEventListener('gripup', function(event) {
+//                         self.el.emit('leftgripup', {pressed: false});
+//                     });
 
-                    //right grip
-                    this.el.addEventListener('gripdown', function(event) {
-                        self.el.emit('rightgripdown', {pressed: true});
-                    });
+//                     //right grip
+//                     this.el.addEventListener('gripdown', function(event) {
+//                         self.el.emit('rightgripdown', {pressed: true});
+//                     });
 
-                    this.el.addEventListener('gripup', function(event) {
-                        self.el.emit('rightgripup', {pressed: false});
-                    });
-                },
+//                     this.el.addEventListener('gripup', function(event) {
+//                         self.el.emit('rightgripup', {pressed: false});
+//                     });
+//                 },
 
-                tick: function() {
-                    let player = document.querySelector("#player");
-                    let camera = document.querySelector("#camera");
-                    let direction = new THREE.Vector3();
-                    let left = new THREE.Vector3();
+//                 tick: function() {
+//                     let player = document.querySelector("#player");
+//                     let camera = document.querySelector("#camera");
+//                     let direction = new THREE.Vector3();
+//                     let left = new THREE.Vector3();
 
-                    //camera's direction for movement
-                    camera.object3D.getWorldDirection(direction);
+//                     //camera's direction for movement
+//                     camera.object3D.getWorldDirection(direction);
 
-                    //lock y
-                    direction.y = 0;
+//                     //lock y
+//                     direction.y = 0;
 
-                    //normalize the direction vector (tsettingy to 0 can fuck vector length)
-                    direction.normalize();
+//                     //normalize the direction vector (tsettingy to 0 can fuck vector length)
+//                     direction.normalize();
 
-                    //work out left direction
-                    left.crossVectors(camera.object3D.up, direction);
+//                     //work out left direction
+//                     left.crossVectors(camera.object3D.up, direction);
 
-                    //movement based on thumbstick position and speed
-                    let forwardMovement = direction.multiplyScalar(this.leftAxisY * this.data.moveSpeed);
-                    let sideMovement = left.multiplyScalar(this.leftAxisX * this.data.moveSpeed);
+//                     //movement based on thumbstick position and speed
+//                     let forwardMovement = direction.multiplyScalar(this.leftAxisY * this.data.moveSpeed);
+//                     let sideMovement = left.multiplyScalar(this.leftAxisX * this.data.moveSpeed);
 
-                    //add forward and side movement vectors to get the total movement vector
-                    let movement = new THREE.Vector3().addVectors(forwardMovement, sideMovement);
-                    let desiredPosition = new THREE.Vector3().addVectors(player.object3D.position, movement);
-                    //smooth
-                    player.object3D.position.lerp(desiredPosition, this.data.smoothness);
-                },
-            });
+//                     //add forward and side movement vectors to get the total movement vector
+//                     let movement = new THREE.Vector3().addVectors(forwardMovement, sideMovement);
+//                     let desiredPosition = new THREE.Vector3().addVectors(player.object3D.position, movement);
+//                     //smooth
+//                     player.object3D.position.lerp(desiredPosition, this.data.smoothness);
+//                 },
+//             });
         </script>
         <!--     JUMP AND FALL (BUT NEVER DEATH, STUCK IN THIS ETERNAL LOOP FOREVAAAAH) -->
         <script>AFRAME.registerComponent('jump', {
