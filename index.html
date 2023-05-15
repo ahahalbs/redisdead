@@ -1248,6 +1248,7 @@
                     default:
                         return;
                 }
+		if(platforms.length == (playerStep.length * 16)+16){    
                 for (let i = 0; i < reorderedSamples.length; i++) {
                     if (reorderedSamples[i] === true) {
 
@@ -1273,6 +1274,7 @@
                     }
                 }
                 selector = -1;
+		}
             };
   	    //destroy our playforms if our players want to do that
             function destroyer(){
