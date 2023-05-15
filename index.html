@@ -454,7 +454,8 @@
         <script>
             const platformSize = 3;
             AFRAME.registerComponent('kick-playhead', {
-                dependencies: ['geometry', 'material'],
+                id: 'playhead',
+                dependencies: ['geometry', 'material', 'box-collider'],
                 init: function() {
                     this.el.setAttribute('geometry', {
                         primitive: 'box',
@@ -468,6 +469,8 @@
                         opacity: 0.5,
                         side: 'double' 
                     });
+                     this.el.setAttribute('box-collider', '');
+
                 },
             });
 
