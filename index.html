@@ -1360,7 +1360,6 @@ playheads.push(playheadData);
                     default:
                         return;
                 }
-                if(platforms.length == (playerSteps.length * 16)+16){    
                     for (let i = 0; i < reorderedSamples.length; i++) {
                         if (reorderedSamples[i] === true) {
 
@@ -1386,7 +1385,6 @@ playheads.push(playheadData);
                         }
                     }
                     selector = -1;
-                }
             };
             //destroy our playforms if our players want to do that
             function destroyer(){
