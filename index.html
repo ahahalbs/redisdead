@@ -1412,7 +1412,9 @@
 		if (bonking > 0) {
 		    bonking -= 0.1;
 		    //reverb += 0.05;
-		    enemySynth.setParam("gain", bonking);
+		    enemySynth.setParam("gain", bonking * 2);
+		    enemySynth.setParam("delay", 0.2);
+	            enemySynth.setParam("reverbMix, bonking *0.5);
 		}
 
 		// Check if bonking has ended
@@ -1426,7 +1428,7 @@
 		    }
 
 		    bonking = 0;
-		    enemySynth.setParam("gain", bonking);
+		    enemySynth.setParam("gain", bonking * 2);
 		}
   
                 //jump sounds
@@ -1612,7 +1614,7 @@
                         ["adsrPitchMod",0],
                         ["cutoff",1372],
                         ["reverbMix",0.12],
-                        ["roomSize",0],
+                        ["roomSize",0.5],
                         ["delay",0],
                         ["delayMix",0],
                         ["frequency",440],
