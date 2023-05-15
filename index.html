@@ -1299,6 +1299,7 @@
                     bonking = 1.0;
                     roomSize =1.0;
                     hasBonked = false;
+		    pauseBonk = true;
                 }
                 if(bonking > 0){
                     bonking -= 0.1;
@@ -1307,10 +1308,12 @@
                 }
                 if (bonking  <= 0){
                     hasBonked = false;
-                    enemySynth.noteoff(62);
-                    enemySynth.noteoff(64);
-                    enemySynth.noteoff(65);
-                    enemySynth.noteoff(69);
+			if(pauseBonk){
+                   	 enemySynth.noteoff(62);
+                    	 enemySynth.noteoff(64);
+                    	 enemySynth.noteoff(65);
+                   	 enemySynth.noteoff(69);
+			}
                     bonking = 0;
                     //enemySynth.setParams(["delay", bonking], ["delayMix", 0.5 ],["reverbMix",reverb],["roomSize",roomSize],["gain",bonking],);
                 } 
@@ -1594,9 +1597,9 @@
                     movePlayheads();
                     stepSequencer(); 
                     useCollectables(player, headingDirection(player), ins);
-                    updateSounds();
                     sequenceTracker(myDrumSequence);
                     updatePlatforms();
+		    updateSounds();
                     destroyer();
 
                 }
