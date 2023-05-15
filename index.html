@@ -1410,8 +1410,8 @@
 		// Check if bonking is active
 		if (bonking > 0) {
 		    bonking -= 0.1;
-		    reverb += 0.2;
-		    enemySynth.setParams([["delay", bonking], ["delayMix", 0.5], ["reverbMix", reverb], ["roomSize", roomSize], ["gain", bonking],]);
+		    reverb += 0.05;
+		    enemySynth.setParams([["delay", bonking*0.01], ["delayMix", 0.5], ["reverbMix", reverb], ["roomSize", roomSize], ,]);
 		}
 
 		// Check if bonking has ended
