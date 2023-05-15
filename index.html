@@ -1553,7 +1553,7 @@
                     sampler.mapped = ["rate_0", "rate_1", "rate_2", "rate_3", "rate_4"];
 
 
-                    instruments.playPause();
+                    //instruments.playPause();
                     instruments.setTempo(tempo);
                     sampler.setSequence(myDrumSequence, 4);
 
@@ -1563,7 +1563,7 @@
                     backingMidSynth.setLoop(16,4);
                     bassSynth.setLoop(16,4);
                     sampler.setLoop(16,4);
-                    //instruments.playPause();
+                    instruments.playPause();
 		   			
                     instruments.setOnTick((playHeads)=> {
                         //The current playhead of the third instrument added
