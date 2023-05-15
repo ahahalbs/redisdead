@@ -1103,9 +1103,8 @@ if (sequenceOrder[sequenceOrder.length - 1] === 0) {
 // Apply the appropriate mixin based on the playhead type
 playhead.setAttribute(playheadType, {});
 
-// Append the playhead entity to the platformsEntity
-platformsEntity.appendChild(playhead);
-
+let newPosition = {x: playerFlooredX, y: playerPos.y + platformSize + 0.001, z: playerFlooredZ};
+                playhead.setAttribute('position', newPosition);
 // Store playhead data if needed
 let playheadData = {
   p: playhead,
@@ -1115,8 +1114,9 @@ let playheadData = {
   modDel: stepOffset - currentPlayerStep,
 };
 playheads.push(playheadData);
-
-                //wait so our platforms positions are updated and then place collectable
+                
+// Append the playhead entity to the platformsEntity
+platformsEntity.appendChild(playhead);
 
                 //generate the collectable for that platform
                 let collectable = document.createElement('a-box');
