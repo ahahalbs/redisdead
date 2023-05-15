@@ -172,6 +172,16 @@
                             }
                         }
                     });
+                    // Handle space key press
+                    window.addEventListener('keydown', (event) => {
+                        if (event.key === ' ' && !this.isJumping) {
+                            if (this.canJump == true) {
+                                this.isJumping = true;
+                                this.jumpSpeed = this.jumpHeight;
+                                this.isOnGround = false;
+                            }
+                        }
+                    });
 
                 }, updateGrounds: function() {
                     this.grounds = Array.from(document.querySelectorAll(this.data.groundSelector));
@@ -543,12 +553,13 @@
             <a-entity class="ground" id="platformsEntity"></a-entity> 
 
             <!--      vr camera/player/rig/akaballache -->
-
-            <a-entity id="rig" position="0 0 0" >
+<!--             <a-entity id="rig" position="0 0 0" >
                 <a-entity id="player" position="0 1.6 6" width="1" height="1.6" depth="1" look controls jump>
                     <a-camera id="camera" camera look controls ></a-camera>
                 </a-entity>
-            </a-entity> 
+            </a-entity>  -->
+            
+            <a-entity id="player" camera position="0 2 8"width="1.0" height="2"depth="1" look-controls wasd-controls="acceleration: 60" jump></a-entity>
 
             <a-plane id="killplane" side="double" position="0 -18 0" rotation="-90 0 0" width="500" height="500" color="red"></a-plane>
             <!--start point-->
@@ -742,10 +753,48 @@
             function handleButtonPress(evt) {
                 if (soundUP == false) {                 
                     playSomething(); 
-                    star.setAttribute('color', 'black');
                     soundUP = true;
                 }
             }    
+            document.addEventListener("keydown", function(event) {
+                if(event.key == '1'){
+                    kickTrigger = true;
+                }
+                if(event.key == '2'){
+                    snareTrigger = true;
+                }
+                if(event.key == '3'){
+                    hihatTrigger = true;
+                }
+                if(event.key == '4'){
+                    bellTrigger = true;
+                }
+                if(event.key == 'q' || event.key == 'Q'){
+                    destroyStep = true;
+                    console.log("Q is pressed");
+                }     
+                keyPressed = event.key;
+            });
+            //inputs key up
+            document.addEventListener("keyup", function(event) {
+                if(event.key == '1'){
+                    kickTrigger = false;
+                }
+                if(event.key == '2'){
+                    snareTrigger = false;
+                }
+                if(event.key == '3'){
+                    hihatTrigger = false;
+                }
+                if(event.key == '4'){
+                    bellTrigger = false;
+                }
+                if(event.key == 'q' || event.key == 'Q'){
+                    destroyStep = false;
+                } 
+                keyPressed = event.key;
+            });
+            
             //have we collected collectable? 
             function logCollected(event) {
                 const collectable = document.getElementById('collectable');
