@@ -596,7 +596,7 @@
                     platform.setAttribute('width', platformSize);
                     platform.setAttribute("height", platformSize);
                     platform.setAttribute("depth", platformSize);
-                    platform.setAttribute('box-collider', '');
+                    //platform.setAttribute('box-collider', '');
                     //step is 15-i because i original built it backwards like a fucking idiot
                     platforms.push({p: platform, s: 15-i, o: stepOffset, branch: branchID, sound: 'tick', orientation: '-z'});
                     reorderedPlatforms.push(false);
@@ -923,7 +923,7 @@
                     platform.setAttribute("height", platformSize);
                     platform.setAttribute("depth", platformSize);
                     platform.setAttribute('scale',  {x: 1, y: 1, z: 1});
-                    platform.setAttribute('box-collider', '');
+                    //platform.setAttribute('box-collider', '');
                     //colour the new platforms with a sick fade yo
                     calcR = r-Math.round(Math.abs((r/numSteps) *(i%numSteps)));
                     calcG = g-Math.round(Math.abs((g/numSteps) *(i%numSteps)));
