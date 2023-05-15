@@ -454,7 +454,7 @@
         <script>
             const platformSize = 3;
             AFRAME.registerComponent('kick-playhead', {
-                dependencies: ['geometry', 'material'],
+                dependencies: ['geometry', 'material', 'box-collider'],
                 init: function() {
                     this.el.setAttribute('geometry', {
                         primitive: 'box',
@@ -473,7 +473,7 @@
             });
 
             AFRAME.registerComponent('snare-playhead', {
-                dependencies: ['geometry', 'material'],
+                dependencies: ['geometry', 'material','box-collider'],
                 init: function() {
                     this.el.setAttribute('geometry', {
                         primitive: 'box',
@@ -493,7 +493,7 @@
             });
 
             AFRAME.registerComponent('hihat-playhead', {
-                dependencies: ['geometry', 'material'],
+                dependencies: ['geometry', 'material','box-collider'],
                 init: function() {
                     if (orientation === 'x' || orientation === '-x') {
                         this.el.setAttribute('geometry', {
@@ -521,7 +521,7 @@
             });
 
             AFRAME.registerComponent('bell-playhead', {
-                dependencies: ['geometry', 'material'],
+                dependencies: ['geometry', 'material','box-collider'],
                 init: function() {
                     if (orientation === 'x' || orientation === '-x') {
                         this.el.setAttribute('geometry', {
