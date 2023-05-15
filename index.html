@@ -731,24 +731,24 @@
             let leftController = document.querySelector('#left-controller');
 
             //right controller
-            rightController.addEventListener('abuttondown', function(evt) { handleButtonPress(evt); });
-            //rightController.addEventListener('abuttonup', function(evt) {  });
-            rightController.addEventListener('bbuttondown', function(evt) { destroyStep = true; handleButtonPress(evt); });
-            rightController.addEventListener('bbuttonup', function(evt) { destroyStep = false; });
-            rightController.addEventListener('righttriggerdown', function(evt) { snareTrigger = true; ins = 1; handleButtonPress(evt); });
-            rightController.addEventListener('righttriggerup', function(evt) { snareTrigger = false; ins = -1; });
-            rightController.addEventListener('rightgripdown', function(evt) { bellTrigger = true; ins = 3; handleButtonPress(evt);});
-            rightController.addEventListener('rightgripup', function(evt) { bellTrigger = false; ins = -1; });
+//             rightController.addEventListener('abuttondown', function(evt) { handleButtonPress(evt); });
+//             //rightController.addEventListener('abuttonup', function(evt) {  });
+//             rightController.addEventListener('bbuttondown', function(evt) { destroyStep = true; handleButtonPress(evt); });
+//             rightController.addEventListener('bbuttonup', function(evt) { destroyStep = false; });
+//             rightController.addEventListener('righttriggerdown', function(evt) { snareTrigger = true; ins = 1; handleButtonPress(evt); });
+//             rightController.addEventListener('righttriggerup', function(evt) { snareTrigger = false; ins = -1; });
+//             rightController.addEventListener('rightgripdown', function(evt) { bellTrigger = true; ins = 3; handleButtonPress(evt);});
+//             rightController.addEventListener('rightgripup', function(evt) { bellTrigger = false; ins = -1; });
 
-            //left controller
-            leftController.addEventListener('xbuttondown', function(evt) { handleButtonPress(evt); });
-            //leftController.addEventListener('xbuttonup', function(evt) {  });
-            leftController.addEventListener('ybuttondown', function(evt) { destroyStep = true; handleButtonPress(evt); });
-            leftController.addEventListener('ybuttonup', function(evt) { destroyStep = false; });
-            leftController.addEventListener('lefttriggerdown', function(evt) { kickTrigger = true; ins = 0; handleButtonPress(evt); });
-            leftController.addEventListener('lefttriggerup', function(evt) { ins = -1; kickTrigger = false; });
-            leftController.addEventListener('leftgripdown', function(evt) { hihatTrigger = true; ins = 2; handleButtonPress(evt); });
-            leftController.addEventListener('leftgripup', function(evt) { hihatTrigger = false; ins = -1 });
+//             //left controller
+//             leftController.addEventListener('xbuttondown', function(evt) { handleButtonPress(evt); });
+//             //leftController.addEventListener('xbuttonup', function(evt) {  });
+//             leftController.addEventListener('ybuttondown', function(evt) { destroyStep = true; handleButtonPress(evt); });
+//             leftController.addEventListener('ybuttonup', function(evt) { destroyStep = false; });
+//             leftController.addEventListener('lefttriggerdown', function(evt) { kickTrigger = true; ins = 0; handleButtonPress(evt); });
+//             leftController.addEventListener('lefttriggerup', function(evt) { ins = -1; kickTrigger = false; });
+//             leftController.addEventListener('leftgripdown', function(evt) { hihatTrigger = true; ins = 2; handleButtonPress(evt); });
+//             leftController.addEventListener('leftgripup', function(evt) { hihatTrigger = false; ins = -1 });
             //first button presson only
             function handleButtonPress(evt) {
                 if (soundUP == false) {                 
