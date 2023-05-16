@@ -393,7 +393,7 @@
                             if (direction === "x" || direction === "-x") {
                                 playerPos.x = direction === "x" ? boxPos + (halfBoxSize * 2) + halfPlayerSize + 3.1 : boxPos - (halfBoxSize * 2) - halfPlayerSize - 3.1;
                             } else if (direction === "y" || direction === "-y") {
-                                playerPos.y = direction === "y" ? boxPos + halfBoxSize + halfPlayerSize : boxPos - halfBoxSize - halfPlayerSize;
+                                playerPos.y = direction === "y" ? boxPos + halfBoxSize + halfPlayerSize + 0.11 : boxPos - halfBoxSize - halfPlayerSize;
                             } else if (direction === "z" || direction === "-z") {
                                 playerPos.z = direction === "z" ? boxPos + (halfBoxSize * 2) + halfPlayerSize + 3.1 : boxPos - (halfBoxSize * 2) - halfPlayerSize - 3.1;
                             }
