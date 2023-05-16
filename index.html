@@ -398,7 +398,6 @@
                                 playerPos.z = direction === "z" ? boxPos + (halfBoxSize * 2) + halfPlayerSize + 3.1 : boxPos - (halfBoxSize * 2) - halfPlayerSize - 3.1;
                             }
                             this.hasBonked = true;
-                            console.log("BONK");
                             this.el.sceneEl.emit('bonked', { detail: { entity: this.el } });
                             break;
                         case "collectable":
@@ -564,8 +563,8 @@
     <body>
         <a-scene background="color: #005AFF">
             <!--       vr controllers -->
-            <a-entity id="left-controller" oculus-touch-controls="hand: left" "model: false" controller></a-entity>
-            <a-entity id="right-controller" oculus-touch-controls="hand: right" "model: false" controller></a-entity>
+            <a-entity id="left-controller" oculus-touch-controls="hand: left, model: false" controller></a-entity>
+            <a-entity id="right-controller" oculus-touch-controls="hand: right, model: false" controller></a-entity>
             <!--this is where the magic happens-->
             <a-entity class="ground" id="platformsEntity"></a-entity> 
             <!--      vr camera/player/rig -->
