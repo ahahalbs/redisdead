@@ -252,7 +252,7 @@
                         let clamp;
                         if(newY >= this.groundCheck.lowY && newY <= this.groundCheck.highY){
                             this.jumpSpeed -=0.01;
-                            clamp = Math.max(newY, this.groundCheck.lowY);  
+                            clamp = Math.max(newY, this.groundCheck.lowY+0.11);  
                         } else 
                             if(newY >= this.groundCheck.highY){
                                 clamp = Math.max(newY,this.groundCheck.highY);   
