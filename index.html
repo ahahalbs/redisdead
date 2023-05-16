@@ -11,123 +11,123 @@
         <script src="./dist/aframe-master.min.js"></script>  
         <!-- 	CONTROL YO SHIT -->
              <script>
-        //              AFRAME.registerComponent('controller', {
-        //                 schema: {
-        //                     moveSpeed: {type: 'number', default: 3.6},
-        //                     smoothness: {type: 'number', default: 0.05}
-        //                 },
-        //                 init: function() {
-        //                     this.leftAxisX = 0;
-        //                     this.leftAxisY = 0;
-        //                     let self = this;
+                     AFRAME.registerComponent('controller', {
+                        schema: {
+                            moveSpeed: {type: 'number', default: 3.6},
+                            smoothness: {type: 'number', default: 0.05}
+                        },
+                        init: function() {
+                            this.leftAxisX = 0;
+                            this.leftAxisY = 0;
+                            let self = this;
 
-        //                     this.el.addEventListener('thumbstickmoved', function(event) {
-        //                         self.leftAxisX = event.detail.x;
-        //                         self.leftAxisY = event.detail.y;
-        //                     });
+                            this.el.addEventListener('thumbstickmoved', function(event) {
+                                self.leftAxisX = event.detail.x;
+                                self.leftAxisY = event.detail.y;
+                            });
 
-        //                     //X button
-        //                     this.el.addEventListener('xbuttondown', function(event) {
-        //                         self.el.emit('xbuttonpressed', {pressed: true});
-        //                     });
+                            //X button
+                            this.el.addEventListener('xbuttondown', function(event) {
+                                self.el.emit('xbuttonpressed', {pressed: true});
+                            });
 
-        //                     this.el.addEventListener('xbuttonup', function(event) {
-        //                         self.el.emit('xbuttonreleased', {pressed: false});
-        //                     });
+                            this.el.addEventListener('xbuttonup', function(event) {
+                                self.el.emit('xbuttonreleased', {pressed: false});
+                            });
 
-        //                     //Y button
-        //                     this.el.addEventListener('ybuttondown', function(event) {
-        //                         self.el.emit('ybuttonpressed', {pressed: true});
-        //                     });
+                            //Y button
+                            this.el.addEventListener('ybuttondown', function(event) {
+                                self.el.emit('ybuttonpressed', {pressed: true});
+                            });
 
-        //                     this.el.addEventListener('ybuttonup', function(event) {
-        //                         self.el.emit('ybuttonreleased', {pressed: false});
-        //                     });
+                            this.el.addEventListener('ybuttonup', function(event) {
+                                self.el.emit('ybuttonreleased', {pressed: false});
+                            });
 
-        //                     //A button
-        //                     this.el.addEventListener('abuttondown', function(event) {
-        //                         self.el.emit('abuttonpressed', {pressed: true});
-        //                     });
+                            //A button
+                            this.el.addEventListener('abuttondown', function(event) {
+                                self.el.emit('abuttonpressed', {pressed: true});
+                            });
 
-        //                     this.el.addEventListener('abuttonup', function(event) {
-        //                         self.el.emit('abuttonreleased', {pressed: false});
-        //                     });
+                            this.el.addEventListener('abuttonup', function(event) {
+                                self.el.emit('abuttonreleased', {pressed: false});
+                            });
 
-        //                     //B button
-        //                     this.el.addEventListener('bbuttondown', function(event) {
-        //                         self.el.emit('bbuttonpressed', {pressed: true});
-        //                     });
+                            //B button
+                            this.el.addEventListener('bbuttondown', function(event) {
+                                self.el.emit('bbuttonpressed', {pressed: true});
+                            });
 
-        //                     this.el.addEventListener('bbuttonup', function(event) {
-        //                         self.el.emit('bbuttonreleased', {pressed: false});
-        //                     });
+                            this.el.addEventListener('bbuttonup', function(event) {
+                                self.el.emit('bbuttonreleased', {pressed: false});
+                            });
 
-        //                     //left trigger
-        //                     this.el.addEventListener('triggerdown', function(event) {
-        //                         self.el.emit('lefttriggerdown', {pressed: true});
-        //                     });
+                            //left trigger
+                            this.el.addEventListener('triggerdown', function(event) {
+                                self.el.emit('lefttriggerdown', {pressed: true});
+                            });
 
-        //                     this.el.addEventListener('triggerup', function(event) {
-        //                         self.el.emit('lefttriggerup', {pressed: false});
-        //                     });
+                            this.el.addEventListener('triggerup', function(event) {
+                                self.el.emit('lefttriggerup', {pressed: false});
+                            });
 
-        //                     //right trigger
-        //                     this.el.addEventListener('triggerdown', function(event) {
-        //                         self.el.emit('righttriggerdown', {pressed: true});
-        //                     });
+                            //right trigger
+                            this.el.addEventListener('triggerdown', function(event) {
+                                self.el.emit('righttriggerdown', {pressed: true});
+                            });
 
-        //                     this.el.addEventListener('triggerup', function(event) {
-        //                         self.el.emit('righttriggerup', {pressed: false});
-        //                     });
+                            this.el.addEventListener('triggerup', function(event) {
+                                self.el.emit('righttriggerup', {pressed: false});
+                            });
 
-        //                     //left grip
-        //                     this.el.addEventListener('gripdown', function(event) {
-        //                         self.el.emit('leftgripdown', {pressed: true});
-        //                     });
+                            //left grip
+                            this.el.addEventListener('gripdown', function(event) {
+                                self.el.emit('leftgripdown', {pressed: true});
+                            });
 
-        //                     this.el.addEventListener('gripup', function(event) {
-        //                         self.el.emit('leftgripup', {pressed: false});
-        //                     });
+                            this.el.addEventListener('gripup', function(event) {
+                                self.el.emit('leftgripup', {pressed: false});
+                            });
 
-        //                     //right grip
-        //                     this.el.addEventListener('gripdown', function(event) {
-        //                         self.el.emit('rightgripdown', {pressed: true});
-        //                     });
+                            //right grip
+                            this.el.addEventListener('gripdown', function(event) {
+                                self.el.emit('rightgripdown', {pressed: true});
+                            });
 
-        //                     this.el.addEventListener('gripup', function(event) {
-        //                         self.el.emit('rightgripup', {pressed: false});
-        //                     });
-        //                 },
+                            this.el.addEventListener('gripup', function(event) {
+                                self.el.emit('rightgripup', {pressed: false});
+                            });
+                        },
 
-        //                 tick: function() {
-        //                     let player = document.querySelector("#player");
-        //                     let camera = document.querySelector("#camera");
-        //                     let direction = new THREE.Vector3();
-        //                     let left = new THREE.Vector3();
+                        tick: function() {
+                            let player = document.querySelector("#player");
+                            let camera = document.querySelector("#camera");
+                            let direction = new THREE.Vector3();
+                            let left = new THREE.Vector3();
 
-        //                     //camera's direction for movement
-        //                     camera.object3D.getWorldDirection(direction);
+                            //camera's direction for movement
+                            camera.object3D.getWorldDirection(direction);
 
-        //                     //lock y
-        //                     direction.y = 0;
+                            //lock y
+                            direction.y = 0;
 
-        //                     //normalize the direction vector (tsettingy to 0 can fuck vector length)
-        //                     direction.normalize();
+                            //normalize the direction vector (tsettingy to 0 can fuck vector length)
+                            direction.normalize();
 
-        //                     //work out left direction
-        //                     left.crossVectors(camera.object3D.up, direction);
+                            //work out left direction
+                            left.crossVectors(camera.object3D.up, direction);
 
-        //                     //movement based on thumbstick position and speed
-        //                     let forwardMovement = direction.multiplyScalar(this.leftAxisY * this.data.moveSpeed);
-        //                     let sideMovement = left.multiplyScalar(this.leftAxisX * this.data.moveSpeed);
+                            //movement based on thumbstick position and speed
+                            let forwardMovement = direction.multiplyScalar(this.leftAxisY * this.data.moveSpeed);
+                            let sideMovement = left.multiplyScalar(this.leftAxisX * this.data.moveSpeed);
 
-        //                     //add forward and side movement vectors to get the total movement vector
-        //                     let movement = new THREE.Vector3().addVectors(forwardMovement, sideMovement);
-        //                     let desiredPosition = new THREE.Vector3().addVectors(player.object3D.position, movement);
-        //                     //smooth
-        //                     player.object3D.position.lerp(desiredPosition, this.data.smoothness);
-        //                 },
-        //             });
+                            //add forward and side movement vectors to get the total movement vector
+                            let movement = new THREE.Vector3().addVectors(forwardMovement, sideMovement);
+                            let desiredPosition = new THREE.Vector3().addVectors(player.object3D.position, movement);
+                            //smooth
+                            player.object3D.position.lerp(desiredPosition, this.data.smoothness);
+                        },
+                    });
                  </script> 
         <!--     JUMP AND FALL (BUT NEVER DEATH, STUCK IN THIS ETERNAL LOOP FOREVAAAAH) -->
         <script>AFRAME.registerComponent('jump', {
@@ -174,15 +174,15 @@
                         }
                     });
                     // Handle space key press
-                    window.addEventListener('keydown', (event) => {
-                        if (event.key === ' ' && !this.isJumping) {
-                            if (this.canJump == true) {
-                                this.isJumping = true;
-                                this.jumpSpeed = this.jumpHeight;
-                                this.isOnGround = false;
-                            }
-                        }
-                    });
+//                     window.addEventListener('keydown', (event) => {
+//                         if (event.key === ' ' && !this.isJumping) {
+//                             if (this.canJump == true) {
+//                                 this.isJumping = true;
+//                                 this.jumpSpeed = this.jumpHeight;
+//                                 this.isOnGround = false;
+//                             }
+//                         }
+//                     });
 
                 }, updateGrounds: function() {
                     this.grounds = Array.from(document.querySelectorAll(this.data.groundSelector));
@@ -453,7 +453,7 @@
                 },
             });
         </script>
-        <script>
+<!--         <script>
             const platformSizeM = 3;
             AFRAME.registerComponent('kick-playhead', {
                 id: 'playhead', class: 'playheads',
@@ -551,26 +551,26 @@
                 },
             });
 
-        </script>
+        </script> -->
     </head>
     <body>
         <a-scene stats background="color: #005AFF">
             <!--       vr controllers -->
-            <a-entity id="left-controller" oculus-touch-controls="hand: left" controller></a-entity>
-            <a-entity id="right-controller" oculus-touch-controls="hand: right" controller></a-entity>
+            <a-entity id="left-controller" oculus-touch-controls="hand: left model: false" controller></a-entity>
+            <a-entity id="right-controller" oculus-touch-controls="hand: right model: false" controller></a-entity>
 
             <!--this is where the magic happens-->
             <a-entity class="ground" id="platformsEntity"></a-entity> 
 
             <!--      vr camera/player/rig/akaballache -->
-            <!--             <a-entity id="rig" position="0 0 0" >
+                        <a-entity id="rig" position="0 0 0" >
 <a-entity id="player" position="0 1.6 6" width="1" height="1.6" depth="1" look controls jump>
 <a-camera id="camera" camera look controls ></a-camera>
 </a-entity>
-</a-entity>  -->
+</a-entity> 
 
-            <a-entity id="player" camera position="0 2 8"width="1.0" height="2"depth="1" look-controls wasd-controls="acceleration: 60" jump></a-entity>
-
+<!--             <a-entity id="player" camera position="0 2 8"width="1.0" height="2"depth="1" look-controls wasd-controls="acceleration: 60" jump></a-entity>
+ -->
             <a-plane id="killplane" side="double" position="0 -18 0" rotation="-90 0 0" width="500" height="500" color="red"></a-plane>
             <!--start point-->
             <a-box class="ground" id="start" position="0 -1 6" width="6" height="1" depth="6" color="white"></a-box>
@@ -741,24 +741,24 @@
             let leftController = document.querySelector('#left-controller');
 
             //right controller
-            //             rightController.addEventListener('abuttondown', function(evt) { handleButtonPress(evt); });
-            //             //rightController.addEventListener('abuttonup', function(evt) {  });
-            //             rightController.addEventListener('bbuttondown', function(evt) { destroyStep = true; handleButtonPress(evt); });
-            //             rightController.addEventListener('bbuttonup', function(evt) { destroyStep = false; });
-            //             rightController.addEventListener('righttriggerdown', function(evt) { snareTrigger = true; ins = 1; handleButtonPress(evt); });
-            //             rightController.addEventListener('righttriggerup', function(evt) { snareTrigger = false; ins = -1; });
-            //             rightController.addEventListener('rightgripdown', function(evt) { bellTrigger = true; ins = 3; handleButtonPress(evt);});
-            //             rightController.addEventListener('rightgripup', function(evt) { bellTrigger = false; ins = -1; });
+                        rightController.addEventListener('abuttondown', function(evt) { handleButtonPress(evt); });
+                        //rightController.addEventListener('abuttonup', function(evt) {  });
+                        rightController.addEventListener('bbuttondown', function(evt) { destroyStep = true; handleButtonPress(evt); });
+                        rightController.addEventListener('bbuttonup', function(evt) { destroyStep = false; });
+                        rightController.addEventListener('righttriggerdown', function(evt) { snareTrigger = true; ins = 1; handleButtonPress(evt); });
+                        rightController.addEventListener('righttriggerup', function(evt) { snareTrigger = false; ins = -1; });
+                        rightController.addEventListener('rightgripdown', function(evt) { bellTrigger = true; ins = 3; handleButtonPress(evt);});
+                        rightController.addEventListener('rightgripup', function(evt) { bellTrigger = false; ins = -1; });
 
             //             //left controller
-            //             leftController.addEventListener('xbuttondown', function(evt) { handleButtonPress(evt); });
-            //             //leftController.addEventListener('xbuttonup', function(evt) {  });
-            //             leftController.addEventListener('ybuttondown', function(evt) { destroyStep = true; handleButtonPress(evt); });
-            //             leftController.addEventListener('ybuttonup', function(evt) { destroyStep = false; });
-            //             leftController.addEventListener('lefttriggerdown', function(evt) { kickTrigger = true; ins = 0; handleButtonPress(evt); });
-            //             leftController.addEventListener('lefttriggerup', function(evt) { ins = -1; kickTrigger = false; });
-            //             leftController.addEventListener('leftgripdown', function(evt) { hihatTrigger = true; ins = 2; handleButtonPress(evt); });
-            //             leftController.addEventListener('leftgripup', function(evt) { hihatTrigger = false; ins = -1 });
+                        leftController.addEventListener('xbuttondown', function(evt) { handleButtonPress(evt); });
+                        //leftController.addEventListener('xbuttonup', function(evt) {  });
+                        leftController.addEventListener('ybuttondown', function(evt) { destroyStep = true; handleButtonPress(evt); });
+                        leftController.addEventListener('ybuttonup', function(evt) { destroyStep = false; });
+                        leftController.addEventListener('lefttriggerdown', function(evt) { kickTrigger = true; ins = 0; handleButtonPress(evt); });
+                        leftController.addEventListener('lefttriggerup', function(evt) { ins = -1; kickTrigger = false; });
+                        leftController.addEventListener('leftgripdown', function(evt) { hihatTrigger = true; ins = 2; handleButtonPress(evt); });
+                        leftController.addEventListener('leftgripup', function(evt) { hihatTrigger = false; ins = -1 });
             //first button presson only
             function handleButtonPress(evt) {
                 if (soundUP == false) {                 
@@ -766,48 +766,48 @@
                     soundUP = true;
                 }
             }    
-            document.addEventListener("keydown", function(event) {
-                if(event.key == '1'){
-                    ins = 0;
-                    kickTrigger = true;
-                }
-                if(event.key == '2'){
-                    ins = 1;
-                    snareTrigger = true;
-                }
-                if(event.key == '3'){
-                    hihatTrigger = true;
-                }
-                if(event.key == '4'){
-                    bellTrigger = true;
-                }
-                if(event.key == 'q' || event.key == 'Q'){
-                    destroyStep = true;
-                    console.log("Q is pressed");
-                }     
-                keyPressed = event.key;
-            });
-            //inputs key up
-            document.addEventListener("keyup", function(event) {
-                if(event.key == '1'){
-                    ins = -1;
-                    kickTrigger = false;
-                }
-                if(event.key == '2'){
-                    ins = -1;
-                    snareTrigger = false;
-                }
-                if(event.key == '3'){
-                    hihatTrigger = false;
-                }
-                if(event.key == '4'){
-                    bellTrigger = false;
-                }
-                if(event.key == 'q' || event.key == 'Q'){
-                    destroyStep = false;
-                } 
-                keyPressed = event.key;
-            });
+//             document.addEventListener("keydown", function(event) {
+//                 if(event.key == '1'){
+//                     ins = 0;
+//                     kickTrigger = true;
+//                 }
+//                 if(event.key == '2'){
+//                     ins = 1;
+//                     snareTrigger = true;
+//                 }
+//                 if(event.key == '3'){
+//                     hihatTrigger = true;
+//                 }
+//                 if(event.key == '4'){
+//                     bellTrigger = true;
+//                 }
+//                 if(event.key == 'q' || event.key == 'Q'){
+//                     destroyStep = true;
+//                     console.log("Q is pressed");
+//                 }     
+//                 keyPressed = event.key;
+//             });
+//             //inputs key up
+//             document.addEventListener("keyup", function(event) {
+//                 if(event.key == '1'){
+//                     ins = -1;
+//                     kickTrigger = false;
+//                 }
+//                 if(event.key == '2'){
+//                     ins = -1;
+//                     snareTrigger = false;
+//                 }
+//                 if(event.key == '3'){
+//                     hihatTrigger = false;
+//                 }
+//                 if(event.key == '4'){
+//                     bellTrigger = false;
+//                 }
+//                 if(event.key == 'q' || event.key == 'Q'){
+//                     destroyStep = false;
+//                 } 
+//                 keyPressed = event.key;
+//             });
 
             //have we collected collectable? 
             function logCollected(event) {
