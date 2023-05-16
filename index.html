@@ -562,20 +562,21 @@
     </head>
     <body>
         <a-scene background="color: #005AFF">
-            <!--       vr controllers -->
-            <a-entity id="left-controller" oculus-touch-controls="hand: left, model: false" controller></a-entity>
-            <a-entity id="right-controller" oculus-touch-controls="hand: right, model: false" controller></a-entity>
+            <!--vr controllers -->
+            <a-entity id="left-controller" oculus-touch-controls="model: false" controller></a-entity>
+            <a-entity id="right-controller" oculus-touch-controls="model: false" controller></a-entity>
             <!--this is where the magic happens-->
             <a-entity class="ground" id="platformsEntity"></a-entity> 
-            <!--      vr camera/player/rig -->
+            <!--vr camera/player/rig -->
             <a-entity id="rig" position="0 0 0" >
             <a-entity id="player" position="0 1.6 6" width="1" height="1.6" depth="1" jump>
             <a-camera id="camera" camera ></a-camera>
             </a-entity>
             </a-entity> 
-            <!--             to calculate heading angle for platforms when VR cam-->
+            <!--to calculate heading angle for platforms when VR cam-->
             <a-entity id="directionEntity" follow-rotation="target: #camera;"></a-entity>
             <!--<a-entity id="player" camera position="0 2 8"width="1.0" height="2"depth="1" look-controls wasd-controls="acceleration: 60" jump></a-entity>-->
+            <!--redkillplane -->
             <a-plane id="killplane" side="double" position="0 -26 0" rotation="-90 0 0" width="500" height="500" color="red"></a-plane>
             <!--start point-->
             <a-box class="ground" id="start" position="0 -1 6" width="6" height="1" depth="6" color="white"></a-box>
@@ -1103,7 +1104,7 @@
                 //playhead biz
                 let playhead = document.createElement('a-box');
                 playhead.setAttribute('class', 'playheads');
-                //playhead.setAttribute("box-collider", '');
+                playhead.setAttribute("box-collider", '');
                 playhead.setAttribute('id', 'playhead');
                 playhead.setAttribute('material', {color: 'red', transparent: 'true', opacity: '0.5'});
                 playhead.setAttribute('side', 'double');
