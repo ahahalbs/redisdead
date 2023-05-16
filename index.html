@@ -164,8 +164,8 @@
                            }
                        }
                    });
-
-                   //A
+//
+//                    //A
                    document.querySelector('#right-controller').addEventListener('abuttondown', function(evt) {
                        if (!self.isJumping) {
                            if (self.canJump == true) {
@@ -175,7 +175,7 @@
                            }
                        }
                    });
-                     //Handle space key press
+                     
 //                      window.addEventListener('keydown', (event) => {
 //                          if (event.key === ' ' && !this.isJumping) {
 //                              if (this.canJump == true) {
@@ -455,6 +455,16 @@
                 },
             });
         </script>
+      <script>
+        AFRAME.registerComponent('follow-rotation', {
+    schema: {
+        target: {type: 'selector'},
+    },
+    tick: function () {
+        this.el.object3D.rotation.y = this.data.target.object3D.rotation.y;
+    }
+});
+      </script>
 <!--         <script>
             const platformSizeM = 3;
             AFRAME.registerComponent('kick-playhead', {
@@ -569,10 +579,12 @@
             <!--      vr camera/player/rig/akaballache -->
 
                         <a-entity id="rig" position="0 0 0" >
-<a-entity id="player" position="0 1.6 6" width="1" height="1.6" depth="1" look-controls jump>
-<a-camera id="camera" camera look-controls></a-camera>
+<a-entity id="player" position="0 1.6 6" width="1" height="1.6" depth="1" jump>
+<a-camera id="camera" camera ></a-camera>
 </a-entity>
 </a-entity> 
+          <a-entity id="directionEntity" follow-rotation="target: #camera;"></a-entity>
+
 
 
 <!--              <a-entity id="player" camera position="0 2 8"width="1.0" height="2"depth="1" look-controls wasd-controls="acceleration: 60" jump></a-entity>
@@ -629,7 +641,7 @@
             const instruments = new MaxiInstruments(origin);
             let scene = document.querySelector('a-scene');
             let player= document.getElementById('player');
-            let camera = document.querySelector("#camera");
+            let directionEntity = document.querySelector("#directionEntity");
             const star = document.getElementById('start');
             let platformsEntity = document.getElementById('platformsEntity');
             let level = 0;
@@ -761,7 +773,7 @@
                        rightController.addEventListener('rightgripdown', function(evt) { bellTrigger = true; ins = 3; handleButtonPress(evt);});
                        rightController.addEventListener('rightgripup', function(evt) { bellTrigger = false; ins = -1; });
 
-//            //             //left controller
+           //             //left controller
                        leftController.addEventListener('xbuttondown', function(evt) { handleButtonPress(evt); });
                        //leftController.addEventListener('xbuttonup', function(evt) {  });
                        leftController.addEventListener('ybuttondown', function(evt) { destroyStep = true; handleButtonPress(evt); });
@@ -777,53 +789,53 @@
                    soundUP = true;
                }
            }    
-//              document.addEventListener("keydown", function(event) {
-//                  if(event.key == '1'){
-//                      ins = 0;
-//                      kickTrigger = true;
-//                  }
-//                  if(event.key == '2'){
-//                      ins = 1;
-//                      snareTrigger = true;
-//                  }
-//                  if(event.key == '3'){
-//                      ins = 2;
-//                      hihatTrigger = true;
-//                  }
-//                  if(event.key == '4'){
-//                      ins = 3;
-//                      bellTrigger = true;
-//                  }
-//                  if(event.key == 'q' || event.key == 'Q'){
-//                      destroyStep = true;
-//                      destroyCount+=1;
-//                      console.log("Q is pressed");
-//                  }     
-//                  keyPressed = event.key;
-//              });
+             document.addEventListener("keydown", function(event) {
+                 if(event.key == '1'){
+                     ins = 0;
+                     kickTrigger = true;
+                 }
+                 if(event.key == '2'){
+                     ins = 1;
+                     snareTrigger = true;
+                 }
+                 if(event.key == '3'){
+                     ins = 2;
+                     hihatTrigger = true;
+                 }
+                 if(event.key == '4'){
+                     ins = 3;
+                     bellTrigger = true;
+                 }
+                 if(event.key == 'q' || event.key == 'Q'){
+                     destroyStep = true;
+                     destroyCount+=1;
+                     console.log("Q is pressed");
+                 }     
+                 keyPressed = event.key;
+             });
              //inputs key up
-//              document.addEventListener("keyup", function(event) {
-//                  if(event.key == '1'){
-//                      ins = -1;
-//                      kickTrigger = false;
-//                  }
-//                  if(event.key == '2'){
-//                      ins = -1;
-//                      snareTrigger = false;
-//                  }
-//                  if(event.key == '3'){
-//                      ins = -1;
-//                      hihatTrigger = false;
-//                  }
-//                  if(event.key == '4'){
-//                      ins = -1;
-//                      bellTrigger = false;
-//                  }
-//                  if(event.key == 'q' || event.key == 'Q'){
-//                      destroyStep = false;
-//                  } 
-//                  keyPressed = event.key;
-//              });
+             document.addEventListener("keyup", function(event) {
+                 if(event.key == '1'){
+                     ins = -1;
+                     kickTrigger = false;
+                 }
+                 if(event.key == '2'){
+                     ins = -1;
+                     snareTrigger = false;
+                 }
+                 if(event.key == '3'){
+                     ins = -1;
+                     hihatTrigger = false;
+                 }
+                 if(event.key == '4'){
+                     ins = -1;
+                     bellTrigger = false;
+                 }
+                 if(event.key == 'q' || event.key == 'Q'){
+                     destroyStep = false;
+                 } 
+                 keyPressed = event.key;
+             });
 
             //have we collected collectable? 
             function logCollected(event) {
@@ -870,64 +882,35 @@
                 })
             });
             //which direction are we facing
-//            function headingDirection(camera) {
-//     let direction = new THREE.Vector3();
-//     camera.object3D.getWorldDirection(direction);
+     function headingDirection(camera) {
+    let direction = new THREE.Vector3();
+    camera.object3D.getWorldDirection(direction);
+    direction.y = 0;
+    direction.normalize();
 
-//     // We ignore the vertical component of the direction
-//     direction.y = 0;
+    // Calculate heading in degrees, adjusted for three.js's coordinate system
+    let heading = Math.atan2(direction.x, direction.z) * 180 / Math.PI;
+    // Normalize heading to be between 0 and 360
+    heading = (heading + 360) % 360;
 
-//     // Normalize the direction vector
-//     direction.normalize();
-
-//     // Calculate heading in degrees
-//     let heading = Math.atan2(-direction.z, direction.x) * 180 / Math.PI;
-
-//     // Normalize heading to be between 0 and 360
-//     heading = (heading + 360) % 360;
-
-//     let facing = "";
-//     if (heading >= 0 && heading <= 45 || heading > 315 && heading < 360) {
-//         facing = "northWest";
-//     } else if (heading > 45 && heading <= 90) {
-//         facing = "westNorth";
-//     } else if (heading > 90 && heading <= 135) {
-//         facing = "westSouth";
-//     } else if (heading > 135 && heading <= 180) {
-//         facing = "southWest";
-//     } else if (heading > 180 && heading <= 225) {
-//         facing = "southEast";
-//     } else if (heading > 225 && heading <= 270) {
-//         facing = "eastSouth";
-//     } else if (heading > 270 && heading <= 315) {
-//         facing = "eastNorth";
-//     }
-//     return facing;
-// };
-                        function headingDirection(player) {
-                const rotation = player.getAttribute("rotation");
-                let heading = rotation.y;
-                //normalize direction
-                heading = (heading + 360000) % 360;
-
-                let facing = "";
-                if (heading >= 0 && heading <= 45 || heading > 315 && heading < 360) {
-                    facing = "northWest";
-                } else if (heading > 45 && heading <= 90) {
-                    facing = "westNorth";
-                } else if (heading > 90 && heading <= 135) {
-                    facing = "westSouth";
-                } else if (heading > 135 && heading <= 180) {
-                    facing = "southWest";
-                } else if (heading > 180 && heading <= 225) {
-                    facing = "southEast";
-                } else if (heading > 225 && heading <= 270) {
-                    facing = "eastSouth";
-                } else if (heading > 270 && heading <= 315) {
-                    facing = "eastNorth";
-                }
-                return facing;
-            };  
+    let facing = "";
+    if (heading >= 0 && heading <= 45 || heading > 315 && heading < 360) {
+        facing = "northWest";
+    } else if (heading > 45 && heading <= 90) {
+        facing = "westNorth";
+    } else if (heading > 90 && heading <= 135) {
+        facing = "westSouth";
+    } else if (heading > 135 && heading <= 180) {
+        facing = "southWest";
+    } else if (heading > 180 && heading <= 225) {
+        facing = "southEast";
+    } else if (heading > 225 && heading <= 270) {
+        facing = "eastSouth";
+    } else if (heading > 270 && heading <= 315) {
+        facing = "eastNorth";
+    }
+    return facing;
+};
 
             //spend collectables (to generate platforms)
             async function useCollectables(player, facing, inputs) {
@@ -962,9 +945,10 @@
                     newOrientation = (direction.z === 'z' || direction.z === '-z') ? direction.z : direction.x;
                 }
                 generatePlatforms(playerPos, stepSequenceLength, inputs, newOrientation);
-                previousOrientation = newOrientation;
+               
+                  previousOrientation = newOrientation;  
+
             };
-            
             //we move this shit
             function movePlayheads() {
                 const reverseOffset = (stepSequenceLength-0.5) * platformSize;
@@ -1473,7 +1457,7 @@
             };
             //holding until filled
             async function runBothPlatforms(){
-                await useCollectables(player, headingDirection(player), ins);
+                await useCollectables(player, headingDirection(directionEntity), ins);
                 updatePlatforms();
                 
             }
@@ -1531,6 +1515,10 @@
                             sampler.setParam("rate_1", scale(filter, -2, 1, 0.1, 0.5)) ;
                             sampler.setParam("rate_2", filter+0.5);
                             sampler.setParam("rate_3", filter-0.5);
+                    
+//                    backingMidSynth.setParam("lfoFrequency", filter);
+//                    backingMidSynth.setParam("lfoPitchMod", filter);
+//                    bassSynth.setParam("cutoff", filter *40);
                     sampler.setParam("rate_1", scale(filter, -2, 1, 0.1, 0.5)) ;
                     sampler.setParam("rate_2", filter+0.5);
                     sampler.setParam("rate_3", filter-0.5);
@@ -1839,4 +1827,4 @@
             } 
         </script>
     </body>
-</html> 
+</html> -
