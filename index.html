@@ -228,7 +228,7 @@
                         }
                     }, { isOverGround: false, groundY: 0, halfGroundX: 0, halfGroundZ: 0, lowY: 0, highY: 0 });
 
-                    if (!this.isJumping && this.groundCheck.isOverGround && currentPosition.y <= this.groundCheck.lowY +0.2 ) {
+                    if (!this.isJumping && this.groundCheck.isOverGround && currentPosition.y <= this.groundCheck.lowY ) {
                         this.isOnGround = true;
                     } else {
                         this.isOnGround = false;
