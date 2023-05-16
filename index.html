@@ -563,8 +563,8 @@
     <body>
         <a-scene background="color: #005AFF">
             <!--vr controllers -->
-            <a-entity id="left-controller" oculus-touch-controls="model: false" controller></a-entity>
-            <a-entity id="right-controller" oculus-touch-controls="model: false" controller></a-entity>
+            <a-entity id="left-controller" oculus-touch-controls="hand: left" oculus-touch-controls="model: false" controller></a-entity>
+            <a-entity id="right-controller" oculus-touch-controls="hand: left" oculus-touch-controls="model: false" controller></a-entity>
             <!--this is where the magic happens-->
             <a-entity class="ground" id="platformsEntity"></a-entity> 
             <!--vr camera/player/rig -->
