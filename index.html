@@ -382,11 +382,11 @@
                     switch (boxID) {
                         case "platform":
                             if (direction === "x" || direction === "-x") {
-                                playerPos.x = direction === "x" ? boxPos + halfBoxSize + halfPlayerSize : boxPos - halfBoxSize - halfPlayerSize;
+                                playerPos.x = direction === "x" ? boxPos + halfBoxSize + halfPlayerSize +0.5 : boxPos - halfBoxSize - halfPlayerSize - 0.5;
                             } else if (direction === "y" || direction === "-y") {
-                                playerPos.y = direction === "y" ? boxPos + halfBoxSize + halfPlayerSize : boxPos - halfBoxSize - halfPlayerSize;
+                                playerPos.y = direction === "y" ? boxPos + halfBoxSize + halfPlayerSize +0.5 : boxPos - halfBoxSize - halfPlayerSize - 0.5;
                             } else if (direction === "z" || direction === "-z") {
-                                playerPos.z = direction === "z" ? boxPos + halfBoxSize + halfPlayerSize : boxPos - halfBoxSize - halfPlayerSize;
+                                playerPos.z = direction === "z" ? boxPos + halfBoxSize + halfPlayerSize + 0.5 : boxPos - halfBoxSize - halfPlayerSize - 0.5;
                             }
                             break;
                         case "playhead":
