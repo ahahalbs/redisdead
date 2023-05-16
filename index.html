@@ -870,40 +870,64 @@
                 })
             });
             //which direction are we facing
-           function headingDirection(camera) {
-    let direction = new THREE.Vector3();
-    camera.object3D.getWorldDirection(direction);
+//            function headingDirection(camera) {
+//     let direction = new THREE.Vector3();
+//     camera.object3D.getWorldDirection(direction);
 
-    // We ignore the vertical component of the direction
-    direction.y = 0;
+//     // We ignore the vertical component of the direction
+//     direction.y = 0;
 
-    // Normalize the direction vector
-    direction.normalize();
+//     // Normalize the direction vector
+//     direction.normalize();
 
-    // Calculate heading in degrees
-    let heading = Math.atan2(-direction.z, direction.x) * 180 / Math.PI;
+//     // Calculate heading in degrees
+//     let heading = Math.atan2(-direction.z, direction.x) * 180 / Math.PI;
 
-    // Normalize heading to be between 0 and 360
-    heading = (heading + 360) % 360;
+//     // Normalize heading to be between 0 and 360
+//     heading = (heading + 360) % 360;
 
-    let facing = "";
-    if (heading >= 0 && heading <= 45 || heading > 315 && heading < 360) {
-        facing = "northWest";
-    } else if (heading > 45 && heading <= 90) {
-        facing = "westNorth";
-    } else if (heading > 90 && heading <= 135) {
-        facing = "westSouth";
-    } else if (heading > 135 && heading <= 180) {
-        facing = "southWest";
-    } else if (heading > 180 && heading <= 225) {
-        facing = "southEast";
-    } else if (heading > 225 && heading <= 270) {
-        facing = "eastSouth";
-    } else if (heading > 270 && heading <= 315) {
-        facing = "eastNorth";
-    }
-    return facing;
-};
+//     let facing = "";
+//     if (heading >= 0 && heading <= 45 || heading > 315 && heading < 360) {
+//         facing = "northWest";
+//     } else if (heading > 45 && heading <= 90) {
+//         facing = "westNorth";
+//     } else if (heading > 90 && heading <= 135) {
+//         facing = "westSouth";
+//     } else if (heading > 135 && heading <= 180) {
+//         facing = "southWest";
+//     } else if (heading > 180 && heading <= 225) {
+//         facing = "southEast";
+//     } else if (heading > 225 && heading <= 270) {
+//         facing = "eastSouth";
+//     } else if (heading > 270 && heading <= 315) {
+//         facing = "eastNorth";
+//     }
+//     return facing;
+// };
+                        function headingDirection(player) {
+                const rotation = player.getAttribute("rotation");
+                let heading = rotation.y;
+                //normalize direction
+                heading = (heading + 360000) % 360;
+
+                let facing = "";
+                if (heading >= 0 && heading <= 45 || heading > 315 && heading < 360) {
+                    facing = "northWest";
+                } else if (heading > 45 && heading <= 90) {
+                    facing = "westNorth";
+                } else if (heading > 90 && heading <= 135) {
+                    facing = "westSouth";
+                } else if (heading > 135 && heading <= 180) {
+                    facing = "southWest";
+                } else if (heading > 180 && heading <= 225) {
+                    facing = "southEast";
+                } else if (heading > 225 && heading <= 270) {
+                    facing = "eastSouth";
+                } else if (heading > 270 && heading <= 315) {
+                    facing = "eastNorth";
+                }
+                return facing;
+            };  
 
             //spend collectables (to generate platforms)
             async function useCollectables(player, facing, inputs) {
@@ -1449,7 +1473,7 @@
             };
             //holding until filled
             async function runBothPlatforms(){
-                await useCollectables(player, headingDirection(camera), ins);
+                await useCollectables(player, headingDirection(player), ins);
                 updatePlatforms();
                 
             }
