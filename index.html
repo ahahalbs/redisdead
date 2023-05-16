@@ -9,8 +9,7 @@
         <script src="enable-threads.js"></script>
         <script crossorigin src="maxiInstruments.v.0.7.1.js"></script>
         <script src="./dist/aframe-master.min.js"></script>  
-        <!-- 	CONTROL YO SHIT -->
-
+        <!-- 	oculus controller -->
              <script>
                      AFRAME.registerComponent('controller', {
                         schema: {
@@ -130,9 +129,9 @@
                         },
                     });
                  </script> 
-
-        <!--     JUMP AND FALL (BUT NEVER DEATH, STUCK IN THIS ETERNAL LOOP FOREVAAAAH) -->
-        <script>AFRAME.registerComponent('jump', {
+        <!--     jump and fall and detect ground and the many edge cases -->
+        <script>
+            AFRAME.registerComponent('jump', {
                 schema: {
                     groundSelector: { type: "string", default: ".ground"},
                 },
@@ -164,8 +163,7 @@
                            }
                        }
                    });
-//
-//                    //A
+                    //A
                    document.querySelector('#right-controller').addEventListener('abuttondown', function(evt) {
                        if (!self.isJumping) {
                            if (self.canJump == true) {
@@ -306,7 +304,7 @@
                 },
             });
         </script>
-        <!--     EVERYTHING COLLIDES -->
+        <!--     my everything collider -->
         <script>AFRAME.registerComponent("box-collider", {
                 schema: {
                     hasBonked: { type: 'boolean', default: false }
@@ -418,14 +416,13 @@
                     this.player.object3D.position.copy(playerPos);
                 },
             });</script>
-        <!--     LURKING -->
+        <!--     Lurking end -->
         <script>AFRAME.registerComponent("lurker", {
                 schema: {
                     target: { type: "selector" },
                     easingFactor: { type: "number", default: 0.03 },
                     offset: { type: "number", default: 0 },
                 },
-
                 init: function () {
                     //initial y position
                     this.initialY = this.el.object3D.position.y;
@@ -433,7 +430,6 @@
                     this.targetWorldPosition = new THREE.Vector3();
                     this.offsetVector = new THREE.Vector3();
                 },
-
                 tick: function () {
                     //world position
                     this.data.target.object3D.getWorldPosition(this.targetWorldPosition);
@@ -568,28 +564,20 @@
     <body>
         <a-scene background="color: #005AFF">
             <!--       vr controllers -->
-
-            <a-entity id="left-controller" oculus-touch-controls="hand: left" controller></a-entity>
-            <a-entity id="right-controller" oculus-touch-controls="hand: right" controller></a-entity>
-
-
+            <a-entity id="left-controller" oculus-touch-controls="hand: left model: false" controller></a-entity>
+            <a-entity id="right-controller" oculus-touch-controls="hand: right model: false" controller></a-entity>
             <!--this is where the magic happens-->
             <a-entity class="ground" id="platformsEntity"></a-entity> 
-
-            <!--      vr camera/player/rig/akaballache -->
-
-                        <a-entity id="rig" position="0 0 0" >
-<a-entity id="player" position="0 1.6 6" width="1" height="1.6" depth="1" jump>
-<a-camera id="camera" camera ></a-camera>
-</a-entity>
-</a-entity> 
-          <a-entity id="directionEntity" follow-rotation="target: #camera;"></a-entity>
-
-
-
-<!--              <a-entity id="player" camera position="0 2 8"width="1.0" height="2"depth="1" look-controls wasd-controls="acceleration: 60" jump></a-entity>
-  -->
-            <a-plane id="killplane" side="double" position="0 -18 0" rotation="-90 0 0" width="500" height="500" color="red"></a-plane>
+            <!--      vr camera/player/rig -->
+            <a-entity id="rig" position="0 0 0" >
+            <a-entity id="player" position="0 1.6 6" width="1" height="1.6" depth="1" jump>
+            <a-camera id="camera" camera ></a-camera>
+            </a-entity>
+            </a-entity> 
+            <!--             to calculate heading angle for platforms when VR cam-->
+            <a-entity id="directionEntity" follow-rotation="target: #camera;"></a-entity>
+            <!--<a-entity id="player" camera position="0 2 8"width="1.0" height="2"depth="1" look-controls wasd-controls="acceleration: 60" jump></a-entity>-->
+            <a-plane id="killplane" side="double" position="0 -26 0" rotation="-90 0 0" width="500" height="500" color="red"></a-plane>
             <!--start point-->
             <a-box class="ground" id="start" position="0 -1 6" width="6" height="1" depth="6" color="white"></a-box>
             <!--end point-->
@@ -732,7 +720,7 @@
                 playhead.setAttribute('width', platformSize-0.1);
                 playhead.setAttribute("height", platformSize-0.1);
                 playhead.setAttribute("depth", platformSize-0.1);
-                //playhead.setAttribute("box-collider", ''); 
+                playhead.setAttribute("box-collider", ''); 
                 playheads.push({p: playhead, o: '-z',startX: 0 , startZ: 0, modDel: 0, modmult: 1});
                 platformsEntity.appendChild(playhead);
 
@@ -753,12 +741,6 @@
             startup();
             //append the platform with everything a single platform needs
             scene.appendChild(platformsEntity);
-            //don't run script until we have a scene!
-            if (scene.hasLoaded) {
-                run();
-            } else {
-                scene.addEventListener('loaded', run);
-            }
 
             let rightController = document.querySelector('#right-controller');
             let leftController = document.querySelector('#left-controller');
@@ -789,53 +771,53 @@
                    soundUP = true;
                }
            }    
-             document.addEventListener("keydown", function(event) {
-                 if(event.key == '1'){
-                     ins = 0;
-                     kickTrigger = true;
-                 }
-                 if(event.key == '2'){
-                     ins = 1;
-                     snareTrigger = true;
-                 }
-                 if(event.key == '3'){
-                     ins = 2;
-                     hihatTrigger = true;
-                 }
-                 if(event.key == '4'){
-                     ins = 3;
-                     bellTrigger = true;
-                 }
-                 if(event.key == 'q' || event.key == 'Q'){
-                     destroyStep = true;
-                     destroyCount+=1;
-                     console.log("Q is pressed");
-                 }     
-                 keyPressed = event.key;
-             });
-             //inputs key up
-             document.addEventListener("keyup", function(event) {
-                 if(event.key == '1'){
-                     ins = -1;
-                     kickTrigger = false;
-                 }
-                 if(event.key == '2'){
-                     ins = -1;
-                     snareTrigger = false;
-                 }
-                 if(event.key == '3'){
-                     ins = -1;
-                     hihatTrigger = false;
-                 }
-                 if(event.key == '4'){
-                     ins = -1;
-                     bellTrigger = false;
-                 }
-                 if(event.key == 'q' || event.key == 'Q'){
-                     destroyStep = false;
-                 } 
-                 keyPressed = event.key;
-             });
+//              document.addEventListener("keydown", function(event) {
+//                  if(event.key == '1'){
+//                      ins = 0;
+//                      kickTrigger = true;
+//                  }
+//                  if(event.key == '2'){
+//                      ins = 1;
+//                      snareTrigger = true;
+//                  }
+//                  if(event.key == '3'){
+//                      ins = 2;
+//                      hihatTrigger = true;
+//                  }
+//                  if(event.key == '4'){
+//                      ins = 3;
+//                      bellTrigger = true;
+//                  }
+//                  if(event.key == 'q' || event.key == 'Q'){
+//                      destroyStep = true;
+//                      destroyCount+=1;
+//                      console.log("Q is pressed");
+//                  }     
+//                  keyPressed = event.key;
+//              });
+//              //inputs key up
+//              document.addEventListener("keyup", function(event) {
+//                  if(event.key == '1'){
+//                      ins = -1;
+//                      kickTrigger = false;
+//                  }
+//                  if(event.key == '2'){
+//                      ins = -1;
+//                      snareTrigger = false;
+//                  }
+//                  if(event.key == '3'){
+//                      ins = -1;
+//                      hihatTrigger = false;
+//                  }
+//                  if(event.key == '4'){
+//                      ins = -1;
+//                      bellTrigger = false;
+//                  }
+//                  if(event.key == 'q' || event.key == 'Q'){
+//                      destroyStep = false;
+//                  } 
+//                  keyPressed = event.key;
+//              });
 
             //have we collected collectable? 
             function logCollected(event) {
@@ -882,36 +864,35 @@
                 })
             });
             //which direction are we facing
-     function headingDirection(camera) {
-    let direction = new THREE.Vector3();
-    camera.object3D.getWorldDirection(direction);
-    direction.y = 0;
-    direction.normalize();
+            function headingDirection(camera) {
+                let direction = new THREE.Vector3();
+                camera.object3D.getWorldDirection(direction);
+                direction.y = 0;
+                direction.normalize();
 
-    // Calculate heading in degrees, adjusted for three.js's coordinate system
-    let heading = Math.atan2(direction.x, direction.z) * 180 / Math.PI;
-    // Normalize heading to be between 0 and 360
-    heading = (heading + 360) % 360;
+                // Calculate heading in degrees, adjusted for three.js's coordinate system
+                let heading = Math.atan2(direction.x, direction.z) * 180 / Math.PI;
+                // Normalize heading to be between 0 and 360
+                heading = (heading + 360) % 360;
 
-    let facing = "";
-    if (heading >= 0 && heading <= 45 || heading > 315 && heading < 360) {
-        facing = "northWest";
-    } else if (heading > 45 && heading <= 90) {
-        facing = "westNorth";
-    } else if (heading > 90 && heading <= 135) {
-        facing = "westSouth";
-    } else if (heading > 135 && heading <= 180) {
-        facing = "southWest";
-    } else if (heading > 180 && heading <= 225) {
-        facing = "southEast";
-    } else if (heading > 225 && heading <= 270) {
-        facing = "eastSouth";
-    } else if (heading > 270 && heading <= 315) {
-        facing = "eastNorth";
-    }
-    return facing;
-};
-
+                let facing = "";
+                if (heading >= 0 && heading <= 45 || heading > 315 && heading < 360) {
+                    facing = "northWest";
+                } else if (heading > 45 && heading <= 90) {
+                    facing = "westNorth";
+                } else if (heading > 90 && heading <= 135) {
+                    facing = "westSouth";
+                } else if (heading > 135 && heading <= 180) {
+                    facing = "southWest";
+                } else if (heading > 180 && heading <= 225) {
+                    facing = "southEast";
+                } else if (heading > 225 && heading <= 270) {
+                    facing = "eastSouth";
+                } else if (heading > 270 && heading <= 315) {
+                    facing = "eastNorth";
+                }
+                return facing;
+            };
             //spend collectables (to generate platforms)
             async function useCollectables(player, facing, inputs) {
                 const playerPos = player.getAttribute('position');
@@ -945,7 +926,6 @@
                     newOrientation = (direction.z === 'z' || direction.z === '-z') ? direction.z : direction.x;
                 }
                 generatePlatforms(playerPos, stepSequenceLength, inputs, newOrientation);
-               
                   previousOrientation = newOrientation;  
 
             };
@@ -1194,7 +1174,7 @@
                 collectable.setAttribute("box-collider", '');
 
                 //quick and dirty as main way is fucked/too computational expensive
-                let away = stepSequenceLength-((difficulty/collectablesFound+1)%9)-1;
+                let away = stepSequenceLength-((difficulty/collectablesFound+1)%6)-1;
 
                 if(orientation == '-x'){
                     //ofset the x by the negative of sequence so it places it at the end
@@ -1352,8 +1332,7 @@
                 let sumHihats = 0;
                 let sumBells = 0;
                 let sumAllSteps =[];
-                //where to play then next collectable
-                let collectablePlacement;
+
                 //get sums of all our steps
                 for(let i = 0; i < 16; i++){
                     sumKicks += allKicksStepValues[i];
@@ -1514,8 +1493,7 @@
                             bassSynth.setParam("cutoff", filter *40);
                             sampler.setParam("rate_1", scale(filter, -2, 1, 0.1, 0.5)) ;
                             sampler.setParam("rate_2", filter+0.5);
-                            sampler.setParam("rate_3", filter-0.5);
-                    
+                            sampler.setParam("rate_3", filter-0.5);                    
 //                    backingMidSynth.setParam("lfoFrequency", filter);
 //                    backingMidSynth.setParam("lfoPitchMod", filter);
 //                    bassSynth.setParam("cutoff", filter *40);
@@ -1594,9 +1572,7 @@
                         instruments.rewind();
                         bassSynth.setSequence([{s:0, l:8, p:38},{s:8, l:4, p:48},{s:12, l:4, p:45}, {s:16, l:16, p:39}],4);
                         bassSynth.setLoop(32,4);
-                        backingMidSynth.setSequence([{s:0, l:8, p:a7sus4},
-                                                     {s:16, l:8, p:cadd9},
-                                                    ],4);
+                        backingMidSynth.setSequence([{s:0, l:8, p:a7sus4}, {s:16, l:8, p:cadd9}],4);
                         backingMidSynth.setLoop(32,4); 
                         collectablePicked = false;    
                     } 
@@ -1631,11 +1607,6 @@
                 } 
                 else if (eventChangeCounter % 5 === 4) {
                     star.setAttribute('color', 'Black');
-                    //sampler.mute();
-                    //backingMidSynth.mute();
-                    //bassSynth.mute();
-                    //instruments.playPause();
-                    //instruments.rewind();
                     canStart = true;
                     hasEnded = false;
                 }
@@ -1777,12 +1748,19 @@
                 });
             };
             //start the step sequencer
-            document.addEventListener('keydown', (event) => {
-                if (event.key && soundUP == false){
-                    playSomething();;
-                    soundUP = true; 
-                }
-            });
+//             document.addEventListener('keydown', (event) => {
+//                 if (event.key && soundUP == false){
+//                     playSomething();;
+//                     soundUP = true; 
+//                 }
+//             });
+            
+             //don't run script until we have a scene!
+            if (scene.hasLoaded) {
+                run();
+            } else {
+                scene.addEventListener('loaded', run);
+            }
 
             setInterval(run, 50);
             function run() {
