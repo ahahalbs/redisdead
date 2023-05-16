@@ -109,7 +109,7 @@
                             camera.object3D.getWorldDirection(direction);
 
                             //lock y
-                            direction.y = 0;
+                            direction.y = player.getAtrribute('position').y;
 
                             //normalize the direction vector (tsettingy to 0 can fuck vector length)
                             direction.normalize();
