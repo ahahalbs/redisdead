@@ -1494,9 +1494,9 @@
                             sampler.setParam("rate_1", Math.max(1-filter,0));
                             sampler.setParam("rate_2", filter+0.5);
                             sampler.setParam("rate_3", filter-0.5);                    
-//                    backingMidSynth.setParam("lfoFrequency", filter);
-//                    backingMidSynth.setParam("lfoPitchMod", filter);
-//                    bassSynth.setParam("cutoff", filter *40);
+                   backingMidSynth.setParam("lfoFrequency", filter);
+                   backingMidSynth.setParam("lfoPitchMod", filter);
+                   bassSynth.setParam("cutoff", filter *40);
                     sampler.setParam("rate_1", Math.max(1-filter,0));
                     sampler.setParam("rate_2", Math.max(filter+0.5, 0));
                     sampler.setParam("rate_3", Math.max(filter-0.5,0));
