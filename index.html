@@ -870,7 +870,9 @@
             });
             //which direction are we facing
             function headingDirection(player) {
-                const rotation = player.getAttribute("rotation");
+                 let camera = document.querySelector("#camera");
+                //const rotation = player.getAttribute("rotation");
+                const rotation = camera.getAttriute("rotation");
                 let heading = rotation.y;
                 //normalize direction
                 heading = (heading + 360000) % 360;
