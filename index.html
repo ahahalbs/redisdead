@@ -563,8 +563,8 @@
     <body>
         <a-scene background="color: #005AFF">
             <!--vr controllers -->
-            <a-entity id="left-controller" oculus-touch-controls="hand: left" oculus-touch-controls="model: false" controller></a-entity>
-            <a-entity id="right-controller" oculus-touch-controls="hand: right" oculus-touch-controls="model: false" controller></a-entity>
+            <a-entity id="left-controller" oculus-touch-controls="hand: left; model: false" controller></a-entity>
+            <a-entity id="right-controller" oculus-touch-controls="hand: right; model: false" controller></a-entity>
             <!--this is where the magic happens-->
             <a-entity class="ground" id="platformsEntity"></a-entity> 
             <!--vr camera/player/rig -->
@@ -577,7 +577,7 @@
             <a-entity id="directionEntity" follow-rotation="target: #camera;"></a-entity>
             <!--<a-entity id="player" camera position="0 2 8"width="1.0" height="2"depth="1" look-controls wasd-controls="acceleration: 60" jump></a-entity>-->
             <!--redkillplane -->
-            <a-plane id="killplane" side="double" position="0 -26 0" rotation="-90 0 0" width="500" height="500" color="red"></a-plane>
+            <a-plane id="killplane" side="double" position="0 -70 0" rotation="-90 0 0" width="500" height="500" color="red"></a-plane>
             <!--start point-->
             <a-box class="ground" id="start" position="0 -1 6" width="6" height="1" depth="6" color="white"></a-box>
             <!--end point-->
@@ -644,7 +644,7 @@
             let stepCheck = 0;
             let branchID = 0;
             let currentBranch = 0;
-            let platformSize = 2;
+            let platformSize = 2.5;
             let previousOrientation = '-z';
             let metro = 0;
             let lastEventFixer = -1;
@@ -1486,20 +1486,20 @@
 
                 //jump sounds
                 if(isJumping == true){
-                    filter += 0.5;
+                    filter += 0.15;
                     
                             backingMidSynth.setParam("lfoFrequency", filter);
-                            backingMidSynth.setParam("lfoPitchMod", filter);
+                            //backingMidSynth.setParam("lfoPitchMod", filter);
                             bassSynth.setParam("cutoff", filter *40);
-                            sampler.setParam("rate_1", scale(filter, -2, 1, 0.1, 0.5)) ;
+                            sampler.setParam("rate_1", Math.max(1-filter,0));
                             sampler.setParam("rate_2", filter+0.5);
                             sampler.setParam("rate_3", filter-0.5);                    
 //                    backingMidSynth.setParam("lfoFrequency", filter);
 //                    backingMidSynth.setParam("lfoPitchMod", filter);
 //                    bassSynth.setParam("cutoff", filter *40);
-                    sampler.setParam("rate_1", scale(filter, -2, 1, 0.1, 0.5)) ;
-                    sampler.setParam("rate_2", filter+0.5);
-                    sampler.setParam("rate_3", filter-0.5);
+                    sampler.setParam("rate_1", Math.max(1-filter,0));
+                    sampler.setParam("rate_2", Math.max(filter+0.5, 0));
+                    sampler.setParam("rate_3", Math.max(filter-0.5,0));
                 } else {
                     if(filter > 0.11){
                         backingMidSynth.setParam("lfoFrequency", filter);
