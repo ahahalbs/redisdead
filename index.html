@@ -109,10 +109,10 @@
                             camera.object3D.getWorldDirection(direction);
 
                             //lock y
-                            direction.y = player.getAtrribute('position').y;
+                            direction.y = 0; 
 
                             //normalize the direction vector (tsettingy to 0 can fuck vector length)
-                            direction.normalize();
+                            //direction.normalize();
 
                             //work out left direction
                             left.crossVectors(camera.object3D.up, direction);
