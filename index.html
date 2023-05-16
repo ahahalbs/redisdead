@@ -920,11 +920,12 @@
                     newOrientation = (direction.z === 'z' || direction.z === '-z') ? direction.z : direction.x;
                 }
                 generatePlatforms(playerPos, stepSequenceLength, inputs, newOrientation);
-                if(sequenceOrder.length % 2 == 0 ){
-                  previousOrientation = newOrientation;  
-                } else {
-                    previousOrientation = previousOrientation;
-                       }
+                previousOrientation = newOrientation;
+//                 if(sequenceOrder.length % 2 == 0 ){
+//                   previousOrientation = newOrientation;  
+//                 } else {
+//                     previousOrientation = previousOrientation;
+//                        }
             };
             //we move this shit
             function movePlayheads() {
