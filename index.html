@@ -629,6 +629,7 @@
             const instruments = new MaxiInstruments(origin);
             let scene = document.querySelector('a-scene');
             let player= document.getElementById('player');
+            let camera = document.querySelector("#camera");
             const star = document.getElementById('start');
             let platformsEntity = document.getElementById('platformsEntity');
             let level = 0;
@@ -870,10 +871,9 @@
             });
             //which direction are we facing
             function headingDirection(player) {
-                 let camera = document.querySelector("#camera");
-                //const rotation = player.getAttribute("rotation");
-                const rotation = camera.getAttriute("rotation");
-                let heading = rotation.y;
+                const rotation = player.getAttribute("rotation");
+                //let heading = rotation.y;
+                let heading = THREE.Math.radToDeg(camera.object3D.rotation.y);
                 //normalize direction
                 heading = (heading + 360000) % 360;
 
@@ -1439,7 +1439,7 @@
             };
             //holding until filled
             async function runBothPlatforms(){
-                await useCollectables(player, headingDirection(player), ins);
+                await useCollectables(player, headingDirection(camera), ins);
                 updatePlatforms();
                 
             }
