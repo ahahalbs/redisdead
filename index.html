@@ -10,7 +10,7 @@
         <script crossorigin src="maxiInstruments.v.0.7.1.js"></script>
         <script src="./dist/aframe-master.min.js"></script>  
         <!-- 	CONTROL YO SHIT -->
-        <!--          <script> -->
+             <script>
         //              AFRAME.registerComponent('controller', {
         //                 schema: {
         //                     moveSpeed: {type: 'number', default: 3.6},
@@ -128,7 +128,7 @@
         //                     player.object3D.position.lerp(desiredPosition, this.data.smoothness);
         //                 },
         //             });
-        <!--         </script> -->
+                 </script> 
         <!--     JUMP AND FALL (BUT NEVER DEATH, STUCK IN THIS ETERNAL LOOP FOREVAAAAH) -->
         <script>AFRAME.registerComponent('jump', {
                 schema: {
@@ -228,7 +228,7 @@
                         }
                     }, { isOverGround: false, groundY: 0, halfGroundX: 0, halfGroundZ: 0, lowY: 0, highY: 0 });
 
-                    if (!this.isJumping && this.groundCheck.isOverGround && currentPosition.y <= this.groundCheck.lowY +0.21 ) {
+                    if (!this.isJumping && this.groundCheck.isOverGround && currentPosition.y <= this.groundCheck.lowY +0.2 ) {
                         this.isOnGround = true;
                     } else {
                         this.isOnGround = false;
@@ -314,7 +314,8 @@
                     this.collected = false;
                     this.hasBonked = false;
                     this.hasEnded = false;
-                    this.distanceThreshold = 2;
+                    this.distanceThreshold = 3;
+                    
                 },
                 tick: function () {
                     this.player = document.querySelector("#player");
@@ -397,6 +398,7 @@
                                 playerPos.z = direction === "z" ? boxPos + (halfBoxSize * 2) + halfPlayerSize + 3.1 : boxPos - (halfBoxSize * 2) - halfPlayerSize - 3.1;
                             }
                             this.hasBonked = true;
+                            console.log("BONK");
                             this.el.sceneEl.emit('bonked', { detail: { entity: this.el } });
                             break;
                         case "collectable":
@@ -454,7 +456,7 @@
         <script>
             const platformSize = 3;
             AFRAME.registerComponent('kick-playhead', {
-                id: 'playhead',
+                id: 'playhead', class: 'playheads',
                 dependencies: ['geometry', 'material', 'box-collider'],
                 init: function() {
                     this.el.setAttribute('geometry', {
@@ -469,9 +471,10 @@
                         opacity: 0.5,
                         side: 'double' 
                     });
-                     this.el.setAttribute('box-collider', {});
-
+                    this.el.setAttribute('box-collider',{});
                 },
+                
+                
             });
 
             AFRAME.registerComponent('snare-playhead', {
@@ -1085,11 +1088,6 @@
                 }
                 //playhead biz
                 let playhead = document.createElement('a-entity');
-                playhead.setAttribute('id', 'playhead');
-                console.log(playhead.getAttribute('id'));
-
-
-
 
                 // Use a lil bit of rng to spice up the chance
                 let rng = Math.random();
@@ -1108,9 +1106,9 @@
 
                 // Apply the appropriate mixin based on the playhead type
                 playhead.setAttribute(playheadType, {});
-                playhead.setAttribute('class', 'playheads');
-                playhead.setAttribute('id', 'playhead');
-                playhead.setAttribute("box-collider", ''); 
+//                playhead.setAttribute('class', 'playheads');
+//                playhead.setAttribute('id', 'playhead');
+//                playhead.setAttribute("box-collider", ''); 
 
                 let newPosition = {x: playerFlooredX, y: playerPos.y + platformSize + 0.001, z: playerFlooredZ};
                 playhead.setAttribute('position', newPosition);
@@ -1760,4 +1758,3 @@
         </script>
     </body>
 </html> 
-
