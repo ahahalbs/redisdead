@@ -8,7 +8,7 @@
         </style>
         <script src="enable-threads.js"></script>
         <script crossorigin src="maxiInstruments.v.0.7.1.js"></script>
-        <script src="./dist/aframe-master.min.js"></script>  
+        <script src="aframe-master.min.js"></script>  
         <!-- 	CONTROL YO SHIT -->
              <script>
         //              AFRAME.registerComponent('controller', {
@@ -228,7 +228,7 @@
                         }
                     }, { isOverGround: false, groundY: 0, halfGroundX: 0, halfGroundZ: 0, lowY: 0, highY: 0 });
 
-                    if (!this.isJumping && this.groundCheck.isOverGround && currentPosition.y <= this.groundCheck.lowY ) {
+                    if (!this.isJumping && this.groundCheck.isOverGround && currentPosition.y <= this.groundCheck.lowY  ) {
                         this.isOnGround = true;
                     } else {
                         this.isOnGround = false;
@@ -252,12 +252,12 @@
                         let clamp;
                         if(newY >= this.groundCheck.lowY && newY <= this.groundCheck.highY){
                             this.jumpSpeed -=0.01;
-                            clamp = Math.max(newY, this.groundCheck.lowY+0.11);  
+                            clamp = Math.max(newY, this.groundCheck.lowY);  
                         } else 
                             if(newY >= this.groundCheck.highY){
                                 clamp = Math.max(newY,this.groundCheck.highY);   
                             }
-                        this.player.object3D.position.set(currentPosition.x, clamp, currentPosition.z);
+                        this.player.object3D.position.set(currentPosition.x, clamp+0.1, currentPosition.z);
 
                         if (this.jumpSpeed <= -this.fallSpeed) {
                             this.isJumping = false;
@@ -382,18 +382,18 @@
                     switch (boxID) {
                         case "platform":
                             if (direction === "x" || direction === "-x") {
-                                playerPos.x = direction === "x" ? boxPos + halfBoxSize + halfPlayerSize +0.5 : boxPos - halfBoxSize - halfPlayerSize - 0.5;
+                                playerPos.x = direction === "x" ? boxPos + halfBoxSize + halfPlayerSize+0.5 : boxPos - halfBoxSize - halfPlayerSize -0.5;
                             } else if (direction === "y" || direction === "-y") {
-                                playerPos.y = direction === "y" ? boxPos + halfBoxSize + halfPlayerSize  : boxPos - halfBoxSize - halfPlayerSize - 0.5;
+                                playerPos.y = direction === "y" ? boxPos + halfBoxSize + halfPlayerSize +0.11: boxPos - halfBoxSize - halfPlayerSize ;
                             } else if (direction === "z" || direction === "-z") {
-                                playerPos.z = direction === "z" ? boxPos + halfBoxSize + halfPlayerSize + 0.5 : boxPos - halfBoxSize - halfPlayerSize - 0.5;
+                                playerPos.z = direction === "z" ? boxPos + halfBoxSize + halfPlayerSize+0.5 : boxPos - halfBoxSize - halfPlayerSize - 0.5;
                             }
                             break;
                         case "playhead":
                             if (direction === "x" || direction === "-x") {
                                 playerPos.x = direction === "x" ? boxPos + (halfBoxSize * 2) + halfPlayerSize + 3.1 : boxPos - (halfBoxSize * 2) - halfPlayerSize - 3.1;
                             } else if (direction === "y" || direction === "-y") {
-                                playerPos.y = direction === "y" ? boxPos + halfBoxSize + halfPlayerSize + 0.11 : boxPos - halfBoxSize - halfPlayerSize;
+                                playerPos.y = direction === "y" ? boxPos + halfBoxSize + halfPlayerSize : boxPos - halfBoxSize - halfPlayerSize;
                             } else if (direction === "z" || direction === "-z") {
                                 playerPos.z = direction === "z" ? boxPos + (halfBoxSize * 2) + halfPlayerSize + 3.1 : boxPos - (halfBoxSize * 2) - halfPlayerSize - 3.1;
                             }
@@ -453,7 +453,105 @@
                 },
             });
         </script>
-        
+        <script>
+            const platformSizeM = 3;
+            AFRAME.registerComponent('kick-playhead', {
+                id: 'playhead', class: 'playheads',
+                dependencies: ['geometry', 'material', 'box-collider'],
+                init: function() {
+                    this.el.setAttribute('geometry', {
+                        primitive: 'box',
+                        width: (platformSizeM * 3) - 0.01,
+                        height: platformSizeM - 0.01,
+                        depth: (platformSizeM * 3) - 0.01
+                    });
+                    this.el.setAttribute('material', {
+                        color: 'red',
+                        transparent: true,
+                        opacity: 0.5,
+                        side: 'double' 
+                    });
+                    this.el.setAttribute('box-collider',{});
+                    this.el.setAttribute('scale',{x: 1,y:1,z:1});
+                },
+                
+                
+            });
+
+            AFRAME.registerComponent('snare-playhead', {
+                dependencies: ['geometry', 'material'],
+                init: function() {
+                    this.el.setAttribute('geometry', {
+                        primitive: 'box',
+                        width: (platformSizeM / 2) - 0.1,
+                        height: (platformSizeM * 3) - 0.1,
+                        depth: (platformSizeM / 2) - 0.1
+                    });
+                    this.el.setAttribute('material', {
+                        color: 'red',
+                        transparent: true,
+                        opacity: 0.5,
+                        side: 'double' 
+
+                    });
+                },
+            });
+
+            AFRAME.registerComponent('hihat-playhead', {
+                dependencies: ['geometry', 'material',],
+                init: function() {
+                    if (orientation === 'x' || orientation === '-x') {
+                        this.el.setAttribute('geometry', {
+                            primitive: 'box',
+                            width: (platformSizeM * 4) - 0.1,
+                            height: (platformSizeM / 4) - 0.1,
+                            depth: (platformSizeM / 4) - 0.1
+                        });
+                    } else {
+                        this.el.setAttribute('geometry', {
+                            primitive: 'box',
+                            width: (platformSizeM / 4) - 0.1,
+                            height: (platformSizeM / 4) - 0.1,
+                            depth: (platformSizeM * 4) - 0.1
+                        });
+                    }
+                    this.el.setAttribute('material', {
+                        color: 'red',
+                        transparent: true,
+                        opacity: 0.5,
+                         side: 'double'
+                    });
+                },
+            });
+
+            AFRAME.registerComponent('bell-playhead', {
+                dependencies: ['geometry', 'material',],
+                init: function() {
+                    if (orientation === 'x' || orientation === '-x') {
+                        this.el.setAttribute('geometry', {
+                            primitive: 'box',
+                            width: platformSizeM - 0.1,
+                            height: (platformSizeM / 4) - 0.1,
+                            depth: (platformSizeM * 3) - 0.1
+                        });
+                    } else {
+                        this.el.setAttribute('geometry', {
+                            primitive: 'box',
+                            width: (platformSizeM * 3) - 0.1,
+                            height: (platformSizeM / 4) - 0.1,
+                            depth: platformSizeM - 0.1
+                        });
+                    }
+                    this.el.setAttribute('material', {
+                        color: 'red',
+                        transparent: true,
+                        opacity: 0.5,
+                        side: 'double' 
+                    });
+                },
+            });
+
+        </script>
     </head>
     <body>
         <a-scene stats background="color: #005AFF">
@@ -989,53 +1087,29 @@
 
                     platformsEntity.appendChild(platform);
                 }
-               //playhead biz
-                let playhead = document.createElement('a-box');
-                playhead.setAttribute('class', 'playheads');
-                playhead.setAttribute("box-collider", '');
-                playhead.setAttribute('id', 'playhead');
-                playhead.setAttribute('material', {color: 'red', transparent: 'true', opacity: '0.5'});
-                playhead.setAttribute('side', 'double');
+                //playhead biz
+                let playhead = document.createElement('a-entity');
 
-                //use a lil bit of rng to spice up the chance
+                // Use a lil bit of rng to spice up the chance
                 let rng = Math.random();
 
-                //our kick PlayHeads
-                if(sequenceOrder[sequenceOrder.length-1] == 0){
-                    playhead.setAttribute('width', (platformSize*3)-0.01);
-                    playhead.setAttribute("height", platformSize+0.01);
-                    playhead.setAttribute("depth", (platformSize*3)-0.01);
-                    //snare playheads
-                } 
-                else if(sequenceOrder[sequenceOrder.length-1] == 1){
-                    playhead.setAttribute('width', (platformSize/2)-0.1);
-                    playhead.setAttribute("height",(platformSize*3)-0.1);
-                    playhead.setAttribute("depth", (platformSize/2)-0.1);
-                    //hihat playheads
-                } 
-                else if(sequenceOrder[sequenceOrder.length-1] == 2){
-                    if (orientation == 'x' || orientation == '-x'){
-                        playhead.setAttribute('width', (platformSize*4)-0.1);
-                        playhead.setAttribute("height",(platformSize/4)-0.1);
-                        playhead.setAttribute("depth", (platformSize/4)-0.1);   
-                    } else {
-                        playhead.setAttribute('width', (platformSize/4)-0.1);
-                        playhead.setAttribute("height",(platformSize/4)-0.1);
-                        playhead.setAttribute("depth", (platformSize*4)-0.1);     
-                    }
-                } 
-                else{
-                    if (orientation == 'x' || orientation == '-x'){
-                        playhead.setAttribute('width', platformSize-0.1);
-                        playhead.setAttribute("height",(platformSize/4)-0.1);
-                        playhead.setAttribute("depth", (platformSize*3)-0.1);   
-                    } else {
-                        playhead.setAttribute('width', (platformSize*3)-0.1);
-                        playhead.setAttribute("height",(platformSize/4)-0.1);
-                        playhead.setAttribute("depth", platformSize-0.1);     
-                    }
-                } 
+                // Determine the playhead type based on the sequenceOrder
+                let playheadType;
+                if (sequenceOrder[sequenceOrder.length - 1] === 0) {
+                    playheadType = 'kick-playhead';
+                } else if (sequenceOrder[sequenceOrder.length - 1] === 1) {
+                    playheadType = 'snare-playhead';
+                } else if (sequenceOrder[sequenceOrder.length - 1] === 2) {
+                    playheadType = 'hihat-playhead';
+                } else {
+                    playheadType = 'bell-playhead';
+                }
 
+                // Apply the appropriate mixin based on the playhead type
+                playhead.setAttribute(playheadType, {});
+//                playhead.setAttribute('class', 'playheads');
+//                playhead.setAttribute('id', 'playhead');
+//                playhead.setAttribute("box-collider", ''); 
 
                 let newPosition = {x: playerFlooredX, y: playerPos.y + platformSize + 0.001, z: playerFlooredZ};
                 playhead.setAttribute('position', newPosition);
@@ -1275,7 +1349,7 @@
                 platform.p.setAttribute('width', width);
                 platform.p.setAttribute('height', height);
                 platform.p.setAttribute('depth', depth);
-                platform.p.setAttribute('scale', { x: 1, y: 1.01, z: 1 });
+                platform.p.setAttribute('scale', { x: 1, y: 0.98, z: 1 });
             };
             //update our platforms when we trigger the corresponding step yo
             function updatePlatforms() {
