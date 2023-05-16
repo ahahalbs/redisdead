@@ -570,7 +570,7 @@
             <!--vr camera/player/rig -->
             <a-entity id="rig" position="0 -0 0" >
             <a-entity id="player" position="0 1.65 6" width="1" height="1.6" depth="1" jump>
-            <a-camera id="camera" camera ></a-camera>
+            <a-camera id="camera" scale = "0.25 0.25 0.25 "camera ></a-camera>
             </a-entity>
             </a-entity> 
             <!--to calculate heading angle for platforms when VR cam-->
@@ -644,7 +644,7 @@
             let stepCheck = 0;
             let branchID = 0;
             let currentBranch = 0;
-            let platformSize = 9;
+            let platformSize = 2;
             let previousOrientation = '-z';
             let metro = 0;
             let lastEventFixer = -1;
