@@ -569,18 +569,19 @@
             <!--      vr camera/player/rig/akaballache -->
 
                         <a-entity id="rig" position="0 0 0" >
-<a-entity id="player" position="0 1.6 6" width="1" height="1.6" depth="1" jump>
+<a-entity id="player" position="0 1.6 6" width="1" height="1.6" depth="1" look controls jump>
 <a-camera id="camera" camera look controls ></a-camera>
 </a-entity>
 </a-entity> 
 
-<!--              <a-entity id="player" camera position="0 2 8"width="1.0" height="2"depth="1" look-controls wasd-controls="acceleration: 60" jump></a-entity>
-  -->
+
+             <a-entity id="player" camera position="0 2 8"width="1.0" height="2"depth="1" look-controls wasd-controls="acceleration: 60" jump></a-entity>
+ 
             <a-plane id="killplane" side="double" position="0 -18 0" rotation="-90 0 0" width="500" height="500" color="red"></a-plane>
             <!--start point-->
             <a-box class="ground" id="start" position="0 -1 6" width="6" height="1" depth="6" color="white"></a-box>
             <!--end point-->
-            <a-box class='end' id="lurker" position="0 12 -15" width="4" height="0.25" depth="4" color="black" box-collider lurker="target: #player "></a-box>  
+            <a-box class='end' id="lurker" position="0 48 -15" width="4" height="0.25" depth="4" color="black" box-collider lurker="target: #player "></a-box>  
         </a-scene> 
         <script>
             let tempo = 96;
@@ -799,7 +800,7 @@
 //                  }     
 //                  keyPressed = event.key;
 //              });
-//              //inputs key up
+             //inputs key up
 //              document.addEventListener("keyup", function(event) {
 //                  if(event.key == '1'){
 //                      ins = -1;
@@ -823,50 +824,50 @@
 //                  keyPressed = event.key;
 //              });
 
-//             //have we collected collectable? 
-//             function logCollected(event) {
-//                 const collectable = document.getElementById('collectable');
-//                 collectableCount += 1;
-//                 collectablesFound += 1;
-//                 collectablePicked = true;
-//                 for(let i = 0; i < collectables.length; i++){   
-//                     collectables.splice(i,1);
-//                     platformsEntity.removeChild(collectable);
-//                 }
-//             };
-//             function setupEventListener(entity) {
-//                 // Remove any old event listeners
-//                 entity.removeEventListener('collected', logCollected);
-//                 // Add a new event listener
-//                 entity.addEventListener('collected', logCollected);
-//             };
-//             document.addEventListener('DOMContentLoaded', () => {
-//                 const entity = document.querySelector('#collectable');
-//                 setupEventListener(entity);
-//             });
-//             //add event listener for new collectable
-//             function onNewEntityAdded(entity) {
-//                 setupEventListener(entity);
-//             };
-//             //check if we're jump and overground for collectible use
-//             document.addEventListener('DOMContentLoaded', function() {
-//                 let player = document.querySelector('#player');
+            //have we collected collectable? 
+            function logCollected(event) {
+                const collectable = document.getElementById('collectable');
+                collectableCount += 1;
+                collectablesFound += 1;
+                collectablePicked = true;
+                for(let i = 0; i < collectables.length; i++){   
+                    collectables.splice(i,1);
+                    platformsEntity.removeChild(collectable);
+                }
+            };
+            function setupEventListener(entity) {
+                // Remove any old event listeners
+                entity.removeEventListener('collected', logCollected);
+                // Add a new event listener
+                entity.addEventListener('collected', logCollected);
+            };
+            document.addEventListener('DOMContentLoaded', () => {
+                const entity = document.querySelector('#collectable');
+                setupEventListener(entity);
+            });
+            //add event listener for new collectable
+            function onNewEntityAdded(entity) {
+                setupEventListener(entity);
+            };
+            //check if we're jump and overground for collectible use
+            document.addEventListener('DOMContentLoaded', function() {
+                let player = document.querySelector('#player');
                 
-//                 player.addEventListener('state-changed', function(event) {
-//                     isJumping = event.detail.isJumping;
-//                     isOverGround = event.detail.isOverGround;
-//                 });
-//                 //get the scene
-//                 const scene = document.querySelector('a-scene');
-//                 //event listener for the 'bonked' event
-//                 scene.addEventListener('bonked', function (event) {
-//                     hasBonked = true;
-//                 });
-//                 scene.addEventListener('hasEnded', function (event){
-//                     // use the boolean value as needed
-//                     hasEnded = true;
-//                 })
-//             });
+                player.addEventListener('state-changed', function(event) {
+                    isJumping = event.detail.isJumping;
+                    isOverGround = event.detail.isOverGround;
+                });
+                //get the scene
+                const scene = document.querySelector('a-scene');
+                //event listener for the 'bonked' event
+                scene.addEventListener('bonked', function (event) {
+                    hasBonked = true;
+                });
+                scene.addEventListener('hasEnded', function (event){
+                    // use the boolean value as needed
+                    hasEnded = true;
+                })
+            });
             //which direction are we facing
             function headingDirection(player) {
                 const rotation = player.getAttribute("rotation");
@@ -925,13 +926,8 @@
                     newOrientation = (direction.z === 'z' || direction.z === '-z') ? direction.z : direction.x;
                 }
                 generatePlatforms(playerPos, stepSequenceLength, inputs, newOrientation);
-                
-                if(sequenceOrder.length %2 == 0){
-                  previousOrientation = newOrientation;  
-                } else {
-                    previousOrientation = previousOrientation;
-                       }
-            };
+                previousOrientation = newOrientation;
+    
             //we move this shit
             function movePlayheads() {
                 const reverseOffset = (stepSequenceLength-0.5) * platformSize;
@@ -1498,10 +1494,6 @@
                             sampler.setParam("rate_1", scale(filter, -2, 1, 0.1, 0.5)) ;
                             sampler.setParam("rate_2", filter+0.5);
                             sampler.setParam("rate_3", filter-0.5);
-                    
-//                    backingMidSynth.setParam("lfoFrequency", filter);
-//                    backingMidSynth.setParam("lfoPitchMod", filter);
-//                    bassSynth.setParam("cutoff", filter *40);
                     sampler.setParam("rate_1", scale(filter, -2, 1, 0.1, 0.5)) ;
                     sampler.setParam("rate_2", filter+0.5);
                     sampler.setParam("rate_3", filter-0.5);
