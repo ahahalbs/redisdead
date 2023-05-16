@@ -469,7 +469,7 @@
                         opacity: 0.5,
                         side: 'double' 
                     });
-                     this.el.setAttribute('box-collider', '');
+                     this.el.setAttribute('box-collider', {});
 
                 },
             });
@@ -1085,7 +1085,7 @@
                 }
                 //playhead biz
                 let playhead = document.createElement('a-entity');
-                playhead.SetAttribute('id', 'playhead');
+                playhead.setAttribute('id', 'playhead');
                 console.log(playhead.getAttribute('id'));
 
 
