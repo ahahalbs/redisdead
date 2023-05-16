@@ -578,7 +578,7 @@
             <!--start point-->
             <a-box class="ground" id="start" position="0 -1 6" width="6" height="1" depth="6" color="white"></a-box>
             <!--end point-->
-            <a-box class='end' id="lurker" position="0 52 -15" width="4" height="0.25" depth="4" color="black" box-collider lurker="target: #player "></a-box>  
+            <a-box class='end' id="lurker" position="0 48 -15" width="4" height="0.25" depth="4" color="black" box-collider lurker="target: #player "></a-box>  
         </a-scene> 
         <script>
             let tempo = 96;
@@ -1104,7 +1104,7 @@
                 //playhead biz
                 let playhead = document.createElement('a-box');
                 playhead.setAttribute('class', 'playheads');
-                //playhead.setAttribute("box-collider", '');
+                playhead.setAttribute("box-collider", '');
                 playhead.setAttribute('id', 'playhead');
                 playhead.setAttribute('material', {color: 'red', transparent: 'true', opacity: '0.5'});
                 playhead.setAttribute('side', 'double');
