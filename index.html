@@ -8,9 +8,9 @@
         </style>
         <script src="enable-threads.js"></script>
         <script crossorigin src="maxiInstruments.v.0.7.1.js"></script>
-        <script src="./dist/aframe-master.min.js"></script>  
+        <script src="aframe-master.min.js"></script>  
         <!-- 	CONTROL YO SHIT -->
-             <script>
+         <script>
                      AFRAME.registerComponent('controller', {
                         schema: {
                             moveSpeed: {type: 'number', default: 3.6},
@@ -128,7 +128,7 @@
                             player.object3D.position.lerp(desiredPosition, this.data.smoothness);
                         },
                     });
-                 </script> 
+         </script> 
         <!--     JUMP AND FALL (BUT NEVER DEATH, STUCK IN THIS ETERNAL LOOP FOREVAAAAH) -->
         <script>AFRAME.registerComponent('jump', {
                 schema: {
@@ -153,36 +153,36 @@
                     this.el.sceneEl.addEventListener('child-detached', this.updateGrounds.bind(this));
 
                     //X
-                    document.querySelector('#left-controller').addEventListener('xbuttondown', function(evt) {
-                        if (!self.isJumping) {
-                            if (self.canJump == true) {
-                                self.isJumping = true;
-                                self.jumpSpeed = self.jumpHeight;
-                                self.isOnGround = false;
-                            }
-                        }
-                    });
+                   document.querySelector('#left-controller').addEventListener('xbuttondown', function(evt) {
+                       if (!self.isJumping) {
+                           if (self.canJump == true) {
+                               self.isJumping = true;
+                               self.jumpSpeed = self.jumpHeight;
+                               self.isOnGround = false;
+                           }
+                       }
+                   });
 
-                    //A
-                    document.querySelector('#right-controller').addEventListener('abuttondown', function(evt) {
-                        if (!self.isJumping) {
-                            if (self.canJump == true) {
-                                self.isJumping = true;
-                                self.jumpSpeed = self.jumpHeight;
-                                self.isOnGround = false;
-                            }
-                        }
-                    });
-                    // Handle space key press
-//                     window.addEventListener('keydown', (event) => {
-//                         if (event.key === ' ' && !this.isJumping) {
-//                             if (this.canJump == true) {
-//                                 this.isJumping = true;
-//                                 this.jumpSpeed = this.jumpHeight;
-//                                 this.isOnGround = false;
-//                             }
-//                         }
-//                     });
+                   //A
+                   document.querySelector('#right-controller').addEventListener('abuttondown', function(evt) {
+                       if (!self.isJumping) {
+                           if (self.canJump == true) {
+                               self.isJumping = true;
+                               self.jumpSpeed = self.jumpHeight;
+                               self.isOnGround = false;
+                           }
+                       }
+                   });
+                     //Handle space key press
+//                      window.addEventListener('keydown', (event) => {
+//                          if (event.key === ' ' && !this.isJumping) {
+//                              if (this.canJump == true) {
+//                                  this.isJumping = true;
+//                                  this.jumpSpeed = this.jumpHeight;
+//                                  this.isOnGround = false;
+//                              }
+//                          }
+//                      });
 
                 }, updateGrounds: function() {
                     this.grounds = Array.from(document.querySelectorAll(this.data.groundSelector));
@@ -556,26 +556,30 @@
     <body>
         <a-scene stats background="color: #005AFF">
             <!--       vr controllers -->
+
             <a-entity id="left-controller" oculus-touch-controls="hand: left" controller></a-entity>
             <a-entity id="right-controller" oculus-touch-controls="hand: right" controller></a-entity>
+
 
             <!--this is where the magic happens-->
             <a-entity class="ground" id="platformsEntity"></a-entity> 
 
             <!--      vr camera/player/rig/akaballache -->
+
                         <a-entity id="rig" position="0 0 0" >
 <a-entity id="player" position="0 1.6 6" width="1" height="1.6" depth="1" look controls jump>
 <a-camera id="camera" camera look controls ></a-camera>
 </a-entity>
 </a-entity> 
 
-<!--             <a-entity id="player" camera position="0 2 8"width="1.0" height="2"depth="1" look-controls wasd-controls="acceleration: 60" jump></a-entity>
- -->
+
+<!--              <a-entity id="player" camera position="0 2 8"width="1.0" height="2"depth="1" look-controls wasd-controls="acceleration: 60" jump></a-entity>
+  -->
             <a-plane id="killplane" side="double" position="0 -18 0" rotation="-90 0 0" width="500" height="500" color="red"></a-plane>
             <!--start point-->
             <a-box class="ground" id="start" position="0 -1 6" width="6" height="1" depth="6" color="white"></a-box>
             <!--end point-->
-            <a-box class='end' id="lurker" position="0 28 -15" width="4" height="0.25" depth="4" color="black" box-collider lurker="target: #player "></a-box>  
+            <a-box class='end' id="lurker" position="0 52 -15" width="4" height="0.25" depth="4" color="black" box-collider lurker="target: #player "></a-box>  
         </a-scene> 
         <script>
             let tempo = 96;
@@ -664,6 +668,7 @@
             let snares= [false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false];
             let hihats= [false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false];
             let bells = [false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false];
+            let hasLoaded = false;
             //things that trigger sound
             let hasBonked = false;
             let activeNote = null;
@@ -741,73 +746,77 @@
             let leftController = document.querySelector('#left-controller');
 
             //right controller
-                        rightController.addEventListener('abuttondown', function(evt) { handleButtonPress(evt); });
-                        //rightController.addEventListener('abuttonup', function(evt) {  });
-                        rightController.addEventListener('bbuttondown', function(evt) { destroyStep = true; handleButtonPress(evt); });
-                        rightController.addEventListener('bbuttonup', function(evt) { destroyStep = false; });
-                        rightController.addEventListener('righttriggerdown', function(evt) { snareTrigger = true; ins = 1; handleButtonPress(evt); });
-                        rightController.addEventListener('righttriggerup', function(evt) { snareTrigger = false; ins = -1; });
-                        rightController.addEventListener('rightgripdown', function(evt) { bellTrigger = true; ins = 3; handleButtonPress(evt);});
-                        rightController.addEventListener('rightgripup', function(evt) { bellTrigger = false; ins = -1; });
-
-            //             //left controller
-                        leftController.addEventListener('xbuttondown', function(evt) { handleButtonPress(evt); });
-                        //leftController.addEventListener('xbuttonup', function(evt) {  });
-                        leftController.addEventListener('ybuttondown', function(evt) { destroyStep = true; handleButtonPress(evt); });
-                        leftController.addEventListener('ybuttonup', function(evt) { destroyStep = false; });
-                        leftController.addEventListener('lefttriggerdown', function(evt) { kickTrigger = true; ins = 0; handleButtonPress(evt); });
-                        leftController.addEventListener('lefttriggerup', function(evt) { ins = -1; kickTrigger = false; });
-                        leftController.addEventListener('leftgripdown', function(evt) { hihatTrigger = true; ins = 2; handleButtonPress(evt); });
-                        leftController.addEventListener('leftgripup', function(evt) { hihatTrigger = false; ins = -1 });
-            //first button presson only
-            function handleButtonPress(evt) {
-                if (soundUP == false) {                 
-                    playSomething(); 
-                    soundUP = true;
-                }
-            }    
-//             document.addEventListener("keydown", function(event) {
-//                 if(event.key == '1'){
-//                     ins = 0;
-//                     kickTrigger = true;
-//                 }
-//                 if(event.key == '2'){
-//                     ins = 1;
-//                     snareTrigger = true;
-//                 }
-//                 if(event.key == '3'){
-//                     hihatTrigger = true;
-//                 }
-//                 if(event.key == '4'){
-//                     bellTrigger = true;
-//                 }
-//                 if(event.key == 'q' || event.key == 'Q'){
-//                     destroyStep = true;
-//                     console.log("Q is pressed");
-//                 }     
-//                 keyPressed = event.key;
-//             });
-//             //inputs key up
-//             document.addEventListener("keyup", function(event) {
-//                 if(event.key == '1'){
-//                     ins = -1;
-//                     kickTrigger = false;
-//                 }
-//                 if(event.key == '2'){
-//                     ins = -1;
-//                     snareTrigger = false;
-//                 }
-//                 if(event.key == '3'){
-//                     hihatTrigger = false;
-//                 }
-//                 if(event.key == '4'){
-//                     bellTrigger = false;
-//                 }
-//                 if(event.key == 'q' || event.key == 'Q'){
-//                     destroyStep = false;
-//                 } 
-//                 keyPressed = event.key;
-//             });
+                       rightController.addEventListener('abuttondown', function(evt) { handleButtonPress(evt); });
+                       //rightController.addEventListener('abuttonup', function(evt) {  });
+                       rightController.addEventListener('bbuttondown', function(evt) { destroyStep = true; handleButtonPress(evt); });
+                       rightController.addEventListener('bbuttonup', function(evt) { destroyStep = false; });
+                       rightController.addEventListener('righttriggerdown', function(evt) { snareTrigger = true; ins = 1; handleButtonPress(evt); });
+                       rightController.addEventListener('righttriggerup', function(evt) { snareTrigger = false; ins = -1; });
+                       rightController.addEventListener('rightgripdown', function(evt) { bellTrigger = true; ins = 3; handleButtonPress(evt);});
+                       rightController.addEventListener('rightgripup', function(evt) { bellTrigger = false; ins = -1; });
+//
+//            //             //left controller
+                       leftController.addEventListener('xbuttondown', function(evt) { handleButtonPress(evt); });
+                       //leftController.addEventListener('xbuttonup', function(evt) {  });
+                       leftController.addEventListener('ybuttondown', function(evt) { destroyStep = true; handleButtonPress(evt); });
+                       leftController.addEventListener('ybuttonup', function(evt) { destroyStep = false; });
+                       leftController.addEventListener('lefttriggerdown', function(evt) { kickTrigger = true; ins = 0; handleButtonPress(evt); });
+                       leftController.addEventListener('lefttriggerup', function(evt) { ins = -1; kickTrigger = false; });
+                       leftController.addEventListener('leftgripdown', function(evt) { hihatTrigger = true; ins = 2; handleButtonPress(evt); });
+                       leftController.addEventListener('leftgripup', function(evt) { hihatTrigger = false; ins = -1 });
+           //first button presson only
+           function handleButtonPress(evt) {
+               if (soundUP == false) {                 
+                   playSomething(); 
+                   soundUP = true;
+               }
+           }    
+//              document.addEventListener("keydown", function(event) {
+//                  if(event.key == '1'){
+//                      ins = 0;
+//                      kickTrigger = true;
+//                  }
+//                  if(event.key == '2'){
+//                      ins = 1;
+//                      snareTrigger = true;
+//                  }
+//                  if(event.key == '3'){
+//                      ins = 2;
+//                      hihatTrigger = true;
+//                  }
+//                  if(event.key == '4'){
+//                      ins = 3;
+//                      bellTrigger = true;
+//                  }
+//                  if(event.key == 'q' || event.key == 'Q'){
+//                      destroyStep = true;
+//                      console.log("Q is pressed");
+//                  }     
+//                  keyPressed = event.key;
+//              });
+             //inputs key up
+//              document.addEventListener("keyup", function(event) {
+//                  if(event.key == '1'){
+//                      ins = -1;
+//                      kickTrigger = false;
+//                  }
+//                  if(event.key == '2'){
+//                      ins = -1;
+//                      snareTrigger = false;
+//                  }
+//                  if(event.key == '3'){
+//                      ins = -1;
+//                      hihatTrigger = false;
+//                  }
+//                  if(event.key == '4'){
+//                      ins = -1;
+//                      bellTrigger = false;
+//                  }
+//                  if(event.key == 'q' || event.key == 'Q'){
+//                      destroyStep = false;
+//                  } 
+//                  keyPressed = event.key;
+//              });
 
             //have we collected collectable? 
             function logCollected(event) {
@@ -1090,7 +1099,7 @@
                 //playhead biz
                 let playhead = document.createElement('a-box');
                 playhead.setAttribute('class', 'playheads');
-                playhead.setAttribute("box-collider", '');
+                //playhead.setAttribute("box-collider", '');
                 playhead.setAttribute('id', 'playhead');
                 playhead.setAttribute('material', {color: 'red', transparent: 'true', opacity: '0.5'});
                 playhead.setAttribute('side', 'double');
@@ -1467,10 +1476,15 @@
 
                 //jump sounds
                 if(isJumping == true){
-                    filter += 0.5;  
-                    backingMidSynth.setParam("lfoFrequency", filter);
-                    backingMidSynth.setParam("lfoPitchMod", filter);
-                    bassSynth.setParam("cutoff", filter *40);
+                    filter += 0.5;
+                    
+                            backingMidSynth.setParam("lfoFrequency", filter);
+                            backingMidSynth.setParam("lfoPitchMod", filter);
+                            bassSynth.setParam("cutoff", filter *40);
+                            sampler.setParam("rate_1", scale(filter, -2, 1, 0.1, 0.5)) ;
+                            sampler.setParam("rate_2", filter+0.5);
+                            sampler.setParam("rate_3", filter-0.5);
+                    
                     sampler.setParam("rate_1", scale(filter, -2, 1, 0.1, 0.5)) ;
                     sampler.setParam("rate_2", filter+0.5);
                     sampler.setParam("rate_3", filter-0.5);
@@ -1579,12 +1593,12 @@
                         platforms.splice(i, 1);
                     }
                     collectables.splice(0, collectables.length);
-                    platformsEntity.remove(collectable);
+                    //platformsEntity.remove(collectable);
                 } 
                 else if (eventChangeCounter % 5 === 4) {
                     star.setAttribute('color', 'Black');
-                    sampler.mute();
-                    backingMidSynth.mute();
+                   sampler.mute();
+//                    backingMidSynth.mute();
                     bassSynth.mute();
                     instruments.playPause();
                     instruments.rewind();
@@ -1713,11 +1727,10 @@
                     bassSynth.setLoop(16,4);
                     sampler.setLoop(16,4);
                     instruments.playPause();
-
+                    hasLoaded = true;
                     instruments.setOnTick((playHeads)=> {
                         //The current playhead of the third instrument added
                         if(playHeads[2] % 6 == 4) {
-                            metro+=0.5;
                             metro++;
                         }
 
@@ -1746,7 +1759,9 @@
                     useCollectables(player, headingDirection(player), ins);
                     sequenceTracker(myDrumSequence);
                     updatePlatforms();
-                    updateSounds();
+                    if(hasLoaded){
+                      updateSounds();  
+                    }
                     destroyer();
 
                 }
