@@ -942,7 +942,7 @@
                 return facing;
             };
             //spend collectables (to generate platforms)
-            async function useCollectables(player, facing, inputs) {
+           function useCollectables(player, facing, inputs) {
                 const playerPos = player.getAttribute('position');
 
                 if (collectableCount <= 0 || isOverGround !== true || isJumping === true) {
@@ -1454,11 +1454,11 @@
                 selector = -1;
             };
             //holding until filled
-            async function runBothPlatforms(){
-                await useCollectables(player, headingDirection(directionEntity), ins);
-                updatePlatforms();
+//             async function runBothPlatforms(){
+//                 await useCollectables(player, headingDirection(directionEntity), ins);
+//                 updatePlatforms();
                 
-            }
+//             }
             //destroy our playforms if our players want to do that
             function destroyer(){
                 const collectable = document.getElementById('collectable');
@@ -1787,8 +1787,9 @@
                     movePlayheads();
                     stepSequencer(); 
                     sequenceTracker(myDrumSequence);
-                    runBothPlatforms();
-                    //updatePlatforms();
+                    useCollectables(player, headingDirection(directionEntity), ins);
+                    updatePlatforms();                  
+                    //runBothPlatforms();
                     if(hasLoaded){
                       updateSounds();  
                     }
