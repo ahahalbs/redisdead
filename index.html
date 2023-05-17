@@ -1471,11 +1471,11 @@
                 } 
                 else if (eventChangeCounter % 5 === 3) {
                     killplane.setAttribute('color', 'black' );
-                    for(let i = 16; i < platforms.length; i++){
+                    for(let i = 0; i < platforms.length; i++){
                         platforms[i].p.remove();
                         platforms.splice(i, 1);
                     }
-                    for(let i = 1; i < playheads.length; i++){
+                    for(let i = 0; i < playheads.length; i++){
                         playheads[i].remove();
                         playheads.splice(i, 1);
                     }
