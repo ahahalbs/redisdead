@@ -563,7 +563,7 @@ side: 'double'
             <!--this is where the magic happens-->
             <a-entity class="ground" id="platformsEntity"></a-entity> 
             <!--vr camera/player/rig -->
-            <a-entity id="rig" position="0 -0 0" >
+            <a-entity id="rig" position="0 0 0" >
                 <a-entity id="player" position="0 1.65 6" width="1" height="1.6" depth="1" jump>
                     <a-camera id="camera" scale = "0.25 0.25 0.25 "camera ></a-camera>
                 </a-entity>
@@ -687,7 +687,9 @@ side: 'double'
                 let platform = document.createElement('a-box');
                 platform.setAttribute('box-collider', '');
                 platform.setAttribute('class', 'ground');
-                platform.setAttribute('id', 'platform');  // give each platform a unique id
+                platform.setAttribute('id', 'platform');
+                platform.setAttribute("scale", { x:1, y:1, z:1});
+
                 platformPool.push(platform);
             }
             //initialise playhead pool
@@ -701,10 +703,10 @@ side: 'double'
                 playhead.setAttribute('width', platformSize - 0.1);
                 playhead.setAttribute("height", platformSize - 0.1);
                 playhead.setAttribute("depth", platformSize - 0.1);
-                playhead.setAttribute('position', {x: 0, y:0, z:0});
+                playhead.setAttribute('position', {x: 1, y:0.98, z:1});
                 playhead.setAttribute("visible", "false"); 
                 playheadsPool.push(playhead);
-                platformsEntity.appendChild(playhead);
+                //platformsEntity.appendChild(playhead);
             }
             function getPlayhead() {
                 for (let i = 0; i < playheads.length; i++) {
@@ -720,9 +722,11 @@ side: 'double'
                 playhead.setAttribute('width', platformSize - 0.1);
                 playhead.setAttribute("height", platformSize - 0.1);
                 playhead.setAttribute("depth", platformSize - 0.1);
-                platformsEntity.appendChild(playhead);
+                playhead.setAttribute("scale", { x:0, y:0, z:0});
+                
+               // platformsEntity.appendChild(playhead);
                 playheadsPool.push(playhead);
-                return playhead
+                return playhead;
             }
 
             //initialise our environment
@@ -755,9 +759,9 @@ side: 'double'
                 //get first playhead for platforms
                 let playhead = getPlayhead();
                 playhead.setAttribute('position', { x: 0, y: platformSize + 0.01, z: 0 });
-                playhead.setAttribute("box-collider", 'true');
+                playhead.setAttribute("box-collider", '');
                 playhead.setAttribute('visible', 'true');
-                playheads.push({p: playhead, o: '-z',startX: 0 , startZ: 0, modDel: 0, modmult: 1});
+                playheads.push({p: playhead, o: '-z',startX: 0 , startZ: 0, modDel: 0});
                 platformsEntity.appendChild(playhead);
 
                 //create the first collectable
