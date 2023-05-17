@@ -1473,11 +1473,11 @@
                 else if (eventChangeCounter % 5 === 3) {
                     killplane.setAttribute('color', 'black' );
                     for(let i = 16; i < platforms.length; i++){
-                        platforms[i].p.remove();
+                        //platforms[i].p.remove();
                         platforms.splice(i, 1);
                     }
                     for(let i = 16; i < playheads.length; i++){
-                        playheads[i].remove();
+                       // playheads[i].remove();
                         playheads.splice(i, 1);
                     }
                     collectables.splice(0, collectables.length);
