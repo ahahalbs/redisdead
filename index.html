@@ -1506,7 +1506,7 @@
                     scene.setAttribute('background',{color: 'black'});
                 } 
                 else if (eventChangeCounter % 5 === 3) {
-                    killplane.setAttribute('color', 'black' );
+                    killplane.setAttribute('color', 'white' );
                     for(let i = 0; i < platforms.length; i++){
                         platforms[i].p.remove();
                         platforms.splice(i, 1);
@@ -1515,9 +1515,14 @@
                         playheads[i].p.remove();
                         playheads.splice(i, 1);
                     }
+                    instruments.pausePlay();
+                    sampler.mute();
+                    backingMidSynth.mute();
+                    bassSynth.mute();
                     collectables.splice(0, collectables.length);
                     platformsEntity.remove(collectable);
                     platformsEntity.removeAll();
+                    
                 } 
                 else if (eventChangeCounter % 5 === 4) {
                     star.setAttribute('color', 'Black');
