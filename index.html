@@ -984,23 +984,23 @@ if (!playhead) {
 let size;
 switch(sequenceOrder[sequenceOrder.length-1]){
     case 0:
-        size = '3* platformSize-0.1 platformSize-0.1 3* platformSize-0.1';
+        size = {width: 3 * platformSize - 0.1, height: platformSize - 0.1, depth: 3 * platformSize - 0.1};
         break;
     case 1:
-        size = '(platformSize-0.1)/2 (platformSize-0.1)*3 (platformSize-0.1)/2';
+        size = {width: (platformSize - 0.1) / 2, height: (platformSize - 0.1) * 3, depth: (platformSize - 0.1) / 2};
         break;
     case 2:
         if (orientation == 'x' || orientation == '-x'){
-            size = '(platformSize-0.1)*4 (platformSize-0.1)/4 (platformSize-0.1)/4';
+            size = {width: (platformSize - 0.1) * 4, height: (platformSize - 0.1) / 4, depth: (platformSize - 0.1) / 4};
         } else {
-            size = '(platformSize-0.1)/4 (platformSize-0.1)/4 (platformSize-0.1)*4'; 
+            size = {width: (platformSize - 0.1) / 4, height: (platformSize - 0.1) / 4, depth: (platformSize - 0.1) * 4};
         }
         break;
     default:
         if (orientation == 'x' || orientation == '-x'){
-            size = '(platformSize-0.1) (platformSize-0.1)/4 (platformSize-0.1)*3'; 
+            size = {width: (platformSize - 0.1), height: (platformSize - 0.1) / 4, depth: (platformSize - 0.1) * 3};
         } else {
-            size = '(platformSize-0.1)*3 (platformSize-0.1)/4 (platformSize-0.1)'; 
+            size = {width: (platformSize - 0.1) * 3, height: (platformSize - 0.1) / 4, depth: (platformSize - 0.1)};
         }
         break;
 }
