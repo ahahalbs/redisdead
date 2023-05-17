@@ -1521,10 +1521,12 @@
                 } 
                 else if (eventChangeCounter % 5 === 4) {
                     star.setAttribute('color', 'Black');
-                    backingMidSynth.unmute();
+                    //backingMidSynth.unmute();
+                    instruments.pausePlay();
+                    star.setAttribute('color', 'white');
                     
 
-                    canStart = true;
+                    canStart = false;
                     hasEnded = false;
                 }
             };
