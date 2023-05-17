@@ -1759,12 +1759,12 @@ side: 'double'
                 });
             };
             //start the step sequencer
-            //             document.addEventListener('keydown', (event) => {
-            //                 if (event.key && soundUP == false){
-            //                     playSomething();;
-            //                     soundUP = true; 
-            //                 }
-            //             });
+                        document.addEventListener('keydown', (event) => {
+                            if (event.key && soundUP == false){
+                                playSomething();;
+                                soundUP = true; 
+                            }
+                        });
 
             //don't run script until we have a scene!
             if (scene.hasLoaded) {
