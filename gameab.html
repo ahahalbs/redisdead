@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,14 +7,462 @@
          <link rel="stylesheet" type="text/css" href="myStyle.css">
         <script src="enable-threads.js"></script>
         <script crossorigin src="maxiInstruments.v.0.7.1.js"></script>
-        <script src="./dist/aframe-master.min.js"></script>      
+        <script src="./dist/aframe-master.min.js"></script>
+	<!-- oculus controller -->
+        <script>AFRAME.registerComponent('controller', {
+                schema: {
+                    moveSpeed: {type: 'number', default: 3.6},
+                    smoothness: {type: 'number', default: 0.05}
+                },
+                init: function() {
+                    this.leftAxisX = 0;
+                    this.leftAxisY = 0;
+                    let self = this;
+
+                    this.el.addEventListener('thumbstickmoved', function(event) {
+                        self.leftAxisX = event.detail.x;
+                        self.leftAxisY = event.detail.y;
+                    });
+
+                    //X button
+                    this.el.addEventListener('xbuttondown', function(event) {
+                        self.el.emit('xbuttonpressed', {pressed: true});
+                    });
+
+                    this.el.addEventListener('xbuttonup', function(event) {
+                        self.el.emit('xbuttonreleased', {pressed: false});
+                    });
+
+                    //Y button
+                    this.el.addEventListener('ybuttondown', function(event) {
+                        self.el.emit('ybuttonpressed', {pressed: true});
+                    });
+
+                    this.el.addEventListener('ybuttonup', function(event) {
+                        self.el.emit('ybuttonreleased', {pressed: false});
+                    });
+
+                    //A button
+                    this.el.addEventListener('abuttondown', function(event) {
+                        self.el.emit('abuttonpressed', {pressed: true});
+                    });
+
+                    this.el.addEventListener('abuttonup', function(event) {
+                        self.el.emit('abuttonreleased', {pressed: false});
+                    });
+
+                    //B button
+                    this.el.addEventListener('bbuttondown', function(event) {
+                        self.el.emit('bbuttonpressed', {pressed: true});
+                    });
+
+                    this.el.addEventListener('bbuttonup', function(event) {
+                        self.el.emit('bbuttonreleased', {pressed: false});
+                    });
+
+                    //left trigger
+                    this.el.addEventListener('triggerdown', function(event) {
+                        self.el.emit('lefttriggerdown', {pressed: true});
+                    });
+
+                    this.el.addEventListener('triggerup', function(event) {
+                        self.el.emit('lefttriggerup', {pressed: false});
+                    });
+
+                    //right trigger
+                    this.el.addEventListener('triggerdown', function(event) {
+                        self.el.emit('righttriggerdown', {pressed: true});
+                    });
+
+                    this.el.addEventListener('triggerup', function(event) {
+                        self.el.emit('righttriggerup', {pressed: false});
+                    });
+
+                    //left grip
+                    this.el.addEventListener('gripdown', function(event) {
+                        self.el.emit('leftgripdown', {pressed: true});
+                    });
+
+                    this.el.addEventListener('gripup', function(event) {
+                        self.el.emit('leftgripup', {pressed: false});
+                    });
+
+                    //right grip
+                    this.el.addEventListener('gripdown', function(event) {
+                        self.el.emit('rightgripdown', {pressed: true});
+                    });
+
+                    this.el.addEventListener('gripup', function(event) {
+                        self.el.emit('rightgripup', {pressed: false});
+                    });
+                },
+
+                tick: function() {
+                    let player = document.querySelector("#player");
+                    let camera = document.querySelector("#camera");
+                    let direction = new THREE.Vector3();
+                    let left = new THREE.Vector3();
+
+                    //camera's direction for movement
+                    camera.object3D.getWorldDirection(direction);
+
+                    //lock y
+                    direction.y = 0;
+
+                    //normalize the direction vector (tsettingy to 0 can fuck vector length)
+                    direction.normalize();
+
+                    //work out left direction
+                    left.crossVectors(camera.object3D.up, direction);
+
+                    //movement based on thumbstick position and speed
+                    let forwardMovement = direction.multiplyScalar(this.leftAxisY * this.data.moveSpeed);
+                    let sideMovement = left.multiplyScalar(this.leftAxisX * this.data.moveSpeed);
+
+                    //add forward and side movement vectors to get the total movement vector
+                    let movement = new THREE.Vector3().addVectors(forwardMovement, sideMovement);
+                    let desiredPosition = new THREE.Vector3().addVectors(player.object3D.position, movement);
+                    //smooth
+                    player.object3D.position.lerp(desiredPosition, this.data.smoothness);
+                },
+            });
+        </script> 
+        <!-- jump and fall and detect ground and the many edge cases -->
+        <script>AFRAME.registerComponent('jump', {
+                schema: {
+                    groundSelector: { type: "string", default: ".ground"},
+                },
+                init: function () {
+                    this.grounds = [];
+                    this.player = document.querySelector('#player');
+                    this.isOverGround = true;
+                    this.isOnGround = false;
+                    this.isJumping = false;
+                    this.jumpHeight = 0.30;
+                    this.jumpSpeed = this.jumpHeight;
+                    this.fallSpeed = 0.5;
+                    this.canJump = true;
+                    this.groundCheck = { isOverGround: false, groundY: 0, halfGroundX: 0, halfGroundZ: 0, lowY: 0, highY: 0 };
+                    let self = this; 
+                    //initialize
+                    this.updateGrounds();
+
+                    this.el.sceneEl.addEventListener('child-attached', this.updateGrounds.bind(this));
+                    this.el.sceneEl.addEventListener('child-detached', this.updateGrounds.bind(this));
+
+                    //X
+                    document.querySelector('#left-controller').addEventListener('xbuttondown', function(evt) {
+                        if (!self.isJumping) {
+                            if (self.canJump == true) {
+                                self.isJumping = true;
+                                self.jumpSpeed = self.jumpHeight;
+                                self.isOnGround = false;
+                            }
+                        }
+                    });
+                    //A
+                    document.querySelector('#right-controller').addEventListener('abuttondown', function(evt) {
+                        if (!self.isJumping) {
+                            if (self.canJump == true) {
+                                self.isJumping = true;
+                                self.jumpSpeed = self.jumpHeight;
+                                self.isOnGround = false;
+                            }
+                        }
+                    });
+
+                    //                      window.addEventListener('keydown', (event) => {
+                    //                          if (event.key === ' ' && !this.isJumping) {
+                    //                              if (this.canJump == true) {
+                    //                                  this.isJumping = true;
+                    //                                  this.jumpSpeed = this.jumpHeight;
+                    //                                  this.isOnGround = false;
+                    //                              }
+                    //                          }
+                    //                      });
+
+                }, updateGrounds: function() {
+                    this.grounds = Array.from(document.querySelectorAll(this.data.groundSelector));
+                },
+                tick: function () {
+                    const currentPosition = this.player.object3D.position;
+                    let lowY, highY;
+                    //see if we're over/under any platforms excluding playheads
+                    this.groundCheck = Array.from(this.grounds).reduce((result, ground) => {
+
+                        halfGroundX = ground.getAttribute("width") / 2;
+                        halfGroundZ = ground.getAttribute("depth") / 2;
+                        groundPosition = ground.getAttribute("position");
+                        groundY = parseFloat(ground.getAttribute("height"));
+                        newYLevel = groundY+groundPosition.y;  
+
+                        const isOverGround = currentPosition.x >= groundPosition.x - halfGroundX &&
+                              currentPosition.x <= groundPosition.x + halfGroundX &&
+                              currentPosition.z >= groundPosition.z - halfGroundZ &&
+                              currentPosition.z <= groundPosition.z + halfGroundZ;
+
+                        if (isOverGround && halfGroundX === result.halfGroundX && halfGroundZ === result.halfGroundZ) {
+                            if (ground.id !== "playhead") {
+                                if (newYLevel < result.lowY) {
+                                    result.lowY = newYLevel;
+                                }
+                                if (newYLevel > result.highY) {
+                                    result.highY = newYLevel;
+                                }
+                            }
+                            return result;
+                        } else if (isOverGround) {
+                            return {
+                                isOverGround: true,
+                                groundY: newYLevel,
+                                halfGroundX: halfGroundX, 
+                                halfGroundZ: halfGroundZ,
+                                lowY: newYLevel,
+                                highY: (ground.id === "playhead") ? 0 : newYLevel
+                            };
+                        } else {
+                            return result;
+                        }
+                    }, { isOverGround: false, groundY: 0, halfGroundX: 0, halfGroundZ: 0, lowY: 0, highY: 0 });
+
+                    if (!this.isJumping && this.groundCheck.isOverGround && currentPosition.y <= this.groundCheck.lowY  ) {
+                        this.isOnGround = true;
+                    } else {
+                        this.isOnGround = false;
+                    }
+                    if (this.isOnGround && !this.isJumping) {
+                        this.canJump = true;
+                    }
+
+                    //send our values for sound
+                    if (this.isJumping !== this.prevIsJumping || this.groundCheck.isOverGround !== this.groundCheck.prevIsOverGround) {
+                        this.prevIsJumping = this.isJumping;
+                        this.groundCheck.prevIsOverGround = this.groundCheck.isOverGround;
+                        this.el.emit('state-changed', {isJumping: this.isJumping, isOverGround: this.groundCheck.isOverGround});
+                    }
+                    //gotta jump up jump up to get down
+                    if (this.isJumping) {
+
+                        this.jumpSpeed -= 0.01;
+                        const newY = Math.max(currentPosition.y + this.jumpSpeed,this.groundCheck.lowY);
+
+                        let clamp;
+                        if(newY >= this.groundCheck.lowY && newY <= this.groundCheck.highY){
+                            this.jumpSpeed -=0.01;
+                            clamp = Math.max(newY, this.groundCheck.lowY);  
+                        } else 
+                            if(newY >= this.groundCheck.highY){
+                                clamp = Math.max(newY,this.groundCheck.highY);   
+                            }
+                        this.player.object3D.position.set(currentPosition.x, clamp+0.1, currentPosition.z);
+
+                        if (this.jumpSpeed <= -this.fallSpeed) {
+                            this.isJumping = false;
+                        }
+                    } 
+                    //so we can land on other platforms jumping from a different height
+                    else if(this.groundCheck.isOverGround && currentPosition.y >= this.groundCheck.groundY-0.6|| !this.groundCheck.isOverGround && currentPosition.y > this.groundCheck.lowY){
+                        this.jumpSpeed = 0.;
+                        let fall = -0.5;
+
+                        if(currentPosition.y >= this.groundCheck.highY){
+                            const newY = Math.max(currentPosition.y + this.jumpSpeed+fall,this.groundCheck.highY);
+                            const clamped = Math.max(newY,this.groundCheck.lowY);
+                            this.player.object3D.position.set(currentPosition.x, clamped, currentPosition.z);
+                            this.canJump = true; 
+                            this.jumpSpeed = this.jumpHeight;
+                        } else {
+                            const newY = Math.max(currentPosition.y + this.jumpSpeed+fall,this.groundCheck.lowY);
+                            //const clamped = Math.max(newY,this.groundCheck.lowY);
+                            this.player.object3D.position.set(currentPosition.x, newY, currentPosition.z);
+                            this.canJump = true; 
+                            this.jumpSpeed =this.jumpHeight;
+                        }
+                    }
+                    //fall off the edge
+                    else if(!this.groundCheck.isOverGround && currentPosition.y <= this.groundCheck.lowY){
+                        let fall = -0.5;
+                        const newY = currentPosition.y + fall;
+                        this.player.object3D.position.set(currentPosition.x, newY, currentPosition.z);
+                        this.canJump = false;
+                    }
+                    //get rid of the hang if player moves back under ground to trigger is overground bool
+                    else if(this.groundCheck.isOverGround && currentPosition.y <= this.groundCheck.lowY){
+                        let fall = -0.5;
+                        const newY = currentPosition.y + fall
+                        this.player.object3D.position.set(currentPosition.x,newY, currentPosition.z);
+                        this.canJump = false;
+                    }
+                    //reset the player if they fall too far
+                    if(currentPosition.y <= -82){
+                        //make sure y is platformSize innit
+                        this.player.object3D.position.set(0, 2, 8);
+                    }
+                },
+            });
+        </script>
+        <!-- my everything collider -->
+        <script>AFRAME.registerComponent("box-collider", {
+                schema: {
+                    hasBonked: { type: 'boolean', default: false }
+                },
+                init: function () {
+                    this.player = document.querySelector("#player");
+                    this.collected = false;
+                    this.hasBonked = false;
+                    this.hasEnded = false;
+                    this.distanceThreshold = 4.51;
+
+                },
+                tick: function () {
+                    this.player = document.querySelector("#player");
+                    const playerPos = new THREE.Vector3();
+                    const playerObj3D = this.player.object3D;
+                    playerObj3D.getWorldPosition(playerPos);
+
+                    const playerScale = this.player.getAttribute("scale");
+                    const boxPos = this.el.object3D.position;
+                    const bosRot = this.el.object3D.rotation;
+                    const boxID = this.el.getAttribute("id");
+                    const boxScale = this.el.getAttribute("scale");
+
+                    const distance = playerPos.distanceTo(boxPos);
+
+                    //check for collisions within the distance threshold
+                    if (distance <= this.distanceThreshold) {
+
+                        const halfWidthBox = 0.5 * parseFloat(this.el.getAttribute("width"));
+                        const halfHeightBox = 0.5 * parseFloat(this.el.getAttribute("height"));
+                        const halfDepthBox = 0.5 * parseFloat(this.el.getAttribute("depth"));
+
+                        const halfWidthPlayer = 0.5 * parseFloat(this.player.getAttribute("width"));
+                        const halfHeightPlayer = 0.5 * parseFloat(this.player.getAttribute("height"));
+                        const halfDepthPlayer = 0.5  * parseFloat(this.player.getAttribute("depth"));
+
+                        //distances
+                        const dx = playerPos.x - boxPos.x;
+                        const dy = playerPos.y - boxPos.y;
+                        const dz = playerPos.z - boxPos.z;
+                        //take the right face
+                        const overlapX = halfWidthBox + halfWidthPlayer - Math.abs(dx);
+                        const overlapY = halfHeightBox + halfHeightPlayer - Math.abs(dy);
+                        const overlapZ = halfDepthBox + halfDepthPlayer - Math.abs(dz);
+
+                        if (overlapX > 0 && overlapY >= 0 && overlapZ > 0) {
+                            const minOverlap = Math.min(overlapX, overlapY, overlapZ);
+                            if (minOverlap === overlapX) {
+                                if(dx > 0){
+                                    this.handleCollision(boxID, "x", halfWidthBox, halfWidthPlayer, boxPos.x, playerPos);
+                                } 
+                                else {
+                                    this.handleCollision(boxID, "-x", halfWidthBox, halfWidthPlayer, boxPos.x, playerPos);
+                                }
+                            } else if (minOverlap === overlapY) {
+                                if(dy > 0){
+                                    this.handleCollision(boxID, "y", halfHeightBox, halfHeightPlayer, boxPos.y, playerPos);
+                                }
+                                else {
+                                    this.handleCollision(boxID, "-y", halfHeightBox, halfHeightPlayer, boxPos.y, playerPos);
+                                }
+                            } else if (minOverlap === overlapZ) {
+                                if(dz > 0) {
+                                    this.handleCollision(boxID, "z", halfDepthBox, halfDepthPlayer, boxPos.z, playerPos);
+                                }
+                                else {
+                                    this.handleCollision(boxID, "-z", halfDepthBox, halfDepthPlayer, boxPos.z, playerPos);
+                                }
+                            }
+                        }
+                    }
+                },
+                handleCollision: function(boxID, direction, halfBoxSize, halfPlayerSize, boxPos, playerPos) {
+                    switch (boxID) {
+                        case "platform":
+                            if (direction === "x" || direction === "-x") {
+                                playerPos.x = direction === "x" ? boxPos + halfBoxSize + halfPlayerSize+0.5 : boxPos - halfBoxSize - halfPlayerSize -0.5;
+                            } else if (direction === "y" || direction === "-y") {
+                                playerPos.y = direction === "y" ? boxPos + halfBoxSize + halfPlayerSize +0.11: boxPos - halfBoxSize - halfPlayerSize ;
+                            } else if (direction === "z" || direction === "-z") {
+                                playerPos.z = direction === "z" ? boxPos + halfBoxSize + halfPlayerSize+0.5 : boxPos - halfBoxSize - halfPlayerSize - 0.5;
+                            }
+                            break;
+                        case "playhead":
+                            if (direction === "x" || direction === "-x") {
+                                playerPos.x = direction === "x" ? boxPos + (halfBoxSize * 2) + halfPlayerSize + 3.1 : boxPos - (halfBoxSize * 2) - halfPlayerSize - 3.1;
+                            } else if (direction === "y" || direction === "-y") {
+                                playerPos.y = direction === "y" ? boxPos + halfBoxSize + halfPlayerSize : boxPos - halfBoxSize - halfPlayerSize;
+                            } else if (direction === "z" || direction === "-z") {
+                                playerPos.z = direction === "z" ? boxPos + (halfBoxSize * 2) + halfPlayerSize + 3.1 : boxPos - (halfBoxSize * 2) - halfPlayerSize - 3.1;
+                            }
+                            this.hasBonked = true;
+                            this.el.sceneEl.emit('bonked', { detail: { entity: this.el } });
+                            break;
+                        case "collectable":
+                            this.collected = true;
+                            this.el.emit('collected', { detail: {collected: this.collected}});
+                            break;
+                        case "lurker":
+                            this.hasEnded = true;
+                            this.el.sceneEl.emit('hasEnded', {detail: {hasEnded: this.hasEnded}});
+                            if (direction === "y" || direction === "-y") {
+                                playerPos.y = direction === "y" ? boxPos + halfBoxSize + halfPlayerSize : boxPos - halfBoxSize - halfPlayerSize;
+                            }
+                            break;
+                    }
+                    this.player.object3D.position.copy(playerPos);
+                },
+            });</script>
+        <!-- Lurking end -->
+        <script>AFRAME.registerComponent("lurker", {
+                schema: {
+                    target: { type: "selector" },
+                    easingFactor: { type: "number", default: 0.03 },
+                    offset: { type: "number", default: 0 },
+                },
+                init: function () {
+                    //initial y position
+                    this.initialY = this.el.object3D.position.y;
+                    //player being targeted
+                    this.targetWorldPosition = new THREE.Vector3();
+                    this.offsetVector = new THREE.Vector3();
+                },
+                tick: function () {
+                    //world position
+                    this.data.target.object3D.getWorldPosition(this.targetWorldPosition);
+                    //players rotation
+                    const targetRotation = this.data.target.object3D.rotation;
+                    //offset position
+                    this.offsetVector.set(
+                        -Math.sin(targetRotation.y) * this.data.offset,
+                        0,
+                        -Math.cos(targetRotation.y) * this.data.offset
+                    );
+                    //easing to x and z positions with the offset
+                    this.el.object3D.position.x +=
+                        (this.targetWorldPosition.x + this.offsetVector.x - this.el.object3D.position.x) * this.data.easingFactor;
+                    this.el.object3D.position.z +=
+                        (this.targetWorldPosition.z + this.offsetVector.z - this.el.object3D.position.z) * this.data.easingFactor;
+                    //lockY
+                    this.el.object3D.position.y = this.initialY;
+                },
+            });
+        </script>
+        <script>AFRAME.registerComponent('follow-rotation', {
+                schema: {
+                    target: {type: 'selector'},
+                },
+                tick: function () {
+                    this.el.object3D.rotation.y = this.data.target.object3D.rotation.y;
+                }
+            });
+        </script>    	    
     </head>
     <body>
         <div id="title">
         <h1>Red is Dead (B)</h1>
         </div>
         <div id="mySceneContainer">
-        <a-scene background="color: #005AFF">
+        <a-scene embedded background="color: #005AFF">
                 <!--vr controllers -->
                 <a-entity id="left-controller" oculus-touch-controls="hand: left" model="false" controller></a-entity>
                 <a-entity id="right-controller" oculus-touch-controls="hand: right" model="false" controller></a-entity>
