@@ -641,7 +641,6 @@
 
                  
                 //create the first sequence of platform
-               if(level == 0){
                 for(let i = stepSequenceLength-1; i >= 0 ; i--){
                     let platform = platformPool[i];  // Get a platform from the pool
 
@@ -658,14 +657,14 @@
                     platforms.push({p: platform, s: 15-i, o: stepOffset, branch: branchID, sound: 'tick', orientation: '-z'});
                     platformsEntity.appendChild(platform);
                 }
-                   if(level == 1){
-                     // Reset existing platforms
-                  for (let i = 0; i < 16; i++) {
-                    const platform = platforms[i].p;
-                    platform.setAttribute('position', { x: 0, y: 0, z: -i * platformSize });
-                    platform.setAttribute('visible', 'true');
-                  }
-                   }
+//                    if(level == 1){
+//                      // Reset existing platforms
+//                   for (let i = stepSequenceLength; i < 16; i++) {
+//                     const platform = platformPool[i]; 
+//                     platform.setAttribute('position', { x: 0, y: 0, z: -i * platformSize });
+//                     platform.setAttribute('visible', 'true');
+//                   }
+//                    }
 //                 //make platform 1 a bit snazzier
                 platforms[0].p.setAttribute('width', platformSize*3);
                 platforms[0].p.setAttribute('height', platformSize-0.1);
@@ -1480,11 +1479,15 @@
                     scene.setAttribute('background', { color: 'black' });
                   } else if (eventChangeCounter % 5 === 3) {
                     killplane.setAttribute('color', 'black');
-                    for (let i = 0; i < platforms.length; i++) {
+                    for (let i = 16; i < platforms.length; i++) {
                       platforms[i].p.remove();
                       platformPool.push(platforms[i].p);
                     }
-                    platforms.length = 0;
+                      for (let i = 0; i < playheadsPool.length; i++) {
+                      playheads.remove();
+                       
+                    }
+                    platforms.length = 16;
                     collectables.length = 0;
                     platformsEntity.remove(collectable);
                   } else if (eventChangeCounter % 5 === 4) {
