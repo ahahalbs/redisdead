@@ -1047,6 +1047,7 @@
                 let rng = Math.random();
                 //quick and dirty as main way is fucked/too computational expensive
                 let away = stepSequenceLength-((Math.round(rng*6)/collectablesFound+1)%6)-1;
+                
 
                 if(orientation == '-x'){
                     //ofset the x by the negative of sequence so it places it at the end
@@ -1183,7 +1184,7 @@
             function scale (number, inMin, inMax, outMin, outMax) {
                 return (number - inMin) * (outMax - outMin) / (inMax - inMin) + outMin;
             };      
-//             //move our collectables around the steps environment based on step distribution
+            //move our collectables around the steps environment based on step distribution
 //             function difficultyMapper(){
 //                 //mapped bar returns 16 step Values mapped to 8, 1, 4, 2
 //                 let mappedKicks = mappedBar(kicks);
@@ -1242,7 +1243,7 @@
 //                 //when distribution is too lopsided make target location very far way. 
 //                 difficulty = difficulty + barCheck(sumAllSteps);
 
-//             };
+//              };
 
             //get the shuffled orderd for our new platform layer
             function reorderSamples(sample, currentPlayerStep) {
@@ -1473,7 +1474,7 @@
                       platforms[i].p.remove();
                       platformPool.push(platforms[i].p);
                     }
-                      for (let i = 0; i < playheadsPool.length; i++) {
+                      for (let i = 0; i < playheads.length; i++) {
                       playheads[i].remove();
                        
                     }
