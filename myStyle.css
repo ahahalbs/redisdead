@@ -23,6 +23,11 @@ body {
     height: 320px;
     z-index: 2;
 }
+
+.main-content iframe[src] {
+    opacity: 1;
+}
+
 .container {
     top: 0px;
     position: absolute;
