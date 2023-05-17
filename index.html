@@ -636,8 +636,20 @@
                 return playhead;
             }
             //initialise our first platforms
-            function startup(){
-                canStart = false;
+           function startup() {
+  canStart = false;
+
+                  // Reset existing platforms
+                  for (let i = 0; i < 16; i++) {
+                    const platform = platforms[i].p;
+                    platform.setAttribute('position', { x: 0, y: 0, z: -i * platformSize });
+                    platform.setAttribute('visible', 'true');
+                  }
+
+                  // Reset first platform to snazzier size
+                  platforms[0].p.setAttribute('width', platformSize * 3);
+                  platforms[0].p.setAttribute('height', platformSize - 0.1);
+                  platforms[0].p.setAttribute('depth', platformSize * 3);
                 //create the first sequence of platforms
                 for(let i = stepSequenceLength-1; i >= 0 ; i--){
                     let platform = platformPool[i];  // Get a platform from the pool
@@ -655,10 +667,10 @@
                     platforms.push({p: platform, s: 15-i, o: stepOffset, branch: branchID, sound: 'tick', orientation: '-z'});
                     platformsEntity.appendChild(platform);
                 }
-                //make platform 1 a bit snazzier
-                platforms[0].p.setAttribute('width', platformSize*3);
-                platforms[0].p.setAttribute('height', platformSize-0.1);
-                platforms[0].p.setAttribute('depth', platformSize*3);
+//                 //make platform 1 a bit snazzier
+//                 platforms[0].p.setAttribute('width', platformSize*3);
+//                 platforms[0].p.setAttribute('height', platformSize-0.1);
+//                 platforms[0].p.setAttribute('depth', platformSize*3);
 
                 //get first playhead for platforms
                 let playhead = getPlayhead();
