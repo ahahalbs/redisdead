@@ -1672,7 +1672,13 @@
                     scene.setAttribute('background', {color: 'white'});
                     killplane.setAttribute('color', 'red');
                     //startup();
-                     platform.setAttribute('material', 'color', rgbString);
+                  for(let i = stepSequenceLength-1; i >= 0 ; i--){
+                    let platform = platformPool[i];  // Get a platform from the pool
+
+                    let calc = Math.round(Math.abs((255/16) *i));
+                    let rgbString = `rgb(${calc}, ${calc}, ${calc})`;
+                    // set material color directly before the entity is attached to the scene
+                    platform.setAttribute('material', 'color', rgbString);
                     platform.setAttribute('position', {x: 0, y: 0, z: -i*platformSize});
                     platform.setAttribute('width', platformSize);
                     platform.setAttribute("height", platformSize);
@@ -1686,6 +1692,7 @@
                 platforms[0].p.setAttribute('width', platformSize*3);
                 platforms[0].p.setAttribute('height', platformSize-0.1);
                 platforms[0].p.setAttribute('depth', platformSize*3);
+
 
                 //get first playhead for platforms
                 let playhead = getPlayhead();
@@ -1713,10 +1720,7 @@
                 collectables.push(collectable);
                 platformsEntity.appendChild(collectable);  
                 onNewEntityAdded(collectable);
-                    
-                    
-                    
-                    
+               
                     //scene.appendChild(platformsEntity);
                     collectableCount = 0;
                     collectablesFound = 0;
