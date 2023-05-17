@@ -480,7 +480,7 @@
             <!--start point-->
             <a-box class="ground" id="start" position="0 -1 6" width="6" height="1" depth="6" color="white"></a-box>
             <!--end point-->
-            <a-box class='end' id="lurker" position="0 12 -15" width="4" height="0.25" depth="4" color="black" box-collider lurker="target: #player "></a-box>  
+            <a-box class='end' id="lurker" position="0 48 -15" width="4" height="0.25" depth="4" color="black" box-collider lurker="target: #player "></a-box>  
         </a-scene> 
         </div>
         <div class="container">
@@ -1487,7 +1487,7 @@
                 }
             }; 
             //end game reset
-            function end(){
+           function end(){
                 //sequentially do stuff
                 if (eventFixer !== lastEventFixer) {
                     lastEventFixer = eventFixer;
@@ -1497,48 +1497,36 @@
                     scene.setAttribute('background',{color: 'black'});
                 } 
                 else if (eventChangeCounter % 5 === 3) {
-                    killplane.setAttribute('color', 'black' );
+                    killplane.setAttribute('color', 'white' );
                     for(let i = 0; i < platforms.length; i++){
                         platforms[i].p.remove();
                         platforms.splice(i, 1);
                     }
-                    for(let i = 1; i < playheads.length; i++){
+                    for(let i = 0; i < playheads.length; i++){
                         playheads[i].p.remove();
                         playheads.splice(i, 1);
                     }
+                    instruments.pausePlay();
+                    sampler.mute();
+                    backingMidSynth.mute();
+                    bassSynth.mute();
                     collectables.splice(0, collectables.length);
                     platformsEntity.remove(collectable);
+                    platformsEntity.removeAll();
+                    
                 } 
                 else if (eventChangeCounter % 5 === 4) {
                     star.setAttribute('color', 'Black');
-                    //create the first sequence of platforms
-                for(let i = stepSequenceLength-1; i >= 0 ; i--){
-                    let platform = document.createElement('a-box');
-                    platform.setAttribute('id', 'platform');
-                    platform.setAttribute('class', 'ground');
-                    platform.setAttribute('scale', {x: 1, y:1, z:1});
-                    let calc = Math.round(Math.abs((255/16) *i));
-                    let rgbString = `rgb(${calc}, ${calc}, ${calc})`;
-                    // set material color directly before the entity is attached to the scene
-                    platform.setAttribute('material', 'color', rgbString);
-                    platform.setAttribute('position', {x: 0, y: 0, z: -i*platformSize});
-                    platform.setAttribute('width', platformSize);
-                    platform.setAttribute("height", platformSize);
-                    platform.setAttribute("depth", platformSize);
-                    platform.setAttribute("visible", 'true');
+                    //backingMidSynth.unmute();
+                    instruments.pausePlay();
+                    star.setAttribute('color', 'white');
+                    
 
-                    platforms.push({p: platform, s: 15-i, o: stepOffset, branch: branchID, sound: 'tick', orientation: '-z'});
-                    platformsEntity.appendChild(platform);
-                }
-                //make platform 1 a bit snazzier
-                platforms[0].p.setAttribute('width', platformSize*3);
-                platforms[0].p.setAttribute('height', platformSize-0.1);
-                platforms[0].p.setAttribute('depth', platformSize*3);
-
-                    canStart = true;
+                    canStart = false;
                     hasEnded = false;
                 }
             };
+
 
             //we pushin' speakers 
             const playSomething=()=>{
