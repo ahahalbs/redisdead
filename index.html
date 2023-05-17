@@ -1512,34 +1512,12 @@
                     for(let i = 0; i < playheads.length;i++){
                         playheads[i].setAttribute('visible', 'false');
                     }
-                else if (eventChangeCounter % 5 === 5) {
+                else if (eventChangeCounter % 5 === 4) {
                     star.setAttribute('color', 'Black');
                     
-                    //grab some platforms from the pool
-                for(let i = numSteps-1; i >= 0; i--){
-                    let platform = null;
-                    if (platformPool.length > 0) {
-                        platform = platformPool.pop();  // Get a platform from the pool
-                    } else {
-                        // Create a new platform if pool is empty
-                        platform = document.createElement('a-box');
-                    }
-
-                    platform.setAttribute('class', 'ground');
-                    platform.setAttribute('box-collider', '');
-                    platform.setAttribute('id', 'platform');  // give each platform a unique id
-                    platform.setAttribute('width', platformSize);
-                    platform.setAttribute("height", platformSize);
-                    platform.setAttribute("depth", platformSize);
-                    platform.setAttribute('scale',  {x: 1, y: 1, z: 1});
-                    platform.setAttribute('box-collider', '');
-                    platform.setAttribute('visible', 'true');
-                    platform.setAttribute('position', {x: 0, y: 0, z: -i*platformSize});
-                }
-                    platforms.push({p:platform, s: 15-i, o: 0, branch: 0, sound: 'tick', orient: -z});
-                    platformsEntity.appendChild(platform); 
                     
-                    //create the first sequence of platforms
+                    
+//                     create the first sequence of platforms
 //                 for(let i = stepSequenceLength-1; i >= 0 ; i--){
 //                     let platform = document.createElement('a-box');
 //                     platform.setAttribute('id', 'platform');
