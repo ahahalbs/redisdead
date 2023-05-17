@@ -141,7 +141,7 @@
                     this.isOverGround = true;
                     this.isOnGround = false;
                     this.isJumping = false;
-                    this.jumpHeight = 0.40;
+                    this.jumpHeight = 0.30;
                     this.jumpSpeed = this.jumpHeight;
                     this.fallSpeed = 0.5;
                     this.canJump = true;
@@ -1018,7 +1018,7 @@
             async function generatePlatforms(playerPos, numSteps, inputs, orientation){
                 //make sure we turn off our collectable
                 collectableCount--;
-                difficultyMapper();
+               //difficultyMapper();
 
                 //floor playerX and Z so we don't prematurely slide off of platform edge
                 let playerFlooredX = Math.floor(0.5+(playerPos.x)/platformSize)*platformSize;
@@ -1128,13 +1128,11 @@
                         playhead.setAttribute('width', 3* platformSize-0.1);
                         playhead.setAttribute("height", platformSize-0.1);
                         playhead.setAttribute("depth",3 * platformSize-0.1);
-                        //snare playheads
                     } 
                     else if(sequenceOrder[sequenceOrder.length-1] == 1){
                         playhead.setAttribute('width', (platformSize-0.1)/2);
                         playhead.setAttribute("height",(platformSize-0.1)*3);
                         playhead.setAttribute("depth", (platformSize-0.1)/2);
-                        //hihat playheads
                     } 
                     else if(sequenceOrder[sequenceOrder.length-1] == 2){
                         if (orientation == 'x' || orientation == '-x'){
@@ -1161,7 +1159,7 @@
 
                     let newPosition = { x: playerFlooredX, y: playerPos.y + platformSize + 0.001, z: playerFlooredZ };
                     playhead.setAttribute('position', newPosition);
-                    // Store playhead data if needed
+
                     let playheadData = {
                         p: playhead,
                         o: orientation,
@@ -1193,8 +1191,9 @@
                 collectable.setAttribute("depth", platformSize/6);
                 collectable.setAttribute("box-collider", '');
 
+                let rng = Math.random();
                 //quick and dirty as main way is fucked/too computational expensive
-                let away = stepSequenceLength-((difficulty/collectablesFound+1)%6)-1;
+                let away = stepSequenceLength-((Math.round(rng*6)/collectablesFound+1)%6)-1;
 
                 if(orientation == '-x'){
                     //ofset the x by the negative of sequence so it places it at the end
@@ -1292,105 +1291,105 @@
                 }
             };
             //mapped our beats so we can check their distribution
-            function mappedBar(bar) {
-                //steps mapped
-                const stepValues = bar.map((bool, index) => {
-                    const mapping = [8, 1, 4, 2];
-                    const mappingIndex = index % 4;
-                    return bool ? mapping[mappingIndex] : 0;
-                });
-                // Beat values
-                const beatValues = [];
-                for (let i = 0; i < stepValues.length; i += 4) {
-                    let sum = 0;
-                    for (let j = i; j < i + 4; j++) {
-                        sum += isNaN(stepValues[j]) ? 0 : stepValues[j];
-                    }
-                    beatValues.push(sum);
-                }           
-                return {stepValues, beatValues};
-            }; 
-            //nifty function for checking individual bar distribution
-            function barCheck(beats){
-                if(beats[0] > beats[1] && beats[2] & beats[3]){
-                    return 5;
-                }
-                if(beats[1] > beats[0]&& beats[2] && beats[3]){
-                    return 10;
-                }
-                if(beats[2] > beats[0]&& beats[1] && beats[3]){
-                    return 5;
-                }
-                if(beats[3] > beats[0]&& beats[1] && beats[2]){
-                    return 5;
-                }  else {
-                    return 0;
-                } 
-            };
+//             function mappedBar(bar) {
+//                 //steps mapped
+//                 const stepValues = bar.map((bool, index) => {
+//                     const mapping = [8, 1, 4, 2];
+//                     const mappingIndex = index % 4;
+//                     return bool ? mapping[mappingIndex] : 0;
+//                 });
+//                 // Beat values
+//                 const beatValues = [];
+//                 for (let i = 0; i < stepValues.length; i += 4) {
+//                     let sum = 0;
+//                     for (let j = i; j < i + 4; j++) {
+//                         sum += isNaN(stepValues[j]) ? 0 : stepValues[j];
+//                     }
+//                     beatValues.push(sum);
+//                 }           
+//                 return {stepValues, beatValues};
+//             }; 
+//             //nifty function for checking individual bar distribution
+//             function barCheck(beats){
+//                 if(beats[0] > beats[1] && beats[2] & beats[3]){
+//                     return 5;
+//                 }
+//                 if(beats[1] > beats[0]&& beats[2] && beats[3]){
+//                     return 10;
+//                 }
+//                 if(beats[2] > beats[0]&& beats[1] && beats[3]){
+//                     return 5;
+//                 }
+//                 if(beats[3] > beats[0]&& beats[1] && beats[2]){
+//                     return 5;
+//                 }  else {
+//                     return 0;
+//                 } 
+//             };
             //lil scale
             function scale (number, inMin, inMax, outMin, outMax) {
                 return (number - inMin) * (outMax - outMin) / (inMax - inMin) + outMin;
             };      
-            //move our collectables around the steps environment based on step distribution
-            function difficultyMapper(){
-                //mapped bar returns 16 step Values mapped to 8, 1, 4, 2
-                let mappedKicks = mappedBar(kicks);
-                let mappedSnares = mappedBar(snares);
-                let mappedHihats = mappedBar(hihats);
-                let mappedBells = mappedBar(bells);
-                let allKicksStepValues = mappedBar(kicks).stepValues;
-                let allSnaresStepValues = mappedBar(snares).stepValues;
-                let allHihatsStepValues = mappedBar(hihats).stepValues;
-                let allBellsStepValues = mappedBar(bells).stepValues;
-                let allKicksBeatValues = mappedBar(kicks).beatValues;
-                let allSnaresBeatValues = mappedBar(snares).beatValues;
-                let allHihatsBeatValues = mappedBar(hihats).beatValues;
-                let allBellsBeatValues = mappedBar(bells).beatValues;
-                //our distances so we know where we're mapping notes too
-                let sumKicks = 0;
-                let sumSnares = 0;
-                let sumHihats = 0;
-                let sumBells = 0;
-                let sumAllSteps =[];
+//             //move our collectables around the steps environment based on step distribution
+//             function difficultyMapper(){
+//                 //mapped bar returns 16 step Values mapped to 8, 1, 4, 2
+//                 let mappedKicks = mappedBar(kicks);
+//                 let mappedSnares = mappedBar(snares);
+//                 let mappedHihats = mappedBar(hihats);
+//                 let mappedBells = mappedBar(bells);
+//                 let allKicksStepValues = mappedBar(kicks).stepValues;
+//                 let allSnaresStepValues = mappedBar(snares).stepValues;
+//                 let allHihatsStepValues = mappedBar(hihats).stepValues;
+//                 let allBellsStepValues = mappedBar(bells).stepValues;
+//                 let allKicksBeatValues = mappedBar(kicks).beatValues;
+//                 let allSnaresBeatValues = mappedBar(snares).beatValues;
+//                 let allHihatsBeatValues = mappedBar(hihats).beatValues;
+//                 let allBellsBeatValues = mappedBar(bells).beatValues;
+//                 //our distances so we know where we're mapping notes too
+//                 let sumKicks = 0;
+//                 let sumSnares = 0;
+//                 let sumHihats = 0;
+//                 let sumBells = 0;
+//                 let sumAllSteps =[];
 
-                //get sums of all our steps
-                for(let i = 0; i < 16; i++){
-                    sumKicks += allKicksStepValues[i];
-                    sumSnares += allSnaresStepValues[i];
-                    sumHihats += allHihatsStepValues[i];
-                    sumBells += allBellsStepValues[i];
-                    sumAllSteps.push(allKicksStepValues[i]+allSnaresStepValues[i]+allHihatsStepValues[i]+allBellsStepValues[i]);
-                }
-                //increase difficulty abit every collection
-                for(let i = 0; i < collectablesFound; i++){
-                    difficulty += 5;
-                }
-                //increase difficult based on kicks
-                if(sumKicks > 12 && sumKicks <=18){
-                    difficulty +=25;
-                }
-                //increase difficulty based on snares
-                if(sumSnares > 12  && sumSnares <= 16 ){
-                    difficulty +=25;
-                } 
-                else if (sumSnares > 16){
-                    difficulty +=30;
-                }
-                //increase difficult based on hihats and bells
-                if(sumHihats + sumBells > 20){
-                    difficulty +=15;
-                }
-                //reward players if they can manage some parity between distributions
-                if(allKicksBeatValues[0] > 0 && allKicksBeatValues[0] == allKicksBeatValues[1] && allKicksBeatValues[2] && allKicksBeatValues[3]){
-                    difficulty -=15;
-                } 
-                if(allHihatsBeatValues[0] > 0 && allHihatsBeatValues[0] == allHihatsBeatValues[1] && allHihatsBeatValues[2] && allHihatsBeatValues[3] || allBellsBeatValues[0] > 0 && allBellsBeatValues[0] == allBellsBeatValues[1] && allBellsBeatValues[2] && allBellsBeatValues[3]){
-                    difficulty -=20;
-                }
-                //when distribution is too lopsided make target location very far way. 
-                difficulty = difficulty + barCheck(sumAllSteps);
+//                 //get sums of all our steps
+//                 for(let i = 0; i < 16; i++){
+//                     sumKicks += allKicksStepValues[i];
+//                     sumSnares += allSnaresStepValues[i];
+//                     sumHihats += allHihatsStepValues[i];
+//                     sumBells += allBellsStepValues[i];
+//                     sumAllSteps.push(allKicksStepValues[i]+allSnaresStepValues[i]+allHihatsStepValues[i]+allBellsStepValues[i]);
+//                 }
+//                 //increase difficulty abit every collection
+//                 for(let i = 0; i < collectablesFound; i++){
+//                     difficulty += 5;
+//                 }
+//                 //increase difficult based on kicks
+//                 if(sumKicks > 12 && sumKicks <=18){
+//                     difficulty +=25;
+//                 }
+//                 //increase difficulty based on snares
+//                 if(sumSnares > 12  && sumSnares <= 16 ){
+//                     difficulty +=25;
+//                 } 
+//                 else if (sumSnares > 16){
+//                     difficulty +=30;
+//                 }
+//                 //increase difficult based on hihats and bells
+//                 if(sumHihats + sumBells > 20){
+//                     difficulty +=15;
+//                 }
+//                 //reward players if they can manage some parity between distributions
+//                 if(allKicksBeatValues[0] > 0 && allKicksBeatValues[0] == allKicksBeatValues[1] && allKicksBeatValues[2] && allKicksBeatValues[3]){
+//                     difficulty -=15;
+//                 } 
+//                 if(allHihatsBeatValues[0] > 0 && allHihatsBeatValues[0] == allHihatsBeatValues[1] && allHihatsBeatValues[2] && allHihatsBeatValues[3] || allBellsBeatValues[0] > 0 && allBellsBeatValues[0] == allBellsBeatValues[1] && allBellsBeatValues[2] && allBellsBeatValues[3]){
+//                     difficulty -=20;
+//                 }
+//                 //when distribution is too lopsided make target location very far way. 
+//                 difficulty = difficulty + barCheck(sumAllSteps);
 
-            };
+//             };
 
             //get the shuffled orderd for our new platform layer
             function reorderSamples(sample, currentPlayerStep) {
@@ -1483,7 +1482,7 @@
                     let randomNote = notes[Math.floor(Math.random()*notes.length)];
                     enemySynth.noteon(randomNote, 127);
                     bonking = 1.0;
-                    roomSize =1.0;
+                    //roomSize =1.0;
                     hasBonked = false;
                     pauseBonk = true;
                 }
@@ -1511,15 +1510,15 @@
                             backingMidSynth.setParam("lfoFrequency", filter);
                             backingMidSynth.setParam("lfoPitchMod", filter);
                             bassSynth.setParam("cutoff", filter *40);
-                            sampler.setParam("rate_1", scale(filter, -2, 1, 0.1, 0.5)) ;
+                            sampler.setParam("rate_1", Math.max(1-filter,0));
                             sampler.setParam("rate_2", filter+0.5);
                             sampler.setParam("rate_3", filter-0.5);                    
 //                    backingMidSynth.setParam("lfoFrequency", filter);
 //                    backingMidSynth.setParam("lfoPitchMod", filter);
 //                    bassSynth.setParam("cutoff", filter *40);
-                    sampler.setParam("rate_1", scale(filter, -2, 1, 0.1, 0.5)) ;
-                    sampler.setParam("rate_2", filter+0.5);
-                    sampler.setParam("rate_3", filter-0.5);
+                      sampler.setParam("rate_1", Math.max(1-filter,0));
+                    sampler.setParam("rate_2", Math.max(filter+0.5, 0));
+                    sampler.setParam("rate_3", Math.max(filter-0.5,0));
                 } else {
                     if(filter > 0.11){
                         backingMidSynth.setParam("lfoFrequency", filter);
