@@ -869,7 +869,7 @@
                     playheads[i].p.setAttribute('position', newPosition);
                 }
             };   
-            async function generatePlatforms(playerPos, numSteps, inputs, orientation){
+            function generatePlatforms(playerPos, numSteps, inputs, orientation){
                 //make sure we turn off our collectable
                 collectableCount--;
                //difficultyMapper();
@@ -968,50 +968,47 @@
                 }
 
                 //playhead biz
-               let playhead = getPlayhead();
+              let playhead = getPlayhead();
 if (!playhead) {
     playhead = document.createElement('a-box');
     playhead.setAttribute('class', 'playheads');
     playhead.setAttribute('id', 'playhead');
     playhead.setAttribute('material', {color: 'red', transparent: 'true', opacity: '0.5'});
     playhead.setAttribute('side', 'double');
-    playhead.setAttribute('scale', {x: 1, y: 0.98, z:1});
+    playhead.setAttribute('scale', '1 0.98 1');
     playhead.setAttribute('visible', 'false');
     playheadsPool.push(playhead);
-    platformsEntity.appendChild(playhead);   
+    platformsEntity.appendChild(playhead);
 }
-
-playhead.object3D.visible = true;
-playhead.object3D.scale.set(1, 1, 1);
 
 let size;
 switch(sequenceOrder[sequenceOrder.length-1]){
     case 0:
-        size = {width: 3* platformSize-0.1, height: platformSize-0.1, depth: 3* platformSize-0.1};
+        size = '3* platformSize-0.1 platformSize-0.1 3* platformSize-0.1';
         break;
     case 1:
-        size = {width: (platformSize-0.1)/2, height: (platformSize-0.1)*3, depth: (platformSize-0.1)/2};
+        size = '(platformSize-0.1)/2 (platformSize-0.1)*3 (platformSize-0.1)/2';
         break;
     case 2:
         if (orientation == 'x' || orientation == '-x'){
-            size = {width: (platformSize-0.1)*4, height: (platformSize-0.1)/4, depth: (platformSize-0.1)/4};
+            size = '(platformSize-0.1)*4 (platformSize-0.1)/4 (platformSize-0.1)/4';
         } else {
-            size = {width: (platformSize-0.1)/4, height: (platformSize-0.1)/4, depth: (platformSize-0.1)*4}; 
+            size = '(platformSize-0.1)/4 (platformSize-0.1)/4 (platformSize-0.1)*4'; 
         }
         break;
     default:
         if (orientation == 'x' || orientation == '-x'){
-            size = {width: (platformSize-0.1), height: (platformSize-0.1)/4, depth: (platformSize-0.1)*3}; 
+            size = '(platformSize-0.1) (platformSize-0.1)/4 (platformSize-0.1)*3'; 
         } else {
-            size = {width: (platformSize-0.1)*3, height: (platformSize-0.1)/4, depth: (platformSize-0.1)}; 
+            size = '(platformSize-0.1)*3 (platformSize-0.1)/4 (platformSize-0.1)'; 
         }
         break;
 }
 
-playhead.object3D.scale.set(size.width, size.height, size.depth);
+playhead.setAttribute('geometry', { primitive: 'box', width: size.width, height: size.height, depth: size.depth });
 
-let newPosition = new THREE.Vector3(playerFlooredX, playerPos.y + platformSize + 0.001, playerFlooredZ);
-playhead.object3D.position.copy(newPosition);
+let newPosition = { x: playerFlooredX, y: playerPos.y + platformSize + 0.001, z: playerFlooredZ };
+playhead.setAttribute('position', newPosition);
 
 let playheadData = {
     p: playhead,
@@ -1021,6 +1018,8 @@ let playheadData = {
     modDel: stepOffset - currentPlayerStep,
 };
 playheads.push(playheadData);
+playhead.setAttribute('visible', 'true');
+
 
 
                 //generate the collectable for that platform
