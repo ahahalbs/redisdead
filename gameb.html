@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -444,7 +444,7 @@
         <div id="title">
             <h1>Red is Dead (B)</h1>
         </div>
-        <div id="mySceneContainer">
+        <div embedded id="mySceneContainer">
             <a-scene background="color: #005AFF">
                 <!--vr controllers -->
                 <a-entity id="left-controller" oculus-touch-controls="hand: left" model="false" controller></a-entity>
@@ -467,7 +467,6 @@
                 <!--end point-->
                 <a-box class='end' id="lurker" position="0 48 -15" width="4" height="0.25" depth="4" color="black" box-collider lurker="target: #player "></a-box>  
             </a-scene> 
-
         </div>
         <div class="container">
             <h3>Make sure your sound is turned up, nice and loud! It is in an experimental stage so expect the odd glitch or bug or slowdown every now and then. Give it a refresh if it's being very badly behaved. This only works in VR mode with controllers!</h3>
