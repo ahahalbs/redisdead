@@ -591,7 +591,6 @@
             let sampler; 
             let staging = 0;
             let soundUP = false;
-            let readyToPlay= true;
             //we jammin, and i hope you like jammin too
             var dm79 = [50, 57, 64, 65, 72];
             var eb911 = [51, 58, 65, 67, 69];
@@ -636,8 +635,11 @@
             let destroyStep = false;
             let destroyCount = 0;
             let platforms = [];
-            let reorderedPlatforms =[];
+            const platformPool = [];
+            const MAX_PLATFORMS = 480;  
             let playheads = [];
+            const playheadsPool = [];
+            const MAX_PLAYHEADS = 30;
             let collectables = [];
             let stepSequenceLength = 16;
             let stepOffset = 0;
@@ -685,42 +687,88 @@
             let roomSize = 0;
             let filter = 0.1;
 
-            //initialise our environment
+            //initialize platform pool
+            for(let i = 0; i < MAX_PLATFORMS; i++){
+                let platform = document.createElement('a-box');
+                platform.setAttribute('box-collider', '');
+                platform.setAttribute('class', 'ground');
+                platform.setAttribute('id', 'platform');
+                platform.setAttribute('scale', {x: 1, y: 0.98, z:1});
+                platform.setAttribute("visible", "false");
+                platformPool.push(platform);
+            }
+            //initialise playhead pool
+            for (let i = 0; i < MAX_PLAYHEADS; i++) {
+                let playhead = document.createElement('a-box');
+                playhead.setAttribute("box-collider", '');
+                playhead.setAttribute('class', 'playheads');
+                playhead.setAttribute('id', 'playhead');
+                playhead.setAttribute('material', { color: 'red', transparent: 'true', opacity: '0.5' });
+                playhead.setAttribute('side', 'double');
+                playhead.setAttribute('width', platformSize - 0.1);
+                playhead.setAttribute("height", platformSize - 0.1);
+                playhead.setAttribute("depth", platformSize - 0.1);
+                playhead.setAttribute('position', {x: 0, y:0, z:0});
+                playhead.setAttribute('scale', {x: 1, y: 0.98, z:1});
+                playhead.setAttribute("visible", "false"); 
+                playheadsPool.push(playhead);
+            }
+            function getPlayhead() {
+                for (let i = 0; i < playheadsPool.length; i++) {
+                    if (!playheadsPool[i].getAttribute("visible")) {
+                        return playheadsPool[i];
+                    }
+                }
+                // if no available playhead found
+                let playhead = document.createElement('a-box');
+                playhead.setAttribute("box-collider", '');
+                playhead.setAttribute('class', 'playheads');
+                playhead.setAttribute('material', { color: 'red', transparent: 'true', opacity: '0.5' });
+                playhead.setAttribute('side', 'double');
+                playhead.setAttribute('width', platformSize - 0.1);
+                playhead.setAttribute("height", platformSize - 0.1);
+                playhead.setAttribute("depth", platformSize - 0.1);
+                playhead.setAttribute('scale', {x: 1, y: 0.98, z:1});
+                playhead.setAttribute("visible", "false"); 
+                platformsEntity.appendChild(playhead);
+                playheadsPool.push(playhead);
+                return playhead;
+            }
+            //initialise our first platforms
             function startup(){
                 canStart = false;
                 //create the first sequence of platforms
                 for(let i = stepSequenceLength-1; i >= 0 ; i--){
-                    let platform = document.createElement('a-box');
-                    platform.setAttribute('class', 'ground');
-                    platform.setAttribute('id', 'platform');
+                    let platform = platformPool[i];  // Get a platform from the pool
+
                     let calc = Math.round(Math.abs((255/16) *i));
                     let rgbString = `rgb(${calc}, ${calc}, ${calc})`;
+                    // set material color directly before the entity is attached to the scene
                     platform.setAttribute('material', 'color', rgbString);
                     platform.setAttribute('position', {x: 0, y: 0, z: -i*platformSize});
                     platform.setAttribute('width', platformSize);
                     platform.setAttribute("height", platformSize);
                     platform.setAttribute("depth", platformSize);
-                    platform.setAttribute('box-collider', '');
-                    //step is 15-i because i original built it backwards like a fucking idiot
+                    platform.setAttribute("visible", 'true');
+
                     platforms.push({p: platform, s: 15-i, o: stepOffset, branch: branchID, sound: 'tick', orientation: '-z'});
-                    reorderedPlatforms.push(false);
                     platformsEntity.appendChild(platform);
                 }
-                //lets make it look cooler for the 0 platform/also easier! 
-                platforms[1].p.setAttribute('width', platformSize*3);
-                platforms[1].p.setAttribute('height', platformSize-0.1);
-                platforms[1].p.setAttribute('depth', platformSize*3);
-                //Create the first playhead for platforms
-                let playhead = document.createElement('a-box');
-                playhead.setAttribute('class', "playheads");
+                //make platform 1 a bit snazzier
+                platforms[0].p.setAttribute('width', platformSize*3);
+                platforms[0].p.setAttribute('height', platformSize-0.1);
+                platforms[0].p.setAttribute('depth', platformSize*3);
+
+                //get first playhead for platforms
+                let playhead = getPlayhead();
+                playhead.setAttribute('position', { x: 0, y: platformSize + 0.01, z: 0 });
+                playhead.setAttribute('class', 'playheads');
+                playhead.setAttribute("box-collider", '');
                 playhead.setAttribute('id', 'playhead');
                 playhead.setAttribute('material', {color: 'red', transparent: 'true', opacity: '0.5'});
                 playhead.setAttribute('side', 'double');
-                playhead.setAttribute('position', {x:0, y: platformSize+0.01, z: 0});
-                playhead.setAttribute('width', platformSize-0.1);
-                playhead.setAttribute("height", platformSize-0.1);
-                playhead.setAttribute("depth", platformSize-0.1);
-                playhead.setAttribute("box-collider", ''); 
+                playhead.setAttribute('scale', {x: 1, y: 1, z:1});
+                playhead.setAttribute('visible', 'true');
                 playheads.push({p: playhead, o: '-z',startX: 0 , startZ: 0, modDel: 0, modmult: 1});
                 platformsEntity.appendChild(playhead);
 
@@ -1017,151 +1065,123 @@
                         break;
                 }
                 
-                //generate our platform floor 
+                //grab some platforms from the pool
                 for(let i = numSteps-1; i >= 0; i--){
-                    let platform = document.createElement('a-box');
+                    let platform = null;
+                    if (platformPool.length > 0) {
+                        platform = platformPool.pop();  // Get a platform from the pool
+                    } else {
+                        // Create a new platform if pool is empty
+                        platform = document.createElement('a-box');
+                    }
+
                     platform.setAttribute('class', 'ground');
-                    platform.setAttribute('id', 'platform' );
+                    platform.setAttribute('box-collider', '');
+                    platform.setAttribute('id', 'platform');  // give each platform a unique id
                     platform.setAttribute('width', platformSize);
                     platform.setAttribute("height", platformSize);
                     platform.setAttribute("depth", platformSize);
                     platform.setAttribute('scale',  {x: 1, y: 1, z: 1});
                     platform.setAttribute('box-collider', '');
+                    platform.setAttribute('visible', 'true');
+
                     //colour the new platforms with a sick fade yo
                     calcR = r-Math.round(Math.abs((r/numSteps) *(i%numSteps)));
                     calcG = g-Math.round(Math.abs((g/numSteps) *(i%numSteps)));
-                    calcB = b-Math.round(Math.abs((b/numSteps) *(i%numSteps)));; 
+                    calcB = b-Math.round(Math.abs((b/numSteps) *(i%numSteps))); 
                     let rgbString = `rgb(${calcR}, ${calcG}, ${calcB})`;
-                    platform.setAttribute('color', rgbString);  
+                    platform.setAttribute('material', 'color', rgbString);  
 
                     //set position based on player orientation
-                    if(orientation == '-x'){
-                        if(playerFlooredZ < 0){
-                            if(playerFlooredX <= 0){
-                                platform.setAttribute('position', {x: playerFlooredX -(i*platformSize), y: playerPos.y, z: playerFlooredZ});
-                            } else {
-                                platform.setAttribute('position', {x: playerFlooredX +(-i*platformSize), y: playerPos.y, z: playerFlooredZ});
-                            }
-                        } else {
-                            if(playerFlooredX <= 0){
-                                platform.setAttribute('position', {x: playerFlooredX -(i*platformSize), y: playerPos.y, z: playerFlooredZ});
-                            } else {
-                                platform.setAttribute('position', {x: playerFlooredX +(-i*platformSize), y: playerPos.y, z: playerFlooredZ});
-                            }
-                        }
-                    } 
-                    else if(orientation == '-z'){
-                        if(playerFlooredZ < 0){
-                            if(playerFlooredX < 0){
-                                platform.setAttribute('position', {x:playerFlooredX  , y: playerPos.y, z:playerFlooredZ -(i*platformSize)});
-                            } else {
-                                platform.setAttribute('position', {x:playerFlooredX  , y: playerPos.y, z:playerFlooredZ -(i*platformSize)});
-                            }
-                        } else  {
-                            if(playerFlooredX <=0){
-                                platform.setAttribute('position', {x:playerFlooredX  , y: playerPos.y, z:playerFlooredZ -(i*platformSize)});
-                            }else {
-                                platform.setAttribute('position', {x:playerFlooredX  , y: playerPos.y, z:playerFlooredZ -(i*platformSize)});
-                            }
-                        }
-                    }
-                    else if(orientation == 'z'){
-                        if(playerFlooredZ < 0){
-                            if(playerFlooredX <0){
-                                platform.setAttribute('position', {x:playerFlooredX , y: playerPos.y, z: playerFlooredZ + (i *platformSize)});
-                            } else {
-                                platform.setAttribute('position', {x:playerFlooredX , y: playerPos.y, z: playerFlooredZ + (i *platformSize)});
-                            }
-                        } else {
-                            if(playerFlooredX <= 0){
-                                platform.setAttribute('position', {x:playerFlooredX , y: playerPos.y, z: playerFlooredZ - (-i *platformSize)});
-                            } else{
-                                platform.setAttribute('position', {x:playerFlooredX , y: playerPos.y, z: playerFlooredZ + (i *platformSize)});
-                            }
-                        }
-                    }
-                    else if(orientation == 'x'){
-                        if(playerFlooredZ <= 0){
-                            if(playerFlooredX < 0){
-                                platform.setAttribute('position', {x: playerFlooredX + (i*platformSize), y: playerPos.y, z: playerFlooredZ});
-                            }else {
-                                platform.setAttribute('position', {x: playerFlooredX - (-i*platformSize), y: playerPos.y, z: playerFlooredZ});
-                            }
-                        }
-                        else{
-                            if(playerFlooredX <= 0){
-                                platform.setAttribute('position', {x: playerFlooredX + (i*platformSize), y: playerPos.y, z: playerFlooredZ});
+                    let position = {x: playerFlooredX, y: playerPos.y, z: playerFlooredZ};
+                    let distance = i * platformSize;
 
-                            } else{
-                                platform.setAttribute('position', {x: playerFlooredX + (i*platformSize), y: playerPos.y, z: playerFlooredZ});
-                            }
-                        }
+                    switch (orientation) {
+                        case '-x':
+                        case 'x':
+                            position.x += orientation === '-x' ? -distance : distance;
+                            break;
+                        case '-z':
+                        case 'z':
+                            position.z += orientation === '-z' ? -distance : distance;
+                            break;
                     }
+
+                    platform.object3D.position.set(position.x, position.y, position.z);
+
                     platforms.push({p:platform, s: 15-i, o: 0, branch: branchID, sound: platformLabel, orient: orientation});
-
                     platformsEntity.appendChild(platform);
                 }
+
                 //playhead biz
-                let playhead = document.createElement('a-box');
-                playhead.setAttribute('class', 'playheads');
-                playhead.setAttribute("box-collider", '');
-                playhead.setAttribute('id', 'playhead');
-                playhead.setAttribute('material', {color: 'red', transparent: 'true', opacity: '0.5'});
-                playhead.setAttribute('side', 'double');
+                let playhead = getPlayhead();
+                if (playhead) {
+                    playhead.setAttribute('class', 'playheads');
+                    playhead.setAttribute("box-collider", '');
+                    playhead.setAttribute('id', 'playhead');
+                    playhead.setAttribute('material', {color: 'red', transparent: 'true', opacity: '0.5'});
+                    playhead.setAttribute('side', 'double');
+                    playhead.setAttribute('scale', {x: 1, y: 1, z:1});
 
-                //use a lil bit of rng to spice up the chance
-                let rng = Math.random();
+                    //our kick PlayHeads
+                    if(sequenceOrder[sequenceOrder.length-1] == 0){
+                        playhead.setAttribute('width', 3* platformSize-0.1);
+                        playhead.setAttribute("height", platformSize-0.1);
+                        playhead.setAttribute("depth",3 * platformSize-0.1);
+                        //snare playheads
+                    } 
+                    else if(sequenceOrder[sequenceOrder.length-1] == 1){
+                        playhead.setAttribute('width', (platformSize-0.1)/2);
+                        playhead.setAttribute("height",(platformSize-0.1)*3);
+                        playhead.setAttribute("depth", (platformSize-0.1)/2);
+                        //hihat playheads
+                    } 
+                    else if(sequenceOrder[sequenceOrder.length-1] == 2){
+                        if (orientation == 'x' || orientation == '-x'){
+                            playhead.setAttribute('width', (platformSize-0.1)*4);
+                            playhead.setAttribute("height",(platformSize-0.1)/4);
+                            playhead.setAttribute("depth", (platformSize-0.1)/4);   
+                        } else {
+                            playhead.setAttribute('width', (platformSize-0.1)/4);
+                            playhead.setAttribute("height",(platformSize-0.1)/4);
+                            playhead.setAttribute("depth", (platformSize-0.1)*4);     
+                        }
+                    } 
+                    else{
+                        if (orientation == 'x' || orientation == '-x'){
+                            playhead.setAttribute('width', (platformSize-0.1));
+                            playhead.setAttribute("height",(platformSize-0.1)/4);
+                            playhead.setAttribute("depth", (platformSize-0.1)*3);   
+                        } else {
+                            playhead.setAttribute('width', (platformSize-0.1)*3);
+                            playhead.setAttribute("height",(platformSize-0.1)/4);
+                            playhead.setAttribute("depth", (platformSize-0.1));     
+                        }
+                    } 
 
-                //our kick PlayHeads
-                if(sequenceOrder[sequenceOrder.length-1] == 0){
-                    playhead.setAttribute('width', 3* platformSize-0.1);
-                    playhead.setAttribute("height", platformSize-0.1);
-                    playhead.setAttribute("depth",3 * platformSize-0.1);
-                    //snare playheads
-                } 
-                else if(sequenceOrder[sequenceOrder.length-1] == 1){
-                    playhead.setAttribute('width', (platformSize-0.1)/2);
-                    playhead.setAttribute("height",(platformSize-0.1)*3);
-                    playhead.setAttribute("depth", (platformSize-0.1)/2);
-                    //hihat playheads
-                } 
-                else if(sequenceOrder[sequenceOrder.length-1] == 2){
-                    if (orientation == 'x' || orientation == '-x'){
-                        playhead.setAttribute('width', (platformSize-0.1)*4);
-                        playhead.setAttribute("height",(platformSize-0.1)/4);
-                        playhead.setAttribute("depth", (platformSize-0.1)/4);   
-                    } else {
-                        playhead.setAttribute('width', (platformSize-0.1)/4);
-                        playhead.setAttribute("height",(platformSize-0.1)/4);
-                        playhead.setAttribute("depth", (platformSize-0.1)*4);     
-                    }
-                } 
-                else{
-                    if (orientation == 'x' || orientation == '-x'){
-                        playhead.setAttribute('width', (platformSize-0.1));
-                        playhead.setAttribute("height",(platformSize-0.1)/4);
-                        playhead.setAttribute("depth", (platformSize-0.1)*3);   
-                    } else {
-                        playhead.setAttribute('width', (platformSize-0.1)*3);
-                        playhead.setAttribute("height",(platformSize-0.1)/4);
-                        playhead.setAttribute("depth", (platformSize-0.1));     
-                    }
-                } 
-
-                let newPosition = {x: playerFlooredX, y: playerPos.y + platformSize + 0.001, z: playerFlooredZ};
-                playhead.setAttribute('position', newPosition);
-                // Store playhead data if needed
-                let playheadData = {
-                    p: playhead,
-                    o: orientation,
-                    startX: playerFlooredX,
-                    startZ: playerFlooredZ,
-                    modDel: stepOffset - currentPlayerStep,
-                };
-                playheads.push(playheadData);
-
-                // Append the playhead entity to the platformsEntity
-                platformsEntity.appendChild(playhead);
+                    let newPosition = { x: playerFlooredX, y: playerPos.y + platformSize + 0.001, z: playerFlooredZ };
+                    playhead.setAttribute('position', newPosition);
+                    // Store playhead data if needed
+                    let playheadData = {
+                        p: playhead,
+                        o: orientation,
+                        startX: playerFlooredX,
+                        startZ: playerFlooredZ,
+                        modDel: stepOffset - currentPlayerStep,
+                    };
+                    playheads.push(playheadData);
+                    playhead.setAttribute('visible', 'true');
+                } else {
+                    playhead = document.createElement('a-box');
+                    playhead.setAttribute('class', 'playheads');
+                    playhead.setAttribute('id', 'playhead');
+                    playhead.setAttribute('material', {color: 'red', transparent: 'true', opacity: '0.5'});
+                    playhead.setAttribute('side', 'double');
+                    playhead.setAttribute('scale', {x: 1, y: 0.98, z:1});
+                    playhead.setAttribute('visible', 'false');
+                    playheadsPool.push(playhead);
+                    platformsEntity.appendChild(playhead);   
+                }
 
                 //generate the collectable for that platform
                 let collectable = document.createElement('a-box');
