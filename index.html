@@ -1520,29 +1520,7 @@
                 } 
                 else if (eventChangeCounter % 5 === 4) {
                     star.setAttribute('color', 'Black');
-                    //create the first sequence of platforms
-                for(let i = stepSequenceLength-1; i >= 0 ; i--){
-                    let platformNew = document.createElement('a-box');
-                    platformNew.setAttribute('id', 'platform');
-                    platformNew.setAttribute('class', 'ground');
-                    platformNew.setAttribute('scale', {x: 1, y:1, z:1});
-                    let calc = Math.round(Math.abs((255/16) *i));
-                    let rgbString = `rgb(${calc}, ${calc}, ${calc})`;
-                    // set material color directly before the entity is attached to the scene
-                    platformNew.setAttribute('material', 'color', rgbString);
-                    platformNew.setAttribute('position', {x: 0, y: 0, z: -i*platformSize});
-                    platformNew.setAttribute('width', platformSize);
-                    platformNew.setAttribute("height", platformSize);
-                    platformNew.setAttribute("depth", platformSize);
-                    platformNew.setAttribute("visible", 'true');
-
-                    platformsNew.push({p: platform, s: 15-i, o: stepOffset, branch: branchID, sound: 'tick', orientation: '-z'});
-                    platformsEntity.appendChild(platformNew);
-                }
-                //make platform 1 a bit snazzier
-                platforms[0].p.setAttribute('width', platformSize*3);
-                platforms[0].p.setAttribute('height', platformSize-0.1);
-                platforms[0].p.setAttribute('depth', platformSize*3);
+                    backingMidSynth.unmute();
 
                     canStart = true;
                     hasEnded = false;
@@ -1724,22 +1702,22 @@
                     player.setAttribute('position', {x:0, y: 2, z:8});
                     scene.setAttribute('background', {color: 'white'});
                     killplane.setAttribute('color', 'red');
-                    //startup();
-                    scene.appendChild(platformsEntity);
+                    startup();
+                    //scene.appendChild(platformsEntity);
                     collectableCount = 0;
                     collectablesFound = 0;
                     collectablePicked = false;
-                    instruments.setTempo(172);
+                    //instruments.setTempo(172);
                     backingMidSynth.setSequence(midSynthSeq, 2);
-                    bassSynth.setSequence(bassSynthSeq2, 4);
+                    //bassSynth.setSequence(bassSynthSeq2, 4);
                     instruments.rewind();
                     backingMidSynth.setLoop(16,4);
-                    bassSynth.setLoop(64,4);
-                    sampler.setLoop(16,4);
-                    sampler.unmute();
+                    //bassSynth.setLoop(64,4);
+                    //sampler.setLoop(16,4);
+                    //sampler.unmute();
                     backingMidSynth.unmute();
-                    bassSynth.unmute();
-                    instrumenst.playPause();
+                    //bassSynth.unmute();
+                    //instrumenst.playPause();
                 }
             } 
         </script>
