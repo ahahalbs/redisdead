@@ -1703,6 +1703,9 @@
                     scene.setAttribute('background', {color: 'white'});
                     killplane.setAttribute('color', 'red');
                     startup();
+                    for(let i = 0; i < 16; i++){
+                    platforms[i].p.setAttribute('visible', 'true');
+                    }
                     //scene.appendChild(platformsEntity);
                     collectableCount = 0;
                     collectablesFound = 0;
