@@ -967,61 +967,72 @@
                 }
 
                 //playhead biz
-             let playhead = getPlayhead();
-            if (!playhead) {
-                playhead = document.createElement('a-box');
-                playhead.setAttribute('class', 'playheads');
-                playhead.setAttribute('id', 'playhead');
-                playhead.setAttribute('material', {color: 'red', transparent: 'true', opacity: '0.5'});
-                playhead.setAttribute('side', 'double');
-                playhead.setAttribute('scale', '1 0.98 1');
-                playhead.setAttribute('visible', 'false');
-                playheadsPool.push(playhead);
-                platformsEntity.appendChild(playhead);
-            }
+                let playhead = getPlayhead();
+                if (playhead) {
+                    playhead.setAttribute('class', 'playheads');
+                    playhead.setAttribute("box-collider", '');
+                    playhead.setAttribute('id', 'playhead');
+                    playhead.setAttribute('material', {color: 'red', transparent: 'true', opacity: '0.5'});
+                    playhead.setAttribute('side', 'double');
+                    playhead.setAttribute('scale', {x: 1, y: 1, z:1});
 
-                let size;
-                switch(sequenceOrder[sequenceOrder.length-1]){
-                    case 0:
-                        size = {width: 3 * platformSize - 0.1, height: platformSize - 0.1, depth: 3 * platformSize - 0.1};
-                        break;
-                    case 1:
-                        size = {width: (platformSize - 0.1) / 2, height: (platformSize - 0.1) * 3, depth: (platformSize - 0.1) / 2};
-                        break;
-                    case 2:
+                    //our kick PlayHeads
+                    if(sequenceOrder[sequenceOrder.length-1] == 0){
+                        playhead.setAttribute('width', 3* platformSize-0.1);
+                        playhead.setAttribute("height", platformSize-0.1);
+                        playhead.setAttribute("depth",3 * platformSize-0.1);
+                    } 
+                    else if(sequenceOrder[sequenceOrder.length-1] == 1){
+                        playhead.setAttribute('width', (platformSize-0.1)/2);
+                        playhead.setAttribute("height",(platformSize-0.1)*3);
+                        playhead.setAttribute("depth", (platformSize-0.1)/2);
+                    } 
+                    else if(sequenceOrder[sequenceOrder.length-1] == 2){
                         if (orientation == 'x' || orientation == '-x'){
-                            size = {width: (platformSize - 0.1) * 4, height: (platformSize - 0.1) / 4, depth: (platformSize - 0.1) / 4};
+                            playhead.setAttribute('width', (platformSize-0.1)*4);
+                            playhead.setAttribute("height",(platformSize-0.1)/4);
+                            playhead.setAttribute("depth", (platformSize-0.1)/4);   
                         } else {
-                            size = {width: (platformSize - 0.1) / 4, height: (platformSize - 0.1) / 4, depth: (platformSize - 0.1) * 4};
+                            playhead.setAttribute('width', (platformSize-0.1)/4);
+                            playhead.setAttribute("height",(platformSize-0.1)/4);
+                            playhead.setAttribute("depth", (platformSize-0.1)*4);     
                         }
-                        break;
-                    default:
+                    } 
+                    else{
                         if (orientation == 'x' || orientation == '-x'){
-                            size = {width: (platformSize - 0.1), height: (platformSize - 0.1) / 4, depth: (platformSize - 0.1) * 3};
+                            playhead.setAttribute('width', (platformSize-0.1));
+                            playhead.setAttribute("height",(platformSize-0.1)/4);
+                            playhead.setAttribute("depth", (platformSize-0.1)*3);   
                         } else {
-                            size = {width: (platformSize - 0.1) * 3, height: (platformSize - 0.1) / 4, depth: (platformSize - 0.1)};
+                            playhead.setAttribute('width', (platformSize-0.1)*3);
+                            playhead.setAttribute("height",(platformSize-0.1)/4);
+                            playhead.setAttribute("depth", (platformSize-0.1));     
                         }
-                        break;
-                    }
+                    } 
 
-                playhead.setAttribute('geometry', { primitive: 'box', width: size.width, height: size.height, depth: size.depth });
-                playhead.removeAttribute('box-collider'); // Remove the existing box-collider component
-                playhead.setAttribute('box-collider', ''); // Add it back
+                    let newPosition = { x: playerFlooredX, y: playerPos.y + platformSize + 0.001, z: playerFlooredZ };
+                    playhead.setAttribute('position', newPosition);
 
-                let newPosition = { x: playerFlooredX, y: playerPos.y + platformSize + 0.001, z: playerFlooredZ };
-                playhead.setAttribute('position', newPosition);
-
-                let playheadData = {
-                    p: playhead,
-                    o: orientation,
-                    startX: playerFlooredX,
-                    startZ: playerFlooredZ,
-                    modDel: stepOffset - currentPlayerStep,
+                    let playheadData = {
+                        p: playhead,
+                        o: orientation,
+                        startX: playerFlooredX,
+                        startZ: playerFlooredZ,
+                        modDel: stepOffset - currentPlayerStep,
                     };
                     playheads.push(playheadData);
                     playhead.setAttribute('visible', 'true');
-
-
+                } else {
+                    playhead = document.createElement('a-box');
+                    playhead.setAttribute('class', 'playheads');
+                    playhead.setAttribute('id', 'playhead');
+                    playhead.setAttribute('material', {color: 'red', transparent: 'true', opacity: '0.5'});
+                    playhead.setAttribute('side', 'double');
+                    playhead.setAttribute('scale', {x: 1, y: 0.98, z:1});
+                    playhead.setAttribute('visible', 'false');
+                    playheadsPool.push(playhead);
+                    platformsEntity.appendChild(playhead);   
+                }
 
                 //generate the collectable for that platform
                 let collectable = document.createElement('a-box');
