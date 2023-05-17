@@ -1498,14 +1498,14 @@
                 } 
                 else if (eventChangeCounter % 5 === 3) {
                     killplane.setAttribute('color', 'white' );
-                    for(let i = 0; i < platforms.length; i++){
-                        platforms[i].p.remove();
-                        platforms.splice(i, 1);
-                    }
-                    for(let i = 0; i < playheads.length; i++){
-                        playheads[i].p.remove();
-                        playheads.splice(i, 1);
-                    }
+//                     for(let i = 0; i < platforms.length; i++){
+//                         platforms[i].p.remove();
+//                         platforms.splice(i, 1);
+//                     }
+//                     for(let i = 0; i < playheads.length; i++){
+//                         playheads[i].p.remove();
+//                         playheads.splice(i, 1);
+//                     }
                     instruments.pausePlay();
                     sampler.mute();
                     backingMidSynth.mute();
@@ -1516,14 +1516,14 @@
                     
                 } 
                 else if (eventChangeCounter % 5 === 4) {
-                    star.setAttribute('color', 'Black');
+                    star.setAttribute('color', 'white');
                     //backingMidSynth.unmute();
                     instruments.pausePlay();
                     star.setAttribute('color', 'white');
                     
 
                     canStart = false;
-                    hasEnded = false;
+                    hasEnded = true;
                 }
             };
 
