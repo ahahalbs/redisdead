@@ -1503,6 +1503,12 @@
                         platforms.splice(i, 1);
                         //platformsEntity.removeAll();
                     }
+		    for(let i = 0; i < playheads.length; i++){
+                        playheads[i].p.remove();
+                        playheads.splice(i, 1);
+                        //platformsEntity.removeAll();
+                    }
+			
                     collectables.splice(0, collectables.length);
                     platformsEntity.remove(collectable);
                 } 
@@ -1648,7 +1654,7 @@
 //                         if(playHeads[2] % 3 == 2) {
 //                             doubleMetro++;
 //                         }
-                        if(playHeads[2] % 48 == 4) {
+                        if(playHeads[2] % 16 == 4) {
                             sequenceTrigger = true;
                             eventFixer++;
                         } 
