@@ -459,106 +459,7 @@
         this.el.object3D.rotation.y = this.data.target.object3D.rotation.y;
     }
 });
-      </script>
-<!--         <script>
-            const platformSizeM = 3;
-            AFRAME.registerComponent('kick-playhead', {
-                id: 'playhead', class: 'playheads',
-                dependencies: ['geometry', 'material', 'box-collider'],
-                init: function() {
-                    this.el.setAttribute('geometry', {
-                        primitive: 'box',
-                        width: (platformSizeM * 3) - 0.01,
-                        height: platformSizeM - 0.01,
-                        depth: (platformSizeM * 3) - 0.01
-                    });
-                    this.el.setAttribute('material', {
-                        color: 'red',
-                        transparent: true,
-                        opacity: 0.5,
-                        side: 'double' 
-                    });
-                    this.el.setAttribute('box-collider',{});
-                    this.el.setAttribute('scale',{x: 1,y:1,z:1});
-                },
-                
-                
-            });
-
-            AFRAME.registerComponent('snare-playhead', {
-                dependencies: ['geometry', 'material'],
-                init: function() {
-                    this.el.setAttribute('geometry', {
-                        primitive: 'box',
-                        width: (platformSizeM / 2) - 0.1,
-                        height: (platformSizeM * 3) - 0.1,
-                        depth: (platformSizeM / 2) - 0.1
-                    });
-                    this.el.setAttribute('material', {
-                        color: 'red',
-                        transparent: true,
-                        opacity: 0.5,
-                        side: 'double' 
-
-                    });
-                },
-            });
-
-            AFRAME.registerComponent('hihat-playhead', {
-                dependencies: ['geometry', 'material',],
-                init: function() {
-                    if (orientation === 'x' || orientation === '-x') {
-                        this.el.setAttribute('geometry', {
-                            primitive: 'box',
-                            width: (platformSizeM * 4) - 0.1,
-                            height: (platformSizeM / 4) - 0.1,
-                            depth: (platformSizeM / 4) - 0.1
-                        });
-                    } else {
-                        this.el.setAttribute('geometry', {
-                            primitive: 'box',
-                            width: (platformSizeM / 4) - 0.1,
-                            height: (platformSizeM / 4) - 0.1,
-                            depth: (platformSizeM * 4) - 0.1
-                        });
-                    }
-                    this.el.setAttribute('material', {
-                        color: 'red',
-                        transparent: true,
-                        opacity: 0.5,
-                         side: 'double'
-                    });
-                },
-            });
-
-            AFRAME.registerComponent('bell-playhead', {
-                dependencies: ['geometry', 'material',],
-                init: function() {
-                    if (orientation === 'x' || orientation === '-x') {
-                        this.el.setAttribute('geometry', {
-                            primitive: 'box',
-                            width: platformSizeM - 0.1,
-                            height: (platformSizeM / 4) - 0.1,
-                            depth: (platformSizeM * 3) - 0.1
-                        });
-                    } else {
-                        this.el.setAttribute('geometry', {
-                            primitive: 'box',
-                            width: (platformSizeM * 3) - 0.1,
-                            height: (platformSizeM / 4) - 0.1,
-                            depth: platformSizeM - 0.1
-                        });
-                    }
-                    this.el.setAttribute('material', {
-                        color: 'red',
-                        transparent: true,
-                        opacity: 0.5,
-                        side: 'double' 
-                    });
-                },
-            });
-
-        </script> -->
+    </script>
     </head>
     <body>
         <a-scene background="color: #005AFF">
@@ -819,54 +720,7 @@
                    soundUP = true;
                }
            }    
-//              document.addEventListener("keydown", function(event) {
-//                  if(event.key == '1'){
-//                      ins = 0;
-//                      kickTrigger = true;
-//                  }
-//                  if(event.key == '2'){
-//                      ins = 1;
-//                      snareTrigger = true;
-//                  }
-//                  if(event.key == '3'){
-//                      ins = 2;
-//                      hihatTrigger = true;
-//                  }
-//                  if(event.key == '4'){
-//                      ins = 3;
-//                      bellTrigger = true;
-//                  }
-//                  if(event.key == 'q' || event.key == 'Q'){
-//                      destroyStep = true;
-//                      destroyCount+=1;
-//                      console.log("Q is pressed");
-//                  }     
-//                  keyPressed = event.key;
-//              });
-//              //inputs key up
-//              document.addEventListener("keyup", function(event) {
-//                  if(event.key == '1'){
-//                      ins = -1;
-//                      kickTrigger = false;
-//                  }
-//                  if(event.key == '2'){
-//                      ins = -1;
-//                      snareTrigger = false;
-//                  }
-//                  if(event.key == '3'){
-//                      ins = -1;
-//                      hihatTrigger = false;
-//                  }
-//                  if(event.key == '4'){
-//                      ins = -1;
-//                      bellTrigger = false;
-//                  }
-//                  if(event.key == 'q' || event.key == 'Q'){
-//                      destroyStep = false;
-//                  } 
-//                  keyPressed = event.key;
-//              });
-
+            
             //have we collected collectable? 
             function logCollected(event) {
                 const collectable = document.getElementById('collectable');
@@ -1114,72 +968,60 @@
                 }
 
                 //playhead biz
-                let playhead = getPlayhead();
-                if (playhead) {
-                    playhead.setAttribute('class', 'playheads');
-                    playhead.setAttribute("box-collider", '');
-                    playhead.setAttribute('id', 'playhead');
-                    playhead.setAttribute('material', {color: 'red', transparent: 'true', opacity: '0.5'});
-                    playhead.setAttribute('side', 'double');
-                    playhead.setAttribute('scale', {x: 1, y: 1, z:1});
+               let playhead = getPlayhead();
+if (!playhead) {
+    playhead = document.createElement('a-box');
+    playhead.setAttribute('class', 'playheads');
+    playhead.setAttribute('id', 'playhead');
+    playhead.setAttribute('material', {color: 'red', transparent: 'true', opacity: '0.5'});
+    playhead.setAttribute('side', 'double');
+    playhead.setAttribute('scale', {x: 1, y: 0.98, z:1});
+    playhead.setAttribute('visible', 'false');
+    playheadsPool.push(playhead);
+    platformsEntity.appendChild(playhead);   
+}
 
-                    //our kick PlayHeads
-                    if(sequenceOrder[sequenceOrder.length-1] == 0){
-                        playhead.setAttribute('width', 3* platformSize-0.1);
-                        playhead.setAttribute("height", platformSize-0.1);
-                        playhead.setAttribute("depth",3 * platformSize-0.1);
-                    } 
-                    else if(sequenceOrder[sequenceOrder.length-1] == 1){
-                        playhead.setAttribute('width', (platformSize-0.1)/2);
-                        playhead.setAttribute("height",(platformSize-0.1)*3);
-                        playhead.setAttribute("depth", (platformSize-0.1)/2);
-                    } 
-                    else if(sequenceOrder[sequenceOrder.length-1] == 2){
-                        if (orientation == 'x' || orientation == '-x'){
-                            playhead.setAttribute('width', (platformSize-0.1)*4);
-                            playhead.setAttribute("height",(platformSize-0.1)/4);
-                            playhead.setAttribute("depth", (platformSize-0.1)/4);   
-                        } else {
-                            playhead.setAttribute('width', (platformSize-0.1)/4);
-                            playhead.setAttribute("height",(platformSize-0.1)/4);
-                            playhead.setAttribute("depth", (platformSize-0.1)*4);     
-                        }
-                    } 
-                    else{
-                        if (orientation == 'x' || orientation == '-x'){
-                            playhead.setAttribute('width', (platformSize-0.1));
-                            playhead.setAttribute("height",(platformSize-0.1)/4);
-                            playhead.setAttribute("depth", (platformSize-0.1)*3);   
-                        } else {
-                            playhead.setAttribute('width', (platformSize-0.1)*3);
-                            playhead.setAttribute("height",(platformSize-0.1)/4);
-                            playhead.setAttribute("depth", (platformSize-0.1));     
-                        }
-                    } 
+playhead.object3D.visible = true;
+playhead.object3D.scale.set(1, 1, 1);
 
-                    let newPosition = { x: playerFlooredX, y: playerPos.y + platformSize + 0.001, z: playerFlooredZ };
-                    playhead.setAttribute('position', newPosition);
+let size;
+switch(sequenceOrder[sequenceOrder.length-1]){
+    case 0:
+        size = {width: 3* platformSize-0.1, height: platformSize-0.1, depth: 3* platformSize-0.1};
+        break;
+    case 1:
+        size = {width: (platformSize-0.1)/2, height: (platformSize-0.1)*3, depth: (platformSize-0.1)/2};
+        break;
+    case 2:
+        if (orientation == 'x' || orientation == '-x'){
+            size = {width: (platformSize-0.1)*4, height: (platformSize-0.1)/4, depth: (platformSize-0.1)/4};
+        } else {
+            size = {width: (platformSize-0.1)/4, height: (platformSize-0.1)/4, depth: (platformSize-0.1)*4}; 
+        }
+        break;
+    default:
+        if (orientation == 'x' || orientation == '-x'){
+            size = {width: (platformSize-0.1), height: (platformSize-0.1)/4, depth: (platformSize-0.1)*3}; 
+        } else {
+            size = {width: (platformSize-0.1)*3, height: (platformSize-0.1)/4, depth: (platformSize-0.1)}; 
+        }
+        break;
+}
 
-                    let playheadData = {
-                        p: playhead,
-                        o: orientation,
-                        startX: playerFlooredX,
-                        startZ: playerFlooredZ,
-                        modDel: stepOffset - currentPlayerStep,
-                    };
-                    playheads.push(playheadData);
-                    playhead.setAttribute('visible', 'true');
-                } else {
-                    playhead = document.createElement('a-box');
-                    playhead.setAttribute('class', 'playheads');
-                    playhead.setAttribute('id', 'playhead');
-                    playhead.setAttribute('material', {color: 'red', transparent: 'true', opacity: '0.5'});
-                    playhead.setAttribute('side', 'double');
-                    playhead.setAttribute('scale', {x: 1, y: 0.98, z:1});
-                    playhead.setAttribute('visible', 'false');
-                    playheadsPool.push(playhead);
-                    platformsEntity.appendChild(playhead);   
-                }
+playhead.object3D.scale.set(size.width, size.height, size.depth);
+
+let newPosition = new THREE.Vector3(playerFlooredX, playerPos.y + platformSize + 0.001, playerFlooredZ);
+playhead.object3D.position.copy(newPosition);
+
+let playheadData = {
+    p: playhead,
+    o: orientation,
+    startX: playerFlooredX,
+    startZ: playerFlooredZ,
+    modDel: stepOffset - currentPlayerStep,
+};
+playheads.push(playheadData);
+
 
                 //generate the collectable for that platform
                 let collectable = document.createElement('a-box');
@@ -1516,7 +1358,7 @@
 //                    backingMidSynth.setParam("lfoFrequency", filter);
 //                    backingMidSynth.setParam("lfoPitchMod", filter);
 //                    bassSynth.setParam("cutoff", filter *40);
-                      sampler.setParam("rate_1", Math.max(filter+0.3,0));
+                      sampler.setParam("rate_1", Math.max(0.5-filter,0.1));
                     sampler.setParam("rate_2", Math.max(filter+0.5, 0));
                     sampler.setParam("rate_3", Math.max(filter-0.5,0));
                 } else {
@@ -1617,7 +1459,7 @@
                 } 
                 else if (eventChangeCounter % 5 === 3) {
                     killplane.setAttribute('color', 'black' );
-                    for(let i = 0; i < platforms.length; i++){
+                    for(let i = 16; i < platforms.length; i++){
                         platforms[i].p.remove();
                         platforms.splice(i, 1);
                     }
