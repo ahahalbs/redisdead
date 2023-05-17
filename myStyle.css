@@ -17,7 +17,6 @@ body {
     font-family: 'Courier', monospace !important;
 }
 
-/*
  #img-container img {
     width: 50%;
     max-height: 200px;  
@@ -26,7 +25,6 @@ body {
      z-index: 3;
 
 }
-*/
 
 #mySceneContainer {
     position: absolute;
