@@ -975,7 +975,6 @@
                     playhead.setAttribute('material', {color: 'red', transparent: 'true', opacity: '0.5'});
                     playhead.setAttribute('side', 'double');
                     playhead.setAttribute('scale', '1 0.98 1');
-                    playhead.setAttribute('box-collider', '');
                     playhead.setAttribute('visible', 'false');
                     playheadsPool.push(playhead);
                     platformsEntity.appendChild(playhead);
@@ -1006,6 +1005,7 @@
                 }
 
                 playhead.setAttribute('geometry', { primitive: 'box', width: size.width, height: size.height, depth: size.depth });
+                playhead.setAttribute('box-collider', '');
 
                 let newPosition = { x: playerFlooredX, y: playerPos.y + platformSize + 0.001, z: playerFlooredZ };
                 playhead.setAttribute('position', newPosition);
@@ -1355,7 +1355,7 @@
 //                    backingMidSynth.setParam("lfoFrequency", filter);
 //                    backingMidSynth.setParam("lfoPitchMod", filter);
 //                    bassSynth.setParam("cutoff", filter *40);
-                      sampler.setParam("rate_1", Math.max(0.5-filter,0.1));
+                      sampler.setParam("rate_1", Math.max(0.4+filter,0.1));
                     sampler.setParam("rate_2", Math.max(filter+0.5, 0));
                     sampler.setParam("rate_3", Math.max(filter-0.5,0));
                 } else {
