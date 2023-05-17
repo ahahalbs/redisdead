@@ -636,11 +636,9 @@
                 return playhead;
             }
             //initialise our first platforms
-           function startup() {
-  canStart = false;
-
-                 
-                //create the first sequence of platform
+            function startup(){
+                canStart = false;
+                //create the first sequence of platforms
                 for(let i = stepSequenceLength-1; i >= 0 ; i--){
                     let platform = platformPool[i];  // Get a platform from the pool
 
@@ -657,19 +655,11 @@
                     platforms.push({p: platform, s: 15-i, o: stepOffset, branch: branchID, sound: 'tick', orientation: '-z'});
                     platformsEntity.appendChild(platform);
                 }
-//                    if(level == 1){
-//                      // Reset existing platforms
-//                   for (let i = stepSequenceLength; i < 16; i++) {
-//                     const platform = platformPool[i]; 
-//                     platform.setAttribute('position', { x: 0, y: 0, z: -i * platformSize });
-//                     platform.setAttribute('visible', 'true');
-//                   }
-//                    }
-//                 //make platform 1 a bit snazzier
+                //make platform 1 a bit snazzier
                 platforms[0].p.setAttribute('width', platformSize*3);
                 platforms[0].p.setAttribute('height', platformSize-0.1);
                 platforms[0].p.setAttribute('depth', platformSize*3);
-               }
+
                 //get first playhead for platforms
                 let playhead = getPlayhead();
                 playhead.setAttribute('position', { x: 0, y: platformSize + 0.01, z: 0 });
@@ -1484,7 +1474,7 @@
                       platformPool.push(platforms[i].p);
                     }
                       for (let i = 0; i < playheadsPool.length; i++) {
-                      playheads.remove();
+                      playheads[i].remove();
                        
                     }
                     platforms.length = 16;
