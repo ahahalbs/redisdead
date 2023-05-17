@@ -1472,18 +1472,41 @@
                 else if (eventChangeCounter % 5 === 3) {
                     killplane.setAttribute('color', 'black' );
                     for(let i = 0; i < platforms.length; i++){
+                        platforms[i].p.remove();
                         platforms.splice(i, 1);
                     }
-                    platformsEntity.removeAll();
-                    for(let i = 0; i < playheads.length; i++){
-                        playheads[i].remove();
+                    for(let i = 1; i < playheads.length; i++){
+                        playheads[i].p.remove();
                         playheads.splice(i, 1);
                     }
                     collectables.splice(0, collectables.length);
                     platformsEntity.remove(collectable);
-                    star.setAttribute('color', 'Black');
                 } 
                 else if (eventChangeCounter % 5 === 4) {
+                    star.setAttribute('color', 'Black');
+                    //create the first sequence of platforms
+                for(let i = stepSequenceLength-1; i >= 0 ; i--){
+                    let platform = document.createElement('a-box');
+                    platform.setAttribute('id', 'platform');
+                    platform.setAttribute('class', 'ground');
+                    platform.setAttribute('scale', {x: 1, y:1, z:1});
+                    let calc = Math.round(Math.abs((255/16) *i));
+                    let rgbString = `rgb(${calc}, ${calc}, ${calc})`;
+                    // set material color directly before the entity is attached to the scene
+                    platform.setAttribute('material', 'color', rgbString);
+                    platform.setAttribute('position', {x: 0, y: 0, z: -i*platformSize});
+                    platform.setAttribute('width', platformSize);
+                    platform.setAttribute("height", platformSize);
+                    platform.setAttribute("depth", platformSize);
+                    platform.setAttribute("visible", 'true');
+
+                    platforms.push({p: platform, s: 15-i, o: stepOffset, branch: branchID, sound: 'tick', orientation: '-z'});
+                    platformsEntity.appendChild(platform);
+                }
+                //make platform 1 a bit snazzier
+                platforms[0].p.setAttribute('width', platformSize*3);
+                platforms[0].p.setAttribute('height', platformSize-0.1);
+                platforms[0].p.setAttribute('depth', platformSize*3);
 
                     canStart = true;
                     hasEnded = false;
