@@ -1517,10 +1517,12 @@
                     }
                     collectables.splice(0, collectables.length);
                     platformsEntity.remove(collectable);
+                    platformsEntity.removeAll();
                 } 
                 else if (eventChangeCounter % 5 === 4) {
                     star.setAttribute('color', 'Black');
                     backingMidSynth.unmute();
+                    
 
                     canStart = true;
                     hasEnded = false;
@@ -1706,7 +1708,7 @@
                     for(let i = 0; i < 16; i++){
                     platforms[i].p.setAttribute('visible', 'true');
                     }
-                    //scene.appendChild(platformsEntity);
+                    scene.appendChild(platformsEntity);
                     collectableCount = 0;
                     collectablesFound = 0;
                     collectablePicked = false;
