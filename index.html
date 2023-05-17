@@ -1484,13 +1484,7 @@
                     star.setAttribute('color', 'Black');
                 } 
                 else if (eventChangeCounter % 5 === 4) {
-              
-                    for(let i = stepSequenceLength-1; i >= 0 ; i--){
-                    let platform = platformPool[i];  
-                    let calc = Math.round(Math.abs((255/16) *i));
-                    let rgbString = `rgb(${calc}, ${calc}, ${calc})`;
-                   
-                    
+
                     canStart = true;
                     hasEnded = false;
                 }
