@@ -1471,11 +1471,11 @@
                 } 
                 else if (eventChangeCounter % 5 === 3) {
                     killplane.setAttribute('color', 'black' );
-                    for(let i = 0; i < platforms.length; i++){
+                    for(let i = 16; i < platforms.length; i++){
                         platforms[i].p.remove();
                         platforms.splice(i, 1);
                     }
-                    for(let i = 0; i < playheads.length; i++){
+                    for(let i = 1; i < playheads.length; i++){
                         playheads[i].remove();
                         playheads.splice(i, 1);
                     }
@@ -1672,55 +1672,6 @@
                     scene.setAttribute('background', {color: 'white'});
                     killplane.setAttribute('color', 'red');
                     //startup();
-                  for(let i = stepSequenceLength-1; i >= 0 ; i--){
-                    let platform = platformPool[i];  // Get a platform from the pool
-
-                    let calc = Math.round(Math.abs((255/16) *i));
-                    let rgbString = `rgb(${calc}, ${calc}, ${calc})`;
-                    // set material color directly before the entity is attached to the scene
-                    platform.setAttribute('material', 'color', rgbString);
-                    platform.setAttribute('position', {x: 0, y: 0, z: -i*platformSize});
-                    platform.setAttribute('width', platformSize);
-                    platform.setAttribute("height", platformSize);
-                    platform.setAttribute("depth", platformSize);
-                    platform.setAttribute("visible", 'true');
-
-                    platforms.push({p: platform, s: 15-i, o: stepOffset, branch: branchID, sound: 'tick', orientation: '-z'});
-                    platformsEntity.appendChild(platform);
-                }
-                //make platform 1 a bit snazzier
-                platforms[0].p.setAttribute('width', platformSize*3);
-                platforms[0].p.setAttribute('height', platformSize-0.1);
-                platforms[0].p.setAttribute('depth', platformSize*3);
-
-
-                //get first playhead for platforms
-                let playhead = getPlayhead();
-                playhead.setAttribute('position', { x: 0, y: platformSize + 0.01, z: 0 });
-                playhead.setAttribute('class', 'playheads');
-                playhead.setAttribute("box-collider", '');
-                playhead.setAttribute('id', 'playhead');
-                playhead.setAttribute('material', {color: 'red', transparent: 'true', opacity: '0.5'});
-                playhead.setAttribute('side', 'double');
-                playhead.setAttribute('scale', {x: 1, y: 1, z:1});
-                playhead.setAttribute('visible', 'true');
-                playheads.push({p: playhead, o: '-z',startX: 0 , startZ: 0, modDel: 0, modmult: 1});
-                platformsEntity.appendChild(playhead);
-
-                //create the first collectable
-                let collectable = document.createElement('a-box');
-                collectable.setAttribute('id', 'collectable');
-                collectable.setAttribute('material', {color: 'rgb(255,165,0)'});
-                collectable.setAttribute('position', {x: 0, y: platformSize, z: -platformSize*(stepSequenceLength-1)});
-                collectable.setAttribute('rotation', {x: 45, y: 45, z: 45});
-                collectable.setAttribute('width', platformSize / 6);
-                collectable.setAttribute("height", platformSize / 6);
-                collectable.setAttribute("depth", platformSize / 6);
-                collectable.setAttribute("box-collider", '');
-                collectables.push(collectable);
-                platformsEntity.appendChild(collectable);  
-                onNewEntityAdded(collectable);
-               
                     //scene.appendChild(platformsEntity);
                     collectableCount = 0;
                     collectablesFound = 0;
