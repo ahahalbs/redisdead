@@ -16,6 +16,9 @@ body {
     position: relative;
     font-family: 'Courier', monospace !important;
 }
+form {
+    min-width: 800px;
+}
 
  #img-container img {
     width: 50%;
