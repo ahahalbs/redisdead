@@ -1,0 +1,11 @@
+Model Information:
+* title:	Medieval Goblet
+* source:	https://sketchfab.com/3d-models/medieval-goblet-53017a1b74634d19964bff04772beea7
+* author:	BlueJester (https://sketchfab.com/BlueJester)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "Medieval Goblet" (https://sketchfab.com/3d-models/medieval-goblet-53017a1b74634d19964bff04772beea7) by BlueJester (https://sketchfab.com/BlueJester) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
