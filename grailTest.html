@@ -314,7 +314,7 @@
             window.addEventListener('DOMContentLoaded', (event) => {
                 const sceneEl = document.querySelector('a-scene');
                 const tilesEntity = document.getElementById('tilesEntity');
-                const grail = document.getElementById('grail');
+//                 const grail = document.getElementById('grail');
 
                 function populateBlocks() {
                     for (let i = 0; i < bassline.length; i++) {
@@ -442,10 +442,10 @@
     <body>
         <!--        <a-scene stats background="color: black" renderer="alpha: true; sortObjects:true; foveationLevel: 0">-->
         <a-scene stats background="color: black">
-            <a-assets>
-<!--                 <a-entity id="grail" gltf-model="./medieval_goblet/scene.gltf" scale="1 1 1" position="0 1 -8" rotation="20 90 20"  material="transparent: true; opacity: 0.5" layer="2" animation__spin="property: rotation; from: 20 0 20 ; to: 20 360 20; loop: true; dur: 5000; easing: linear" -->
+<!--             <a-assets>
+<!--                 <a-entity id="grail" gltf-model="./medieval_goblet/scene.gltf" scale="1 1 1" position="0 1 -8" rotation="20 90 20"  material="transparent: true; opacity: 0.5" layer="2" animation__spin="property: rotation; from: 20 0 20 ; to: 20 360 20; loop: true; dur: 5000; easing: linear" 
 ></a-entity>
-            </a-assets>
+            </a-assets> -->
 
             <a-entity id="rig" position="0 0 0">   
                 <a-entity id="leftHand" laser-controls="hand: left" raycaster="objects: .interactive; far: 10; showLine: false; lineOpacity: 0" controller-listener></a-entity>
@@ -473,8 +473,8 @@
             <a-entity id="tilesEntity"></a-entity>
 
 
-                    <a-entity gltf-model="./angel_statue/scene.gltf" scale="0.07 0.07 0.07" position="0 -1.5 -22" rotation="0 0 0" material="transparent: true; opacity: 0.5" ></a-entity>
-                     
+<!--                     <a-entity gltf-model="./angel_statue/scene.gltf" scale="0.07 0.07 0.07" position="0 -1.5 -22" rotation="0 0 0" material="transparent: true; opacity: 0.5" ></a-entity>
+                      -->
                     
 
         </a-scene>
